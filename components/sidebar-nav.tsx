@@ -36,6 +36,19 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 
+const studentNavItems = [
+  {
+    title: "Dashboard",
+    href: "/dashboard/student",
+    icon: LayoutDashboard,
+  },
+  {
+    title: "Learning Resources",
+    href: "/dashboard/student/resources",
+    icon: BookOpen,
+  },
+]
+
 const teacherNavItems = [
   {
     title: "Dashboard",
@@ -111,12 +124,14 @@ export function SidebarNav() {
   const [userInitials, setUserInitials] = useState("U")
   const [userRole, setUserRole] = useState("Teacher")
   const [employeeId, setEmployeeId] = useState("")
+  const [userType, setUserType] = useState("")
 
   useEffect(() => {
     const loadUserInfo = () => {
       const storedName = localStorage.getItem('userName')
       const storedRole = localStorage.getItem('userType')
       const storedEmployeeId = localStorage.getItem('employeeId')
+      const storedRollNumber = localStorage.getItem('rollNumber')
       
       if (storedName) {
         setUserName(storedName)
@@ -125,11 +140,14 @@ export function SidebarNav() {
       }
       
       if (storedRole) {
+        setUserType(storedRole)
         setUserRole(storedRole.charAt(0).toUpperCase() + storedRole.slice(1))
       }
       
       if (storedEmployeeId) {
         setEmployeeId(storedEmployeeId)
+      } else if (storedRollNumber) {
+        setEmployeeId(storedRollNumber)
       }
     }
     
@@ -156,23 +174,43 @@ export function SidebarNav() {
         </Link>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Teacher Menu</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {teacherNavItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {userType === 'student' ? (
+          <SidebarGroup>
+            <SidebarGroupLabel>Student Menu</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {studentNavItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href}>
+                      <Link href={item.href}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        ) : (
+          <SidebarGroup>
+            <SidebarGroupLabel>Teacher Menu</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {teacherNavItems.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href}>
+                      <Link href={item.href}>
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
         <SidebarGroup>
           <SidebarGroupLabel>Infrastructure</SidebarGroupLabel>
           <SidebarGroupContent>
