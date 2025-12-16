@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [userType, setUserType] = useState("")
   const [employeeId, setEmployeeId] = useState("")
+  const [rollNumber, setRollNumber] = useState("")
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
@@ -25,6 +26,8 @@ export default function LoginPage() {
   useEffect(() => {
     localStorage.removeItem('userType')
     localStorage.removeItem('employeeId')
+    localStorage.removeItem('rollNumber')
+    localStorage.removeItem('studentId')
     localStorage.removeItem('userId')
     localStorage.removeItem('userName')
     localStorage.removeItem('schoolId')
@@ -37,7 +40,51 @@ export default function LoginPage() {
     setError("")
     
     try {
-      // Query database for user with matching employee_id and password
+      // Handle student login separately
+      if (userType === "student") {
+        // Check for demo student credentials
+        if (rollNumber === "STU001" && password === "student123") {
+          // Demo student login - no database required
+          localStorage.setItem('userType', 'student')
+          localStorage.setItem('rollNumber', 'STU001')
+          localStorage.setItem('studentId', 'demo-student-001')
+          localStorage.setItem('userId', 'demo-student-001')
+          localStorage.setItem('userName', 'Demo Student')
+          localStorage.setItem('schoolId', 'demo-school-001')
+          localStorage.setItem('schoolName', 'Demo Government School')
+          
+          window.location.href = "/dashboard/student"
+          return
+        }
+
+        // Regular student login from database
+        const { data: student, error: dbError } = await supabase
+          .from('students')
+          .select('*, schools(name)')
+          .eq('roll_number', rollNumber)
+          .eq('password', password)
+          .single()
+        
+        if (dbError || !student) {
+          setError("Invalid Roll Number or Password. Please contact your teacher.")
+          setIsLoading(false)
+          return
+        }
+
+        // Store student info in localStorage
+        localStorage.setItem('userType', 'student')
+        localStorage.setItem('rollNumber', rollNumber)
+        localStorage.setItem('studentId', student.id)
+        localStorage.setItem('userId', student.id)
+        localStorage.setItem('userName', student.name)
+        localStorage.setItem('schoolId', student.school_id || '')
+        localStorage.setItem('schoolName', (student.schools as any)?.name || '')
+        
+        window.location.href = "/dashboard/student"
+        return
+      }
+
+      // Handle teacher/official login
       const { data: user, error: dbError } = await supabase
         .from('teachers')
         .select('*, schools(name)')
@@ -141,6 +188,12 @@ export default function LoginPage() {
                     <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="student">
+                      <div className="flex items-center gap-2">
+                        <GraduationCap className="h-4 w-4" />
+                        <span>Student</span>
+                      </div>
+                    </SelectItem>
                     <SelectItem value="teacher">
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4" />
@@ -163,20 +216,37 @@ export default function LoginPage() {
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="employeeId">Employee ID</Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="employeeId"
-                    placeholder="Enter your official Employee ID"
-                    className="pl-10"
-                    value={employeeId}
-                    onChange={(e) => setEmployeeId(e.target.value)}
-                    required
-                  />
+              {userType === "student" ? (
+                <div className="space-y-2">
+                  <Label htmlFor="rollNumber">Roll Number</Label>
+                  <div className="relative">
+                    <GraduationCap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="rollNumber"
+                      placeholder="Enter your Roll Number"
+                      className="pl-10"
+                      value={rollNumber}
+                      onChange={(e) => setRollNumber(e.target.value)}
+                      required
+                    />
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-2">
+                  <Label htmlFor="employeeId">Employee ID</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="employeeId"
+                      placeholder="Enter your official Employee ID"
+                      className="pl-10"
+                      value={employeeId}
+                      onChange={(e) => setEmployeeId(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
@@ -224,13 +294,36 @@ export default function LoginPage() {
 
             {/* Info Box */}
             <div className="mt-6 pt-4 border-t border-border/50">
+              {userType === "student" && (
+                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-green-600 dark:text-green-400 mb-2">🎓 Demo Student Credentials</h4>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-center justify-between bg-background/50 rounded px-3 py-2">
+                      <span className="text-muted-foreground">Roll Number:</span>
+                      <code className="font-mono font-semibold">STU001</code>
+                    </div>
+                    <div className="flex items-center justify-between bg-background/50 rounded px-3 py-2">
+                      <span className="text-muted-foreground">Password:</span>
+                      <code className="font-mono font-semibold">student123</code>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
                 <h4 className="text-sm font-semibold text-primary mb-2">ℹ️ How to Login</h4>
-                <div className="space-y-2 text-xs text-muted-foreground">
-                  <p>1. First, register users in the <strong>Settings → Teachers</strong> tab</p>
-                  <p>2. Create Employee ID and Password during registration</p>
-                  <p>3. Select your role and enter credentials to login</p>
-                </div>
+                {userType === "student" ? (
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <p>1. Students are registered in <strong>Dashboard → Student</strong></p>
+                    <p>2. Use your Roll Number and Password provided by your teacher</p>
+                    <p>3. Access attendance records and learning resources</p>
+                  </div>
+                ) : (
+                  <div className="space-y-2 text-xs text-muted-foreground">
+                    <p>1. First, register users in the <strong>Settings → Teachers</strong> tab</p>
+                    <p>2. Create Employee ID and Password during registration</p>
+                    <p>3. Select your role and enter credentials to login</p>
+                  </div>
+                )}
               </div>
             </div>
 

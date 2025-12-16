@@ -1,6 +1,5 @@
 "use client"
 
-import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,69 +17,151 @@ import {
 const resources = [
   {
     id: 1,
-    title: "Mathematics - Class 10",
+    title: "NCERT Mathematics Class 10",
     type: "PDF",
     category: "Study Material",
     subject: "Mathematics",
     size: "2.5 MB",
     icon: FileText,
-    color: "blue"
+    color: "blue",
+    url: "https://ncert.nic.in/textbook.php",
+    description: "Complete NCERT textbook for Class 10 Mathematics"
   },
   {
     id: 2,
-    title: "Science Experiments Guide",
+    title: "Science Lab Manual",
     type: "PDF",
     category: "Practical",
     subject: "Science",
     size: "5.1 MB",
     icon: BookOpen,
-    color: "green"
+    color: "green",
+    url: "https://ncert.nic.in/",
+    description: "NCERT Science practical experiments guide"
   },
   {
     id: 3,
-    title: "English Grammar Lessons",
+    title: "Khan Academy - English Grammar",
     type: "Video",
     category: "Video Lesson",
     subject: "English",
     duration: "45 min",
     icon: Video,
-    color: "purple"
+    color: "purple",
+    url: "https://www.khanacademy.org/humanities/grammar",
+    description: "Free video lessons on English grammar fundamentals"
   },
   {
     id: 4,
-    title: "Social Studies Notes",
+    title: "NCERT Social Studies Class 10",
     type: "PDF",
     category: "Study Material",
     subject: "Social Studies",
     size: "3.2 MB",
     icon: FileText,
-    color: "orange"
+    color: "orange",
+    url: "https://ncert.nic.in/textbook.php",
+    description: "History, Geography, Civics and Economics textbooks"
   },
   {
     id: 5,
-    title: "Mathematics Practice Problems",
+    title: "Mathematics Practice Questions",
     type: "PDF",
     category: "Practice Test",
     subject: "Mathematics",
     size: "1.8 MB",
     icon: FileText,
-    color: "blue"
+    color: "blue",
+    url: "https://ncert.nic.in/exemplar-problems.php",
+    description: "NCERT Exemplar problems with solutions"
   },
   {
     id: 6,
-    title: "Physics Concepts Video",
+    title: "Khan Academy - Physics",
     type: "Video",
     category: "Video Lesson",
     subject: "Science",
     duration: "30 min",
     icon: Video,
-    color: "green"
+    color: "green",
+    url: "https://www.khanacademy.org/science/physics",
+    description: "Free physics video lessons and tutorials"
+  },
+  {
+    id: 7,
+    title: "English Literature Notes",
+    type: "PDF",
+    category: "Study Material",
+    subject: "English",
+    size: "1.2 MB",
+    icon: FileText,
+    color: "purple",
+    url: "https://ncert.nic.in/textbook.php",
+    description: "Chapter-wise summary and analysis"
+  },
+  {
+    id: 8,
+    title: "Biology Video Lessons",
+    type: "Video",
+    category: "Video Lesson",
+    subject: "Science",
+    duration: "50 min",
+    icon: Video,
+    color: "green",
+    url: "https://www.khanacademy.org/science/biology",
+    description: "Cell biology, genetics, and human anatomy"
+  },
+  {
+    id: 9,
+    title: "History Sample Papers",
+    type: "PDF",
+    category: "Practice Test",
+    subject: "Social Studies",
+    size: "2.1 MB",
+    icon: FileText,
+    color: "orange",
+    url: "https://cbseacademic.nic.in/",
+    description: "Previous year questions and sample papers"
+  },
+  {
+    id: 10,
+    title: "Chemistry Tutorials",
+    type: "Video",
+    category: "Video Lesson",
+    subject: "Science",
+    duration: "40 min",
+    icon: Video,
+    color: "green",
+    url: "https://www.khanacademy.org/science/chemistry",
+    description: "Chemical reactions, equations, and periodic table"
+  },
+  {
+    id: 11,
+    title: "Mathematics Formula Sheet",
+    type: "PDF",
+    category: "Study Material",
+    subject: "Mathematics",
+    size: "0.8 MB",
+    icon: FileText,
+    color: "blue",
+    url: "https://ncert.nic.in/",
+    description: "All important formulas for quick revision"
+  },
+  {
+    id: 12,
+    title: "Geography Interactive Maps",
+    type: "Video",
+    category: "Study Material",
+    subject: "Social Studies",
+    duration: "35 min",
+    icon: Video,
+    color: "orange",
+    url: "https://www.khanacademy.org/humanities/geography",
+    description: "World geography with interactive content"
   }
 ]
 
 export default function StudentResourcesPage() {
-  const t = useTranslations()
-
   const getColorClasses = (color: string) => {
     const colors: Record<string, { bg: string, text: string, border: string }> = {
       blue: { bg: "bg-blue-100", text: "text-blue-600", border: "border-blue-200" },
@@ -95,9 +176,9 @@ export default function StudentResourcesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">{t('resources.title')}</h1>
+        <h1 className="text-2xl font-bold">Learning Resources</h1>
         <p className="text-muted-foreground">
-          {t('resources.description')}
+          Access study materials, videos, and practice tests
         </p>
       </div>
 
@@ -108,13 +189,13 @@ export default function StudentResourcesPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder={t('resources.searchPlaceholder')} 
+                placeholder="Search resources..." 
                 className="pl-9"
               />
             </div>
             <Button variant="outline">
               <Filter className="h-4 w-4 mr-2" />
-              {t('resources.filter')}
+              Filter
             </Button>
           </div>
         </CardContent>
@@ -129,8 +210,8 @@ export default function StudentResourcesPage() {
                 <FileText className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <p className="font-semibold">{t('resources.studyMaterials')}</p>
-                <p className="text-sm text-muted-foreground">12 {t('resources.resources')}</p>
+                <p className="font-semibold">Study Materials</p>
+                <p className="text-sm text-muted-foreground">{resources.filter(r => r.category === 'Study Material').length} Resources</p>
               </div>
             </div>
           </CardContent>
@@ -143,8 +224,8 @@ export default function StudentResourcesPage() {
                 <Video className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <p className="font-semibold">{t('resources.videoLessons')}</p>
-                <p className="text-sm text-muted-foreground">8 {t('resources.videos')}</p>
+                <p className="font-semibold">Video Lessons</p>
+                <p className="text-sm text-muted-foreground">{resources.filter(r => r.category === 'Video Lesson').length} Videos</p>
               </div>
             </div>
           </CardContent>
@@ -157,8 +238,8 @@ export default function StudentResourcesPage() {
                 <BookOpen className="h-5 w-5 text-orange-600" />
               </div>
               <div>
-                <p className="font-semibold">{t('resources.practiceTests')}</p>
-                <p className="text-sm text-muted-foreground">15 {t('resources.tests')}</p>
+                <p className="font-semibold">Practice Tests</p>
+                <p className="text-sm text-muted-foreground">{resources.filter(r => r.category === 'Practice Test').length} Tests</p>
               </div>
             </div>
           </CardContent>
@@ -167,7 +248,7 @@ export default function StudentResourcesPage() {
 
       {/* Resources List */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">{t('resources.allResources')}</h2>
+        <h2 className="text-lg font-semibold mb-4">All Resources</h2>
         <div className="grid gap-4">
           {resources.map((resource) => {
             const colors = getColorClasses(resource.color)
@@ -195,22 +276,24 @@ export default function StudentResourcesPage() {
                           </span>
                         </div>
                         <p className="text-sm text-muted-foreground">
-                          {resource.type === 'Video' 
-                            ? 'Educational video content to help you learn better'
-                            : 'Comprehensive study material and practice questions'}
+                          {resource.description}
                         </p>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       {resource.type === 'Video' ? (
-                        <Button size="sm">
-                          <ExternalLink className="h-4 w-4 mr-2" />
-                          {t('resources.watch')}
+                        <Button size="sm" asChild>
+                          <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                            <ExternalLink className="h-4 w-4 mr-2" />
+                            Watch
+                          </a>
                         </Button>
                       ) : (
-                        <Button size="sm">
-                          <Download className="h-4 w-4 mr-2" />
-                          {t('resources.download')}
+                        <Button size="sm" asChild>
+                          <a href={resource.url} target="_blank" rel="noopener noreferrer">
+                            <Download className="h-4 w-4 mr-2" />
+                            Download
+                          </a>
                         </Button>
                       )}
                     </div>
@@ -225,14 +308,14 @@ export default function StudentResourcesPage() {
       {/* Quick Links */}
       <Card>
         <CardHeader>
-          <CardTitle>{t('resources.needHelp')}</CardTitle>
+          <CardTitle>Need Help?</CardTitle>
           <CardDescription>
-            {t('resources.helpDescription')}
+            Contact your teacher if you need additional resources
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant="outline">
-            {t('resources.contactTeacher')}
+            Contact Teacher
           </Button>
         </CardContent>
       </Card>

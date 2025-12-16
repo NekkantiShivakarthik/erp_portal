@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
@@ -19,8 +20,13 @@ const languages = [
 export function LanguageSwitcher() {
   const pathname = usePathname()
   const router = useRouter()
+  const [mounted, setMounted] = useState(false)
 
-  const currentLocale = pathname.split("/")[1] || "en"
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const currentLocale = mounted ? (pathname.split("/")[1] || "en") : "en"
   const currentLanguage = languages.find((lang) => lang.code === currentLocale) || languages[0]
 
   const switchLanguage = (newLocale: string) => {
@@ -33,10 +39,19 @@ export function LanguageSwitcher() {
     router.push(newPath)
   }
 
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="sm" className="gap-2" suppressHydrationWarning>
+        <Languages className="h-4 w-4" />
+        <span className="hidden sm:inline">English</span>
+      </Button>
+    )
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2">
+        <Button variant="ghost" size="sm" className="gap-2" suppressHydrationWarning>
           <Languages className="h-4 w-4" />
           <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
         </Button>

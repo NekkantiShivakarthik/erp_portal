@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { useTranslations } from "next-intl"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
@@ -28,7 +27,6 @@ interface AttendanceRecord {
 }
 
 export default function StudentDashboard() {
-  const t = useTranslations()
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
   const [studentName, setStudentName] = useState("")
@@ -60,7 +58,54 @@ export default function StudentDashboard() {
       return
     }
 
-    // Fetch attendance data
+    // Generate demo data for demo student
+    if (studentId === 'demo-student-001') {
+      const demoRecords = []
+      const today = new Date()
+      
+      // Generate 30 days of demo attendance
+      for (let i = 0; i < 30; i++) {
+        const date = new Date(today)
+        date.setDate(date.getDate() - i)
+        
+        // Generate realistic pattern
+        let status = 'present'
+        if (i % 7 === 0 || i % 7 === 6) {
+          status = 'absent' // Weekend
+        } else if (i % 15 === 0) {
+          status = 'late'
+        } else if (i % 10 === 0) {
+          status = 'absent'
+        }
+        
+        demoRecords.push({
+          id: `demo-${i}`,
+          student_id: 'demo-student-001',
+          date: date.toISOString().split('T')[0],
+          status: status,
+          school_id: 'demo-school-001'
+        })
+      }
+      
+      setAttendanceData(demoRecords as any)
+      const present = demoRecords.filter(r => r.status === 'present').length
+      const absent = demoRecords.filter(r => r.status === 'absent').length
+      const late = demoRecords.filter(r => r.status === 'late').length
+      const total = demoRecords.length
+      
+      setAttendanceStats({
+        totalDays: total,
+        present,
+        absent,
+        late,
+        percentage: total > 0 ? Math.round((present / total) * 100) : 0
+      })
+      
+      setLoading(false)
+      return
+    }
+
+    // Fetch attendance data from database for real students
     const { data: attendance } = await supabase
       .from('attendance')
       .select('*')
@@ -103,8 +148,8 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">{t('student.dashboard')}</h1>
-        <p className="text-muted-foreground">{t('student.viewAttendance')}</p>
+        <h1 className="text-2xl font-bold">Student Dashboard</h1>
+        <p className="text-muted-foreground">View your attendance and access learning resources</p>
       </div>
 
       {/* Student Info */}
@@ -112,21 +157,21 @@ export default function StudentDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            {t('student.information')}
+            Student Information
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <div>
-              <p className="text-sm text-muted-foreground">{t('common.name')}</p>
+              <p className="text-sm text-muted-foreground">Name</p>
               <p className="text-lg font-semibold">{studentName}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">{t('common.rollNo')}</p>
+              <p className="text-sm text-muted-foreground">Roll Number</p>
               <p className="text-lg font-semibold">{rollNumber}</p>
             </div>
             <div>
-              <p className="text-sm text-muted-foreground">{t('common.school')}</p>
+              <p className="text-sm text-muted-foreground">School</p>
               <p className="text-lg font-semibold">{schoolName}</p>
             </div>
           </div>
@@ -135,12 +180,12 @@ export default function StudentDashboard() {
 
       {/* Attendance Stats */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">{t('student.myAttendance')}</h2>
+        <h2 className="text-xl font-semibold mb-4">My Attendance</h2>
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                {t('student.attendanceRate')}
+                Attendance Rate
               </CardTitle>
               <TrendingUp className="h-4 w-4 text-green-600" />
             </CardHeader>
@@ -156,20 +201,20 @@ export default function StudentDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                {t('student.presentDays')}
+                Present Days
               </CardTitle>
               <CheckCircle className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">{attendanceStats.present}</div>
-              <p className="text-xs text-muted-foreground">{t('student.last30Days')}</p>
+              <p className="text-xs text-muted-foreground">Last 30 days</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                {t('student.absentDays')}
+                Absent Days
               </CardTitle>
               <XCircle className="h-4 w-4 text-red-600" />
             </CardHeader>
@@ -182,7 +227,7 @@ export default function StudentDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                {t('student.lateArrivals')}
+                Late Arrivals
               </CardTitle>
               <Clock className="h-4 w-4 text-yellow-600" />
             </CardHeader>
@@ -199,14 +244,14 @@ export default function StudentDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            {t('student.attendanceHistory')}
+            Attendance History
           </CardTitle>
-          <CardDescription>{t('student.last30Days')}</CardDescription>
+          <CardDescription>Last 30 days</CardDescription>
         </CardHeader>
         <CardContent>
           {attendanceData.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              {t('student.noAttendanceData')}
+              No attendance data available
             </p>
           ) : (
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -230,9 +275,9 @@ export default function StudentDashboard() {
                       'destructive'
                     }
                   >
-                    {record.status === 'present' ? t('student.present') : 
-                     record.status === 'late' ? t('student.late') : 
-                     t('student.absent')}
+                    {record.status === 'present' ? 'Present' : 
+                     record.status === 'late' ? 'Late' : 
+                     'Absent'}
                   </Badge>
                 </div>
               ))}
@@ -244,10 +289,10 @@ export default function StudentDashboard() {
       {/* Learning Resources */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">{t('student.learningResources')}</h2>
+          <h2 className="text-xl font-semibold">Learning Resources</h2>
           <Button variant="outline" asChild>
             <Link href="/dashboard/student/resources">
-              {t('student.viewAllResources')}
+              View All Resources
               <ExternalLink className="h-4 w-4 ml-2" />
             </Link>
           </Button>
@@ -261,13 +306,13 @@ export default function StudentDashboard() {
                   <BookOpen className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{t('student.studyMaterials')}</h3>
+                  <h3 className="font-semibold mb-1">Study Materials</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    {t('student.studyMaterialsDesc')}
+                    Access textbooks, notes, and study guides
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      {t('student.browseMaterials')}
+                      Browse Materials
                     </Link>
                   </Button>
                 </div>
@@ -282,13 +327,13 @@ export default function StudentDashboard() {
                   <Video className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{t('student.videoLessons')}</h3>
+                  <h3 className="font-semibold mb-1">Video Lessons</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    {t('student.videoLessonsDesc')}
+                    Watch educational videos and tutorials
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      {t('student.watchVideos')}
+                      Watch Videos
                     </Link>
                   </Button>
                 </div>
@@ -303,13 +348,13 @@ export default function StudentDashboard() {
                   <FileText className="h-6 w-6 text-orange-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">{t('student.practiceTests')}</h3>
+                  <h3 className="font-semibold mb-1">Practice Tests</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    {t('student.practiceTestsDesc')}
+                    Take quizzes and practice exams
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      {t('student.startPractice')}
+                      Start Practice
                     </Link>
                   </Button>
                 </div>

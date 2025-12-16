@@ -1,8 +1,11 @@
-import createMiddleware from 'next-intl/middleware';
-import {routing} from './routing';
+// Middleware disabled - not using locale routing
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default createMiddleware(routing);
+export function middleware(request: NextRequest) {
+  return NextResponse.next();
+}
 
 export const config = {
-  matcher: ['/', '/(kn|te|en)/:path*']
+  matcher: []
 };

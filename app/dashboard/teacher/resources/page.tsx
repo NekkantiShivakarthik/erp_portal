@@ -431,6 +431,10 @@ export default function ResourcesPage() {
             <FileText className="h-4 w-4" />
             Study Notes
           </TabsTrigger>
+          <TabsTrigger value="accessible" className="gap-2">
+            <ExternalLink className="h-4 w-4" />
+            Student Access Links
+          </TabsTrigger>
         </TabsList>
 
         {/* Videos Tab */}
@@ -538,6 +542,285 @@ export default function ResourcesPage() {
               <p className="text-sm text-muted-foreground mt-2">Try changing the class or subject filter</p>
             </div>
           )}
+        </TabsContent>
+
+        {/* Student Access Links Tab */}
+        <TabsContent value="accessible" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Easily Accessible Learning Resources for Students</CardTitle>
+              <CardDescription>
+                Direct links to free educational content - NCERT textbooks, Khan Academy videos, and practice materials
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {/* Study Materials */}
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">NCERT Mathematics Class 10</p>
+                        <p className="text-xs text-muted-foreground">2.5 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Complete NCERT textbook for Class 10 Mathematics</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/textbook.php" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <BookOpen className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Science Lab Manual</p>
+                        <p className="text-xs text-muted-foreground">5.1 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">NCERT Science practical experiments guide</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">NCERT Social Studies</p>
+                        <p className="text-xs text-muted-foreground">3.2 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">History, Geography, Civics and Economics textbooks</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/textbook.php" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Video Lessons */}
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                        <PlayCircle className="h-6 w-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Khan Academy - English Grammar</p>
+                        <p className="text-xs text-muted-foreground">45 min • Video</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Free video lessons on English grammar fundamentals</p>
+                    <Button size="sm" asChild className="w-full">
+                      <a href="https://www.khanacademy.org/humanities/grammar" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Watch
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <PlayCircle className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Khan Academy - Physics</p>
+                        <p className="text-xs text-muted-foreground">30 min • Video</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Free physics video lessons and tutorials</p>
+                    <Button size="sm" asChild className="w-full">
+                      <a href="https://www.khanacademy.org/science/physics" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Watch
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <PlayCircle className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Biology Video Lessons</p>
+                        <p className="text-xs text-muted-foreground">50 min • Video</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Cell biology, genetics, and human anatomy</p>
+                    <Button size="sm" asChild className="w-full">
+                      <a href="https://www.khanacademy.org/science/biology" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Watch
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Practice Tests */}
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Mathematics Practice Questions</p>
+                        <p className="text-xs text-muted-foreground">1.8 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">NCERT Exemplar problems with solutions</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/exemplar-problems.php" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-purple-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">English Literature Notes</p>
+                        <p className="text-xs text-muted-foreground">1.2 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Chapter-wise summary and analysis</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/textbook.php" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <PlayCircle className="h-6 w-6 text-green-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Chemistry Tutorials</p>
+                        <p className="text-xs text-muted-foreground">40 min • Video</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Chemical reactions, equations, and periodic table</p>
+                    <Button size="sm" asChild className="w-full">
+                      <a href="https://www.khanacademy.org/science/chemistry" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Watch
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Mathematics Formula Sheet</p>
+                        <p className="text-xs text-muted-foreground">0.8 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">All important formulas for quick revision</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://ncert.nic.in/" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                        <PlayCircle className="h-6 w-6 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">Geography Interactive Maps</p>
+                        <p className="text-xs text-muted-foreground">35 min • Video</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">World geography with interactive content</p>
+                    <Button size="sm" asChild className="w-full">
+                      <a href="https://www.khanacademy.org/humanities/geography" target="_blank" rel="noopener noreferrer">
+                        <ExternalLink className="h-4 w-4 mr-2" />
+                        Watch
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                <Card className="hover:shadow-lg transition-shadow">
+                  <CardContent className="pt-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="h-12 w-12 rounded-lg bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                        <FileText className="h-6 w-6 text-orange-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold">History Sample Papers</p>
+                        <p className="text-xs text-muted-foreground">2.1 MB • PDF</p>
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-3">Previous year questions and sample papers</p>
+                    <Button size="sm" variant="outline" asChild className="w-full">
+                      <a href="https://cbseacademic.nic.in/" target="_blank" rel="noopener noreferrer">
+                        <Download className="h-4 w-4 mr-2" />
+                        Download
+                      </a>
+                    </Button>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p className="text-sm text-blue-900 dark:text-blue-100 font-medium mb-2">
+                  📚 These resources are also available in the Student Dashboard
+                </p>
+                <p className="text-xs text-blue-700 dark:text-blue-300">
+                  All links open official educational websites (NCERT, Khan Academy, CBSE) in a new tab. Students can access these same resources from their learning resources page.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
 
