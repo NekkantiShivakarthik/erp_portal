@@ -95,9 +95,9 @@ export default function StudentResourcesPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">Learning Resources</h1>
+        <h1 className="text-2xl font-bold">{t('resources.title')}</h1>
         <p className="text-muted-foreground">
-          Access study materials, videos, and practice tests
+          {t('resources.description')}
         </p>
       </div>
 
@@ -108,13 +108,13 @@ export default function StudentResourcesPage() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input 
-                placeholder="Search resources..." 
+                placeholder={t('resources.searchPlaceholder')} 
                 className="pl-9"
               />
             </div>
             <Button variant="outline">
               <Filter className="h-4 w-4 mr-2" />
-              Filter
+              {t('resources.filter')}
             </Button>
           </div>
         </CardContent>
@@ -129,8 +129,8 @@ export default function StudentResourcesPage() {
                 <FileText className="h-5 w-5 text-blue-600" />
               </div>
               <div>
-                <p className="font-semibold">Study Materials</p>
-                <p className="text-sm text-muted-foreground">12 Resources</p>
+                <p className="font-semibold">{t('resources.studyMaterials')}</p>
+                <p className="text-sm text-muted-foreground">12 {t('resources.resources')}</p>
               </div>
             </div>
           </CardContent>
@@ -143,8 +143,8 @@ export default function StudentResourcesPage() {
                 <Video className="h-5 w-5 text-green-600" />
               </div>
               <div>
-                <p className="font-semibold">Video Lessons</p>
-                <p className="text-sm text-muted-foreground">8 Videos</p>
+                <p className="font-semibold">{t('resources.videoLessons')}</p>
+                <p className="text-sm text-muted-foreground">8 {t('resources.videos')}</p>
               </div>
             </div>
           </CardContent>
@@ -157,8 +157,8 @@ export default function StudentResourcesPage() {
                 <BookOpen className="h-5 w-5 text-orange-600" />
               </div>
               <div>
-                <p className="font-semibold">Practice Tests</p>
-                <p className="text-sm text-muted-foreground">15 Tests</p>
+                <p className="font-semibold">{t('resources.practiceTests')}</p>
+                <p className="text-sm text-muted-foreground">15 {t('resources.tests')}</p>
               </div>
             </div>
           </CardContent>
@@ -167,7 +167,7 @@ export default function StudentResourcesPage() {
 
       {/* Resources List */}
       <div>
-        <h2 className="text-lg font-semibold mb-4">All Resources</h2>
+        <h2 className="text-lg font-semibold mb-4">{t('resources.allResources')}</h2>
         <div className="grid gap-4">
           {resources.map((resource) => {
             const colors = getColorClasses(resource.color)
@@ -205,12 +205,12 @@ export default function StudentResourcesPage() {
                       {resource.type === 'Video' ? (
                         <Button size="sm">
                           <ExternalLink className="h-4 w-4 mr-2" />
-                          Watch
+                          {t('resources.watch')}
                         </Button>
                       ) : (
                         <Button size="sm">
                           <Download className="h-4 w-4 mr-2" />
-                          Download
+                          {t('resources.download')}
                         </Button>
                       )}
                     </div>
@@ -225,14 +225,14 @@ export default function StudentResourcesPage() {
       {/* Quick Links */}
       <Card>
         <CardHeader>
-          <CardTitle>Need Help?</CardTitle>
+          <CardTitle>{t('resources.needHelp')}</CardTitle>
           <CardDescription>
-            Contact your teacher if you need additional resources
+            {t('resources.helpDescription')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant="outline">
-            Contact Teacher
+            {t('resources.contactTeacher')}
           </Button>
         </CardContent>
       </Card>

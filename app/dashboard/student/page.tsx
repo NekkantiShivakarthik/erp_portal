@@ -103,8 +103,8 @@ export default function StudentDashboard() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold">{t('sidebar.student')}</h1>
-        <p className="text-muted-foreground">View your attendance and access learning resources</p>
+        <h1 className="text-2xl font-bold">{t('student.dashboard')}</h1>
+        <p className="text-muted-foreground">{t('student.viewAttendance')}</p>
       </div>
 
       {/* Student Info */}
@@ -112,7 +112,7 @@ export default function StudentDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <User className="h-5 w-5" />
-            Student Information
+            {t('student.information')}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -135,12 +135,12 @@ export default function StudentDashboard() {
 
       {/* Attendance Stats */}
       <div>
-        <h2 className="text-xl font-semibold mb-4">My Attendance</h2>
+        <h2 className="text-xl font-semibold mb-4">{t('student.myAttendance')}</h2>
         <div className="grid gap-4 md:grid-cols-4">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Attendance Rate
+                {t('student.attendanceRate')}
               </CardTitle>
               <TrendingUp className="h-4 w-4 text-green-600" />
             </CardHeader>
@@ -156,20 +156,20 @@ export default function StudentDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Present Days
+                {t('student.presentDays')}
               </CardTitle>
               <CheckCircle className="h-4 w-4 text-green-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-green-600">{attendanceStats.present}</div>
-              <p className="text-xs text-muted-foreground">Last 30 days</p>
+              <p className="text-xs text-muted-foreground">{t('student.last30Days')}</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Absent Days
+                {t('student.absentDays')}
               </CardTitle>
               <XCircle className="h-4 w-4 text-red-600" />
             </CardHeader>
@@ -182,7 +182,7 @@ export default function StudentDashboard() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Late Arrivals
+                {t('student.lateArrivals')}
               </CardTitle>
               <Clock className="h-4 w-4 text-yellow-600" />
             </CardHeader>
@@ -199,14 +199,14 @@ export default function StudentDashboard() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calendar className="h-5 w-5" />
-            Attendance History
+            {t('student.attendanceHistory')}
           </CardTitle>
-          <CardDescription>Last 30 days</CardDescription>
+          <CardDescription>{t('student.last30Days')}</CardDescription>
         </CardHeader>
         <CardContent>
           {attendanceData.length === 0 ? (
             <p className="text-center text-muted-foreground py-8">
-              No attendance data available
+              {t('student.noAttendanceData')}
             </p>
           ) : (
             <div className="space-y-2 max-h-96 overflow-y-auto">
@@ -230,9 +230,9 @@ export default function StudentDashboard() {
                       'destructive'
                     }
                   >
-                    {record.status === 'present' ? 'Present' : 
-                     record.status === 'late' ? 'Late' : 
-                     'Absent'}
+                    {record.status === 'present' ? t('student.present') : 
+                     record.status === 'late' ? t('student.late') : 
+                     t('student.absent')}
                   </Badge>
                 </div>
               ))}
@@ -244,10 +244,10 @@ export default function StudentDashboard() {
       {/* Learning Resources */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">Learning Resources</h2>
+          <h2 className="text-xl font-semibold">{t('student.learningResources')}</h2>
           <Button variant="outline" asChild>
             <Link href="/dashboard/student/resources">
-              View All Resources
+              {t('student.viewAllResources')}
               <ExternalLink className="h-4 w-4 ml-2" />
             </Link>
           </Button>
@@ -261,13 +261,13 @@ export default function StudentDashboard() {
                   <BookOpen className="h-6 w-6 text-blue-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Study Materials</h3>
+                  <h3 className="font-semibold mb-1">{t('student.studyMaterials')}</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Access textbooks, notes, and study guides
+                    {t('student.studyMaterialsDesc')}
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      Browse Materials
+                      {t('student.browseMaterials')}
                     </Link>
                   </Button>
                 </div>
@@ -282,13 +282,13 @@ export default function StudentDashboard() {
                   <Video className="h-6 w-6 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Video Lessons</h3>
+                  <h3 className="font-semibold mb-1">{t('student.videoLessons')}</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Watch educational videos and tutorials
+                    {t('student.videoLessonsDesc')}
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      Watch Videos
+                      {t('student.watchVideos')}
                     </Link>
                   </Button>
                 </div>
@@ -303,13 +303,13 @@ export default function StudentDashboard() {
                   <FileText className="h-6 w-6 text-orange-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold mb-1">Practice Tests</h3>
+                  <h3 className="font-semibold mb-1">{t('student.practiceTests')}</h3>
                   <p className="text-sm text-muted-foreground mb-3">
-                    Take quizzes and practice exams
+                    {t('student.practiceTestsDesc')}
                   </p>
                   <Button size="sm" variant="outline" asChild>
                     <Link href="/dashboard/student/resources">
-                      Start Practice
+                      {t('student.startPractice')}
                     </Link>
                   </Button>
                 </div>

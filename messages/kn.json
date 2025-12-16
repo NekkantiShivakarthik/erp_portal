@@ -1,0 +1,61 @@
+{
+  "student": {
+    "dashboard": "ವಿದ್ಯಾರ್ಥಿ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+    "viewAttendance": "ನಿಮ್ಮ ಹಾಜರಾತಿಯನ್ನು ವೀಕ್ಷಿಸಿ ಮತ್ತು ಕಲಿಕೆಯ ಸಂಪನ್ಮೂಲಗಳನ್ನು ಪ್ರವೇಶಿಸಿ",
+    "information": "ವಿದ್ಯಾರ್ಥಿ ಮಾಹಿತಿ",
+    "myAttendance": "ನನ್ನ ಹಾಜರಾತಿ",
+    "attendanceRate": "ಹಾಜರಾತಿ ದರ",
+    "presentDays": "ಹಾಜರಿದ್ದ ದಿನಗಳು",
+    "absentDays": "ಗೈರುಹಾಜರಿದ್ದ ದಿನಗಳು",
+    "lateArrivals": "ತಡವಾಗಿ ಬಂದವರು",
+    "last30Days": "ಕೊನೆಯ 30 ದಿನಗಳು",
+    "attendanceHistory": "ಹಾಜರಾತಿ ಇತಿಹಾಸ",
+    "noAttendanceData": "ಹಾಜರಾತಿ ಮಾಹಿತಿ ಲಭ್ಯವಿಲ್ಲ",
+    "present": "ಹಾಜರು",
+    "absent": "ಗೈರುಹಾಜರು",
+    "late": "ತಡವಾಗಿ",
+    "learningResources": "ಕಲಿಕೆಯ ಸಂಪನ್ಮೂಲಗಳು",
+    "viewAllResources": "ಎಲ್ಲಾ ಸಂಪನ್ಮೂಲಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "studyMaterials": "ಅಧ್ಯಯನ ಸಾಮಗ್ರಿಗಳು",
+    "studyMaterialsDesc": "ಪಠ್ಯಪುಸ್ತಕಗಳು, ಟಿಪ್ಪಣಿಗಳು ಮತ್ತು ಅಧ್ಯಯನ ಮಾರ್ಗದರ್ಶಿಗಳನ್ನು ಪ್ರವೇಶಿಸಿ",
+    "browseMaterials": "ಸಾಮಗ್ರಿಗಳನ್ನು ಬ್ರೌಸ್ ಮಾಡಿ",
+    "videoLessons": "ವೀಡಿಯೊ ಪಾಠಗಳು",
+    "videoLessonsDesc": "ಶೈಕ್ಷಣಿಕ ವೀಡಿಯೊಗಳು ಮತ್ತು ಟ್ಯುಟೋರಿಯಲ್‌ಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "watchVideos": "ವೀಡಿಯೊಗಳನ್ನು ವೀಕ್ಷಿಸಿ",
+    "practiceTests": "ಅಭ್ಯಾಸ ಪರೀಕ್ಷೆಗಳು",
+    "practiceTestsDesc": "ಕ್ವಿಜ್‌ಗಳು ಮತ್ತು ಅಭ್ಯಾಸ ಪರೀಕ್ಷೆಗಳನ್ನು ತೆಗೆದುಕೊಳ್ಳಿ",
+    "startPractice": "ಅಭ್ಯಾಸ ಪ್ರಾರಂಭಿಸಿ"
+  },
+  "resources": {
+    "title": "ಕಲಿಕೆಯ ಸಂಪನ್ಮೂಲಗಳು",
+    "description": "ಅಧ್ಯಯನ ಸಾಮಗ್ರಿಗಳು, ವೀಡಿಯೊಗಳು ಮತ್ತು ಅಭ್ಯಾಸ ಪರೀಕ್ಷೆಗಳನ್ನು ಪ್ರವೇಶಿಸಿ",
+    "searchPlaceholder": "ಸಂಪನ್ಮೂಲಗಳನ್ನು ಹುಡುಕಿ...",
+    "filter": "ಫಿಲ್ಟರ್",
+    "studyMaterials": "ಅಧ್ಯಯನ ಸಾಮಗ್ರಿಗಳು",
+    "videoLessons": "ವೀಡಿಯೊ ಪಾಠಗಳು",
+    "practiceTests": "ಅಭ್ಯಾಸ ಪರೀಕ್ಷೆಗಳು",
+    "resourceCount": "{count} ಸಂಪನ್ಮೂಲಗಳು",
+    "videoCount": "{count} ವೀಡಿಯೊಗಳು",
+    "testCount": "{count} ಪರೀಕ್ಷೆಗಳು",
+    "allResources": "ಎಲ್ಲಾ ಸಂಪನ್ಮೂಲಗಳು",
+    "watch": "ವೀಕ್ಷಿಸಿ",
+    "download": "ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ",
+    "needHelp": "ಸಹಾಯ ಬೇಕೇ?",
+    "contactTeacher": "ಶಿಕ್ಷಕರನ್ನು ಸಂಪರ್ಕಿಸಿ",
+    "contactTeacherButton": "ಶಿಕ್ಷಕರನ್ನು ಸಂಪರ್ಕಿಸಿ",
+    "resources": "ಸಂಪನ್ಮೂಲಗಳು",
+    "videos": "ವೀಡಿಯೊಗಳು",
+    "tests": "ಪರೀಕ್ಷೆಗಳು",
+    "helpDescription": "ನಿಮಗೆ ಹೆಚ್ಚುವರಿ ಸಂಪನ್ಮೂಲಗಳು ಬೇಕಾದರೆ ನಿಮ್ಮ ಶಿಕ್ಷಕರನ್ನು ಸಂಪರ್ಕಿಸಿ"
+  },
+  "common": {
+    "name": "ಹೆಸರು",
+    "rollNo": "ರೋಲ್ ಸಂಖ್ಯೆ",
+    "school": "ಶಾಲೆ",
+    "loading": "ಲೋಡ್ ಆಗುತ್ತಿದೆ...",
+    "days": "ದಿನಗಳು"
+  },
+  "sidebar": {
+    "student": "ವಿದ್ಯಾರ್ಥಿ ನಿರ್ವಹಣೆ"
+  }
+}

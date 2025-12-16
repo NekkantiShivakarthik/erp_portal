@@ -1,0 +1,61 @@
+{
+  "student": {
+    "dashboard": "Student Dashboard",
+    "viewAttendance": "View your attendance and access learning resources",
+    "information": "Student Information",
+    "myAttendance": "My Attendance",
+    "attendanceRate": "Attendance Rate",
+    "presentDays": "Present Days",
+    "absentDays": "Absent Days",
+    "lateArrivals": "Late Arrivals",
+    "last30Days": "Last 30 days",
+    "attendanceHistory": "Attendance History",
+    "noAttendanceData": "No attendance data available",
+    "present": "Present",
+    "absent": "Absent",
+    "late": "Late",
+    "learningResources": "Learning Resources",
+    "viewAllResources": "View All Resources",
+    "studyMaterials": "Study Materials",
+    "studyMaterialsDesc": "Access textbooks, notes, and study guides",
+    "browseMaterials": "Browse Materials",
+    "videoLessons": "Video Lessons",
+    "videoLessonsDesc": "Watch educational videos and tutorials",
+    "watchVideos": "Watch Videos",
+    "practiceTests": "Practice Tests",
+    "practiceTestsDesc": "Take quizzes and practice exams",
+    "startPractice": "Start Practice"
+  },
+  "resources": {
+    "title": "Learning Resources",
+    "description": "Access study materials, videos, and practice tests",
+    "searchPlaceholder": "Search resources...",
+    "filter": "Filter",
+    "studyMaterials": "Study Materials",
+    "videoLessons": "Video Lessons",
+    "practiceTests": "Practice Tests",
+    "resourceCount": "{count} Resources",
+    "videoCount": "{count} Videos",
+    "testCount": "{count} Tests",
+    "allResources": "All Resources",
+    "watch": "Watch",
+    "download": "Download",
+    "needHelp": "Need Help?",
+    "contactTeacher": "Contact Teacher",
+    "contactTeacherButton": "Contact Teacher",
+    "resources": "Resources",
+    "videos": "Videos",
+    "tests": "Tests",
+    "helpDescription": "Contact your teacher if you need additional resources"
+  },
+  "common": {
+    "name": "Name",
+    "rollNo": "Roll Number",
+    "school": "School",
+    "loading": "Loading...",
+    "days": "days"
+  },
+  "sidebar": {
+    "student": "Student Management"
+  }
+}

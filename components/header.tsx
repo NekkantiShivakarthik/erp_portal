@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { LanguageSwitcher } from "@/components/language-switcher"
 import Link from "next/link"
 
 export function Header() {
@@ -79,6 +80,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2">
+        <LanguageSwitcher />
         <ThemeToggle />
         
         <Button variant="ghost" size="icon" suppressHydrationWarning>

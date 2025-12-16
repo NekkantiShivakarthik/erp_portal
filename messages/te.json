@@ -1,0 +1,61 @@
+{
+  "student": {
+    "dashboard": "విద్యార్థి డాష్‌బోర్డ్",
+    "viewAttendance": "మీ హాజరును వీక్షించండి మరియు అభ్యసన వనరులను యాక్సెస్ చేయండి",
+    "information": "విద్యార్థి సమాచారం",
+    "myAttendance": "నా హాజరు",
+    "attendanceRate": "హాజరు రేటు",
+    "presentDays": "హాజరైన రోజులు",
+    "absentDays": "గైర్హాజరైన రోజులు",
+    "lateArrivals": "ఆలస్యంగా రావడం",
+    "last30Days": "చివరి 30 రోజులు",
+    "attendanceHistory": "హాజరు చరిత్ర",
+    "noAttendanceData": "హాజరు డేటా అందుబాటులో లేదు",
+    "present": "హాజరు",
+    "absent": "గైర్హాజరు",
+    "late": "ఆలస్యం",
+    "learningResources": "అభ్యసన వనరులు",
+    "viewAllResources": "అన్ని వనరులను వీక్షించండి",
+    "studyMaterials": "అధ్యయన సామగ్రి",
+    "studyMaterialsDesc": "పాఠ్యపుస్తకాలు, నోట్స్ మరియు అధ్యయన మార్గదర్శకాలను యాక్సెస్ చేయండి",
+    "browseMaterials": "సామగ్రిని బ్రౌజ్ చేయండి",
+    "videoLessons": "వీడియో పాఠాలు",
+    "videoLessonsDesc": "విద్యా వీడియోలు మరియు ట్యుటోరియల్స్ చూడండి",
+    "watchVideos": "వీడియోలు చూడండి",
+    "practiceTests": "ప్రాక్టీస్ టెస్ట్‌లు",
+    "practiceTestsDesc": "క్విజ్‌లు మరియు ప్రాక్టీస్ పరీక్షలు తీసుకోండి",
+    "startPractice": "ప్రాక్టీస్ ప్రారంభించండి"
+  },
+  "resources": {
+    "title": "అభ్యసన వనరులు",
+    "description": "అధ్యయన సామగ్రి, వీడియోలు మరియు ప్రాక్టీస్ టెస్ట్‌లను యాక్సెస్ చేయండి",
+    "searchPlaceholder": "వనరులను శోధించండి...",
+    "filter": "ఫిల్టర్",
+    "studyMaterials": "అధ్యయన సామగ్రి",
+    "videoLessons": "వీడియో పాఠాలు",
+    "practiceTests": "ప్రాక్టీస్ టెస్ట్‌లు",
+    "resourceCount": "{count} వనరులు",
+    "videoCount": "{count} వీడియోలు",
+    "testCount": "{count} టెస్ట్‌లు",
+    "allResources": "అన్ని వనరులు",
+    "watch": "చూడండి",
+    "download": "డౌన్‌లోడ్ చేయండి",
+    "needHelp": "సహాయం కావాలా?",
+    "contactTeacher": "ఉపాధ్యాయుడిని సంప్రదించండి",
+    "contactTeacherButton": "ఉపాధ్యాయుడిని సంప్రదించండి",
+    "resources": "వనరులు",
+    "videos": "వీడియోలు",
+    "tests": "పరీక్షలు",
+    "helpDescription": "మీకు అదనపు వనరులు అవసరమైతే మీ ఉపాధ్యాయుడిని సంప్రదించండి"
+  },
+  "common": {
+    "name": "పేరు",
+    "rollNo": "రోల్ నంబర్",
+    "school": "పాఠశాల",
+    "loading": "లోడ్ అవుతోంది...",
+    "days": "రోజులు"
+  },
+  "sidebar": {
+    "student": "విద్యార్థి నిర్వహణ"
+  }
+}
