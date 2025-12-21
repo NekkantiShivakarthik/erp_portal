@@ -16,6 +16,7 @@ import {
   Clock,
   CheckCircle
 } from "lucide-react"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 const reportTypes = [
   {
@@ -131,20 +132,22 @@ const scheduledReports = [
 ]
 
 export default function ReportsPage() {
+  const { t } = useLanguage()
+  
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Reports & Analytics</h1>
+          <h1 className="text-2xl font-bold">{t('reports.title')}</h1>
           <p className="text-muted-foreground">
-            Generate, view, and download various school reports
+            {t('reports.description')}
           </p>
         </div>
         <div className="flex gap-2">
           <Select defaultValue="this-month">
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="Time Period" />
+              <SelectValue placeholder={t('reports.dateRange')} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="today">Today</SelectItem>

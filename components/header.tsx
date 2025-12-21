@@ -16,12 +16,14 @@ import { Badge } from "@/components/ui/badge"
 import { SidebarTrigger } from "@/components/ui/sidebar"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { LanguageSwitcher } from "@/components/language-switcher"
+import { useLanguage } from "@/lib/i18n/language-context"
 import Link from "next/link"
 
 export function Header() {
   const [userName, setUserName] = useState("User")
   const [schoolName, setSchoolName] = useState("")
   const [userInitials, setUserInitials] = useState("U")
+  const { t } = useLanguage()
 
   useEffect(() => {
     const loadUserInfo = () => {
@@ -74,12 +76,14 @@ export function Header() {
       
       <div className="flex flex-1 items-center gap-4">
         <div className="hidden md:block">
-          <h1 className="text-lg font-semibold">Welcome back, {userName}</h1>
+          <h1 className="text-lg font-semibold">{t('header.welcomeBack')}, {userName}</h1>
           {schoolName && <p className="text-sm text-muted-foreground">{schoolName}</p>}
         </div>
       </div>
 
       <div className="flex items-center gap-2">
+        <LanguageSwitcher />
+        
         <ThemeToggle />
         
         <Button variant="ghost" size="icon" suppressHydrationWarning>
@@ -96,30 +100,30 @@ export function Header() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuLabel>{t('header.notifications')}</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">Infrastructure Request Approved</span>
+              <span className="font-medium">{t('header.infraApproved')}</span>
               <span className="text-xs text-muted-foreground">
-                Your request for 10 new benches has been approved
+                {t('header.infraApprovedDesc')}
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">New Training Workshop</span>
+              <span className="font-medium">{t('header.newTraining')}</span>
               <span className="text-xs text-muted-foreground">
-                Digital Teaching Methods - Dec 20, 2024
+                {t('header.newTrainingDesc')}
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">Attendance Reminder</span>
+              <span className="font-medium">{t('header.attendanceReminder')}</span>
               <span className="text-xs text-muted-foreground">
-                Please update today's attendance by 3:00 PM
+                {t('header.attendanceReminderDesc')}
               </span>
             </DropdownMenuItem>
             <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">Monthly Report Due</span>
+              <span className="font-medium">{t('header.monthlyReportDue')}</span>
               <span className="text-xs text-muted-foreground">
-                Submit your classroom report by Dec 15
+                {t('header.monthlyReportDueDesc')}
               </span>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -138,16 +142,16 @@ export function Header() {
             <DropdownMenuLabel>
               <div className="flex flex-col">
                 <span>{userName}</span>
-                <span className="text-xs font-normal text-muted-foreground">{schoolName || 'Education Portal'}</span>
+                <span className="text-xs font-normal text-muted-foreground">{schoolName || t('header.educationPortal')}</span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>My Profile</DropdownMenuItem>
+            <DropdownMenuItem>{t('header.myProfile')}</DropdownMenuItem>
             <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>Help & Support</DropdownMenuItem>
+            <DropdownMenuItem>{t('header.helpSupport')}</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/" className="text-red-600 cursor-pointer">Log out</Link>
+              <Link href="/" className="text-red-600 cursor-pointer">{t('header.logout')}</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

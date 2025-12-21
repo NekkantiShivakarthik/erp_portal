@@ -2,6 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 const feeData = [
   {
@@ -31,11 +32,13 @@ const feeData = [
 ]
 
 export function FeeOverview() {
+  const { t } = useLanguage()
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Fee Collection Overview</CardTitle>
-        <CardDescription>Current academic year fee status</CardDescription>
+        <CardTitle>{t('dashboard.feeCollection')}</CardTitle>
+        <CardDescription>{t('dashboard.currentAcademicYear')}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         {feeData.map((item) => (
@@ -46,19 +49,19 @@ export function FeeOverview() {
             </div>
             <Progress value={item.collected} className="h-2" />
             <div className="flex justify-between text-xs text-muted-foreground">
-              <span>Collected: {item.amount}</span>
-              <span>Pending: {item.pending}</span>
+              <span>{t('dashboard.collected')}: {item.amount}</span>
+              <span>{t('dashboard.pending')}: {item.pending}</span>
             </div>
           </div>
         ))}
         <div className="rounded-lg bg-muted p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium">Total Collected</p>
+              <p className="text-sm font-medium">{t('dashboard.totalCollected')}</p>
               <p className="text-2xl font-bold text-green-600">₹45,40,000</p>
             </div>
             <div className="text-right">
-              <p className="text-sm font-medium">Total Pending</p>
+              <p className="text-sm font-medium">{t('dashboard.totalPending')}</p>
               <p className="text-2xl font-bold text-orange-600">₹7,39,000</p>
             </div>
           </div>

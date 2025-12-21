@@ -21,6 +21,7 @@ import {
   Lightbulb,
   Monitor
 } from "lucide-react"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 const challenges = [
   {
@@ -79,57 +80,58 @@ const categoryIcons: Record<string, React.ElementType> = {
 
 export default function ChallengesPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const { t } = useLanguage()
 
   return (
     <div className="space-y-6">
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Classroom Challenges</h1>
+          <h1 className="text-2xl font-bold">{t('challengesPage.title')}</h1>
           <p className="text-muted-foreground">
-            Report and track classroom issues for support and resolution
+            {t('challengesPage.description')}
           </p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-orange-500 hover:bg-orange-600">
               <Plus className="h-4 w-4 mr-2" />
-              Report New Challenge
+              {t('challengesPage.reportNew')}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>Report a Classroom Challenge</DialogTitle>
+              <DialogTitle>{t('challengesPage.reportTitle')}</DialogTitle>
               <DialogDescription>
-                Describe the issue you're facing. This will be reviewed by school administrators.
+                {t('challengesPage.reportDesc')}
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label htmlFor="title">Challenge Title</Label>
-                <Input id="title" placeholder="Brief description of the issue" />
+                <Label htmlFor="title">{t('challengesPage.challengeTitle')}</Label>
+                <Input id="title" placeholder={t('challengesPage.titlePlaceholder')} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>{t('challengesPage.category')}</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('challengesPage.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="academic">Academic</SelectItem>
-                      <SelectItem value="attendance">Attendance</SelectItem>
-                      <SelectItem value="resources">Resources</SelectItem>
-                      <SelectItem value="discipline">Discipline</SelectItem>
-                      <SelectItem value="technology">Technology</SelectItem>
+                      <SelectItem value="academic">{t('challengesPage.academic')}</SelectItem>
+                      <SelectItem value="attendance">{t('challengesPage.attendanceIssue')}</SelectItem>
+                      <SelectItem value="resources">{t('challengesPage.resourcesIssue')}</SelectItem>
+                      <SelectItem value="discipline">{t('challengesPage.discipline')}</SelectItem>
+                      <SelectItem value="technology">{t('challengesPage.technology')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Class</Label>
+                  <Label>{t('challengesPage.class')}</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select class" />
+                      <SelectValue placeholder={t('challengesPage.selectClass')} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="8b">Class 8B</SelectItem>
@@ -141,28 +143,28 @@ export default function ChallengesPage() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Priority</Label>
+                <Label>{t('challengesPage.priority')}</Label>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select priority" />
+                    <SelectValue placeholder={t('challengesPage.selectPriority')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">{t('challengesPage.low')}</SelectItem>
+                    <SelectItem value="medium">{t('challengesPage.medium')}</SelectItem>
+                    <SelectItem value="high">{t('challengesPage.high')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="description">Detailed Description</Label>
+                <Label htmlFor="description">{t('challengesPage.detailedDesc')}</Label>
                 <Textarea 
                   id="description" 
-                  placeholder="Provide more details about the challenge..."
+                  placeholder={t('challengesPage.descPlaceholder')}
                   rows={4}
                 />
               </div>
               <Button className="w-full bg-orange-500 hover:bg-orange-600">
-                Submit Challenge Report
+                {t('challengesPage.submitChallenge')}
               </Button>
             </div>
           </DialogContent>
@@ -179,7 +181,7 @@ export default function ChallengesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">4</p>
-                <p className="text-sm text-muted-foreground">Total Issues</p>
+                <p className="text-sm text-muted-foreground">{t('infrastructure.totalIssues')}</p>
               </div>
             </div>
           </CardContent>
@@ -192,7 +194,7 @@ export default function ChallengesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">2</p>
-                <p className="text-sm text-muted-foreground">Open</p>
+                <p className="text-sm text-muted-foreground">{t('challengesPage.open')}</p>
               </div>
             </div>
           </CardContent>
@@ -205,7 +207,7 @@ export default function ChallengesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">1</p>
-                <p className="text-sm text-muted-foreground">In Progress</p>
+                <p className="text-sm text-muted-foreground">{t('challengesPage.inProgress')}</p>
               </div>
             </div>
           </CardContent>
@@ -218,7 +220,7 @@ export default function ChallengesPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">1</p>
-                <p className="text-sm text-muted-foreground">Resolved</p>
+                <p className="text-sm text-muted-foreground">{t('challengesPage.resolved')}</p>
               </div>
             </div>
           </CardContent>
@@ -291,7 +293,7 @@ export default function ChallengesPage() {
                       <span>•</span>
                       <span className="flex items-center gap-1">
                         <MessageSquare className="h-3 w-3" />
-                        {challenge.responses} responses
+                        {challenge.responses} {t('challengesPage.responses')}
                       </span>
                     </div>
                   </div>

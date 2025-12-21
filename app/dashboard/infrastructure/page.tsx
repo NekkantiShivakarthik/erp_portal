@@ -26,9 +26,11 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 export default function InfrastructurePage() {
   const supabase = createClient()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [issues, setIssues] = useState<any[]>([])
   const [schools, setSchools] = useState<any[]>([])
@@ -105,29 +107,29 @@ export default function InfrastructurePage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Infrastructure Status</h1>
+          <h1 className="text-2xl font-bold">{t('sidebar.infrastructureStatus')}</h1>
           <p className="text-muted-foreground">
-            Overview of school facilities and infrastructure condition
+            {t('infrastructure.manageInfrastructure')}
           </p>
         </div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
             <Button className="bg-orange-500 hover:bg-orange-600" disabled={hasNoData}>
               <Plus className="h-4 w-4 mr-2" />
-              Report Issue
+              {t('infrastructure.reportIssue')}
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Report Infrastructure Issue</DialogTitle>
-              <DialogDescription>Submit a new infrastructure problem</DialogDescription>
+              <DialogTitle>{t('infrastructure.reportIssue')}</DialogTitle>
+              <DialogDescription>{t('infrastructure.description')}</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
-                <Label>School</Label>
+                <Label>{t('common.school')}</Label>
                 <Select value={newIssue.school_id} onValueChange={(v) => setNewIssue({...newIssue, school_id: v})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select school" />
+                    <SelectValue placeholder={t('reports.selectSchool')} />
                   </SelectTrigger>
                   <SelectContent>
                     {schools.map((s) => (
@@ -137,53 +139,53 @@ export default function InfrastructurePage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Issue Title</Label>
+                <Label>{t('challengesPage.challengeTitle')}</Label>
                 <Input 
                   value={newIssue.title}
                   onChange={(e) => setNewIssue({...newIssue, title: e.target.value})}
-                  placeholder="e.g., Broken ceiling fan in Room 12"
+                  placeholder={t('challengesPage.titlePlaceholder')}
                 />
               </div>
               <div className="space-y-2">
-                <Label>Category</Label>
+                <Label>{t('infrastructure.category')}</Label>
                 <Select value={newIssue.category} onValueChange={(v) => setNewIssue({...newIssue, category: v})}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
+                    <SelectValue placeholder={t('challengesPage.selectCategory')} />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="electrical">Electrical</SelectItem>
-                    <SelectItem value="plumbing">Plumbing</SelectItem>
-                    <SelectItem value="furniture">Furniture</SelectItem>
-                    <SelectItem value="building">Building</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
+                    <SelectItem value="electrical">{t('infrastructure.electrical')}</SelectItem>
+                    <SelectItem value="plumbing">{t('infrastructure.plumbing')}</SelectItem>
+                    <SelectItem value="furniture">{t('infrastructure.furniture')}</SelectItem>
+                    <SelectItem value="building">{t('infrastructure.building')}</SelectItem>
+                    <SelectItem value="other">{t('infrastructure.other')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Priority</Label>
+                <Label>{t('infrastructure.priority')}</Label>
                 <Select value={newIssue.priority} onValueChange={(v) => setNewIssue({...newIssue, priority: v})}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="low">Low</SelectItem>
-                    <SelectItem value="medium">Medium</SelectItem>
-                    <SelectItem value="high">High</SelectItem>
+                    <SelectItem value="low">{t('infrastructure.lowPriority')}</SelectItem>
+                    <SelectItem value="medium">{t('infrastructure.mediumPriority')}</SelectItem>
+                    <SelectItem value="high">{t('infrastructure.highPriority')}</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label>Description</Label>
+                <Label>{t('infrastructure.description')}</Label>
                 <Textarea 
                   value={newIssue.description}
                   onChange={(e) => setNewIssue({...newIssue, description: e.target.value})}
-                  placeholder="Describe the issue in detail..."
+                  placeholder={t('challengesPage.descPlaceholder')}
                 />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>Cancel</Button>
-              <Button onClick={handleCreateIssue}>Submit Issue</Button>
+              <Button variant="outline" onClick={() => setDialogOpen(false)}>{t('settingsPage.cancel')}</Button>
+              <Button onClick={handleCreateIssue}>{t('infrastructure.submitReport')}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

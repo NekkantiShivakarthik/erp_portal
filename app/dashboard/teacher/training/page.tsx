@@ -27,6 +27,7 @@ import {
   Brain,
   Heart
 } from "lucide-react"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 // Training Video Resources for Teachers
 const trainingVideos = [
@@ -304,6 +305,7 @@ const completedCourses = [
 ]
 
 export default function TrainingPage() {
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedVideo, setSelectedVideo] = useState<typeof trainingVideos[0] | null>(null)
@@ -335,9 +337,9 @@ export default function TrainingPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Training Workshops</h1>
+        <h1 className="text-2xl font-bold">{t('trainingPage.title')}</h1>
         <p className="text-muted-foreground">
-          Attend online training workshops and improve your teaching skills
+          {t('trainingPage.description')}
         </p>
       </div>
 
@@ -351,7 +353,7 @@ export default function TrainingPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">{trainingVideos.length}</p>
-                <p className="text-sm text-muted-foreground">Training Videos</p>
+                <p className="text-sm text-muted-foreground">{t('trainingPage.trainingVideos')}</p>
               </div>
             </div>
           </CardContent>
@@ -364,7 +366,7 @@ export default function TrainingPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">12</p>
-                <p className="text-sm text-muted-foreground">Live Workshops</p>
+                <p className="text-sm text-muted-foreground">{t('trainingPage.upcomingWorkshops')}</p>
               </div>
             </div>
           </CardContent>
@@ -377,7 +379,7 @@ export default function TrainingPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">3</p>
-                <p className="text-sm text-muted-foreground">Completed</p>
+                <p className="text-sm text-muted-foreground">{t('trainingPage.completed')}</p>
               </div>
             </div>
           </CardContent>
@@ -390,7 +392,7 @@ export default function TrainingPage() {
               </div>
               <div>
                 <p className="text-2xl font-bold">8</p>
-                <p className="text-sm text-muted-foreground">Hours Trained</p>
+                <p className="text-sm text-muted-foreground">{t('trainingPage.duration')}</p>
               </div>
             </div>
           </CardContent>

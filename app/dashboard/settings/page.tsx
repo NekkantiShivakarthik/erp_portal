@@ -21,6 +21,7 @@ import {
 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { createClient } from "@/lib/supabase/client"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 type School = {
   id: string
@@ -69,6 +70,7 @@ type Student = {
 
 export default function SettingsPage() {
   const supabase = createClient()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState("schools")
   
@@ -251,9 +253,9 @@ export default function SettingsPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Data Management</h1>
+        <h1 className="text-2xl font-bold">{t('settingsPage.title')}</h1>
         <p className="text-muted-foreground">
-          Add and manage schools, teachers, classes, and students
+          {t('settingsPage.description')}
         </p>
       </div>
 
@@ -261,19 +263,19 @@ export default function SettingsPage() {
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="schools" className="flex items-center gap-2">
             <School className="h-4 w-4" />
-            Schools
+            {t('settingsPage.schools')}
           </TabsTrigger>
           <TabsTrigger value="teachers" className="flex items-center gap-2">
             <GraduationCap className="h-4 w-4" />
-            Teachers
+            {t('settingsPage.teachers')}
           </TabsTrigger>
           <TabsTrigger value="classes" className="flex items-center gap-2">
             <BookOpen className="h-4 w-4" />
-            Classes
+            {t('settingsPage.classes')}
           </TabsTrigger>
           <TabsTrigger value="students" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
-            Students
+            {t('settingsPage.students')}
           </TabsTrigger>
         </TabsList>
 

@@ -4,62 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-
-const activities = [
-  {
-    id: 1,
-    user: "Priya Sharma",
-    action: "submitted fee payment",
-    amount: "₹4,500",
-    time: "2 min ago",
-    type: "payment",
-    avatar: "PS",
-  },
-  {
-    id: 2,
-    user: "Rajesh Kumar",
-    action: "marked attendance for Class 10A",
-    time: "15 min ago",
-    type: "attendance",
-    avatar: "RK",
-  },
-  {
-    id: 3,
-    user: "New Student",
-    action: "admission approved",
-    details: "Amit Singh - Class 6B",
-    time: "1 hour ago",
-    type: "admission",
-    avatar: "AS",
-  },
-  {
-    id: 4,
-    user: "System",
-    action: "generated monthly report",
-    details: "November 2024",
-    time: "2 hours ago",
-    type: "system",
-    avatar: "SY",
-  },
-  {
-    id: 5,
-    user: "Sunita Devi",
-    action: "updated class timetable",
-    details: "Class 8B",
-    time: "3 hours ago",
-    type: "update",
-    avatar: "SD",
-  },
-  {
-    id: 6,
-    user: "Transport Dept",
-    action: "added new bus route",
-    details: "Route #15 - Sector 22",
-    time: "4 hours ago",
-    type: "transport",
-    avatar: "TD",
-  },
-]
+import { useLanguage } from "@/lib/i18n/language-context"
 
 const typeColors: Record<string, string> = {
   payment: "bg-green-100 text-green-800",
@@ -71,11 +16,75 @@ const typeColors: Record<string, string> = {
 }
 
 export function RecentActivities() {
+  const { t } = useLanguage()
+
+  const activities = [
+    {
+      id: 1,
+      user: "Priya Sharma",
+      action: t('dashboard.submittedFeePayment'),
+      amount: "₹4,500",
+      time: "2 min ago",
+      type: "payment",
+      typeLabel: t('dashboard.payment'),
+      avatar: "PS",
+    },
+    {
+      id: 2,
+      user: "Rajesh Kumar",
+      action: `${t('dashboard.markedAttendance')} Class 10A`,
+      time: "15 min ago",
+      type: "attendance",
+      typeLabel: t('dashboard.attendance'),
+      avatar: "RK",
+    },
+    {
+      id: 3,
+      user: "New Student",
+      action: t('dashboard.admissionApproved'),
+      details: "Amit Singh - Class 6B",
+      time: "1 hour ago",
+      type: "admission",
+      typeLabel: t('dashboard.admission'),
+      avatar: "AS",
+    },
+    {
+      id: 4,
+      user: "System",
+      action: t('dashboard.generatedMonthlyReport'),
+      details: "November 2024",
+      time: "2 hours ago",
+      type: "system",
+      typeLabel: t('dashboard.system'),
+      avatar: "SY",
+    },
+    {
+      id: 5,
+      user: "Sunita Devi",
+      action: t('dashboard.updatedTimetable'),
+      details: "Class 8B",
+      time: "3 hours ago",
+      type: "update",
+      typeLabel: t('dashboard.update'),
+      avatar: "SD",
+    },
+    {
+      id: 6,
+      user: "Transport Dept",
+      action: t('dashboard.addedBusRoute'),
+      details: "Route #15 - Sector 22",
+      time: "4 hours ago",
+      type: "transport",
+      typeLabel: t('dashboard.transport'),
+      avatar: "TD",
+    },
+  ]
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Recent Activities</CardTitle>
-        <CardDescription>Latest updates across the school</CardDescription>
+        <CardTitle>{t('dashboard.recentActivities')}</CardTitle>
+        <CardDescription>{t('dashboard.latestUpdates')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[350px]">
@@ -93,7 +102,7 @@ export function RecentActivities() {
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{activity.user}</span>
                     <Badge variant="secondary" className={typeColors[activity.type]}>
-                      {activity.type}
+                      {activity.typeLabel}
                     </Badge>
                   </div>
                   <p className="text-sm text-muted-foreground">

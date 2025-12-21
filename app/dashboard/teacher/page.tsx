@@ -20,9 +20,11 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 export default function TeacherDashboard() {
   const supabase = createClient()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [stats, setStats] = useState({
     totalStudents: 0,
@@ -80,29 +82,29 @@ export default function TeacherDashboard() {
 
   const quickActions = [
     {
-      title: "Mark Attendance",
-      description: "Update today's student attendance",
+      title: t('teacherDashboard.markAttendance'),
+      description: t('teacherDashboard.updateAttendance'),
       href: "/dashboard/teacher/attendance",
       icon: ClipboardList,
       color: "bg-blue-500",
     },
     {
-      title: "Report Challenge",
-      description: "Report classroom issues",
+      title: t('teacherDashboard.reportChallenge'),
+      description: t('teacherDashboard.reportIssues'),
       href: "/dashboard/teacher/challenges",
       icon: AlertTriangle,
       color: "bg-orange-500",
     },
     {
-      title: "Teaching Resources",
-      description: "Access learning materials",
+      title: t('teacherDashboard.teachingResources'),
+      description: t('teacherDashboard.accessMaterials'),
       href: "/dashboard/teacher/resources",
       icon: BookOpen,
       color: "bg-green-500",
     },
     {
-      title: "Infrastructure Issue",
-      description: "Report school facility problems",
+      title: t('teacherDashboard.infrastructureIssue'),
+      description: t('teacherDashboard.reportFacilityProblems'),
       href: "/dashboard/infrastructure/report",
       icon: AlertTriangle,
       color: "bg-red-500",
@@ -123,9 +125,9 @@ export default function TeacherDashboard() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Teacher Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t('teacherDashboard.title')}</h1>
         <p className="text-muted-foreground">
-          Overview of your classes, attendance, and pending tasks
+          {t('teacherDashboard.overview')}
         </p>
       </div>
 
@@ -135,12 +137,12 @@ export default function TeacherDashboard() {
             <div className="flex items-center gap-4">
               <AlertCircle className="h-10 w-10 text-orange-500" />
               <div>
-                <h3 className="font-medium">No Data Found</h3>
+                <h3 className="font-medium">{t('teacherDashboard.noDataFound')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Start by adding schools, teachers, classes, and students in the Settings page.
+                  {t('teacherDashboard.noDataDesc')}
                 </p>
                 <Button asChild className="mt-2" size="sm">
-                  <Link href="/dashboard/settings">Go to Settings</Link>
+                  <Link href="/dashboard/settings">{t('teacherDashboard.goToSettings')}</Link>
                 </Button>
               </div>
             </div>
@@ -153,7 +155,7 @@ export default function TeacherDashboard() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Total Students
+              {t('dashboard.totalStudents')}
             </CardTitle>
             <div className="rounded-lg p-2 bg-blue-100">
               <Users className="h-4 w-4 text-blue-600" />
@@ -161,13 +163,13 @@ export default function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalStudents}</div>
-            <p className="text-xs text-muted-foreground">Registered in system</p>
+            <p className="text-xs text-muted-foreground">{t('teacherDashboard.students')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Today's Attendance
+              {t('teacherDashboard.todayAttendance')}
             </CardTitle>
             <div className="rounded-lg p-2 bg-green-100">
               <ClipboardList className="h-4 w-4 text-green-600" />
@@ -175,13 +177,13 @@ export default function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.todayAttendance.toFixed(1)}%</div>
-            <p className="text-xs text-muted-foreground">{stats.presentCount} present</p>
+            <p className="text-xs text-muted-foreground">{stats.presentCount} {t('teacherDashboard.studentsPresent')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Pending Tasks
+              {t('teacherDashboard.pendingTasks')}
             </CardTitle>
             <div className="rounded-lg p-2 bg-orange-100">
               <Clock className="h-4 w-4 text-orange-600" />
@@ -189,13 +191,13 @@ export default function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.pendingTasks}</div>
-            <p className="text-xs text-muted-foreground">Action required</p>
+            <p className="text-xs text-muted-foreground">{t('teacherDashboard.tasksDue')}</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
-              Active Issues
+              {t('teacherDashboard.activeIssues')}
             </CardTitle>
             <div className="rounded-lg p-2 bg-red-100">
               <AlertTriangle className="h-4 w-4 text-red-600" />
@@ -203,7 +205,7 @@ export default function TeacherDashboard() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.activeIssues}</div>
-            <p className="text-xs text-muted-foreground">Infrastructure issues</p>
+            <p className="text-xs text-muted-foreground">{t('teacherDashboard.unresolvedIssues')}</p>
           </CardContent>
         </Card>
       </div>
@@ -211,8 +213,7 @@ export default function TeacherDashboard() {
       {/* Quick Actions */}
       <Card>
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Frequently used features</CardDescription>
+          <CardTitle>{t('teacherDashboard.quickActions')}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -237,8 +238,7 @@ export default function TeacherDashboard() {
         {/* Recent Activities */}
         <Card>
           <CardHeader>
-            <CardTitle>Recent Activities</CardTitle>
-            <CardDescription>Your latest actions in the portal</CardDescription>
+            <CardTitle>{t('dashboard.recentActivities')}</CardTitle>
           </CardHeader>
           <CardContent>
             {recentActivities.length === 0 ? (

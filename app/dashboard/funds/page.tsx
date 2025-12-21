@@ -30,9 +30,11 @@ import {
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { toast } from "sonner"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 export default function FundsPage() {
   const supabase = createClient()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [funds, setFunds] = useState<any[]>([])
   const [transactions, setTransactions] = useState<any[]>([])
@@ -219,9 +221,9 @@ export default function FundsPage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Fund Allocation & Transparency</h1>
+          <h1 className="text-2xl font-bold">{t('funds.title')}</h1>
           <p className="text-muted-foreground">
-            Track fund allocation, utilization, and pending approvals
+            {t('funds.description')}
           </p>
         </div>
         <div className="flex gap-2">
@@ -229,20 +231,20 @@ export default function FundsPage() {
             <DialogTrigger asChild>
               <Button variant="outline" disabled={hasNoData}>
                 <Plus className="h-4 w-4 mr-2" />
-                Add Fund
+                {t('funds.newRequest')}
               </Button>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Add Fund Allocation</DialogTitle>
-                <DialogDescription>Allocate funds to a school</DialogDescription>
+                <DialogTitle>{t('funds.title')}</DialogTitle>
+                <DialogDescription>{t('funds.description')}</DialogDescription>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="space-y-2">
-                  <Label>School</Label>
+                  <Label>{t('common.school')}</Label>
                   <Select value={newFund.school_id} onValueChange={(v) => setNewFund({...newFund, school_id: v})}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select school" />
+                      <SelectValue placeholder={t('reports.selectSchool')} />
                     </SelectTrigger>
                     <SelectContent>
                       {schools.map((s) => (
@@ -252,23 +254,23 @@ export default function FundsPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Category</Label>
+                  <Label>{t('funds.category')}</Label>
                   <Select value={newFund.category} onValueChange={(v) => setNewFund({...newFund, category: v})}>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
+                      <SelectValue placeholder={t('challengesPage.selectCategory')} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="infrastructure">Infrastructure Repairs</SelectItem>
-                      <SelectItem value="teaching">Teaching Materials</SelectItem>
-                      <SelectItem value="furniture">Furniture & Equipment</SelectItem>
-                      <SelectItem value="sports">Sports & Activities</SelectItem>
-                      <SelectItem value="technology">Technology & Digital</SelectItem>
-                      <SelectItem value="maintenance">Maintenance</SelectItem>
+                      <SelectItem value="infrastructure">{t('funds.infrastructure')}</SelectItem>
+                      <SelectItem value="teaching">{t('funds.academics')}</SelectItem>
+                      <SelectItem value="furniture">{t('infrastructure.furniture')}</SelectItem>
+                      <SelectItem value="sports">{t('funds.sports')}</SelectItem>
+                      <SelectItem value="technology">{t('challengesPage.technology')}</SelectItem>
+                      <SelectItem value="maintenance">{t('funds.maintenance')}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label>Allocated Amount (₹)</Label>
+                  <Label>{t('funds.amount')} (₹)</Label>
                   <Input 
                     type="number"
                     value={newFund.allocated_amount}

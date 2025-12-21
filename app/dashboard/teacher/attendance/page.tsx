@@ -19,6 +19,7 @@ import {
   AlertCircle
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 type Student = {
   id: string
@@ -42,6 +43,7 @@ type Class = {
 
 export default function AttendancePage() {
   const supabase = createClient()
+  const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [selectedClass, setSelectedClass] = useState("")
@@ -151,19 +153,19 @@ export default function AttendancePage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">Attendance Management</h1>
-          <p className="text-muted-foreground">Mark and manage daily student attendance</p>
+          <h1 className="text-2xl font-bold">{t('attendancePage.title')}</h1>
+          <p className="text-muted-foreground">{t('attendancePage.description')}</p>
         </div>
         <Card>
           <CardContent className="py-10">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 text-orange-500 mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No Classes Found</h3>
+              <h3 className="text-lg font-medium mb-2">{t('attendancePage.noClasses')}</h3>
               <p className="text-muted-foreground mb-4">
-                Please add classes and students first in the Settings page.
+                {t('attendancePage.noClassesDesc')}
               </p>
               <Button asChild>
-                <a href="/dashboard/settings">Go to Settings</a>
+                <a href="/dashboard/settings">{t('common.settings')}</a>
               </Button>
             </div>
           </CardContent>
@@ -177,19 +179,19 @@ export default function AttendancePage() {
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Attendance Management</h1>
+          <h1 className="text-2xl font-bold">{t('attendancePage.title')}</h1>
           <p className="text-muted-foreground">
-            Mark and manage daily student attendance
+            {t('attendancePage.description')}
           </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
-            Export Report
+            {t('attendancePage.exportReport')}
           </Button>
           <Button className="bg-orange-500 hover:bg-orange-600" onClick={saveAttendance} disabled={saving || students.length === 0}>
             {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-            Save Attendance
+            {t('attendancePage.saveAttendance')}
           </Button>
         </div>
       </div>
@@ -199,7 +201,7 @@ export default function AttendancePage() {
         <div className="w-48">
           <Select value={selectedClass} onValueChange={setSelectedClass}>
             <SelectTrigger>
-              <SelectValue placeholder="Select Class" />
+              <SelectValue placeholder={t('attendancePage.selectClass')} />
             </SelectTrigger>
             <SelectContent>
               {classes.map((cls) => (
@@ -225,7 +227,7 @@ export default function AttendancePage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-green-600">{presentCount}</p>
-                    <p className="text-sm text-muted-foreground">Present</p>
+                    <p className="text-sm text-muted-foreground">{t('attendancePage.present')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -238,7 +240,7 @@ export default function AttendancePage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-red-600">{absentCount}</p>
-                    <p className="text-sm text-muted-foreground">Absent</p>
+                    <p className="text-sm text-muted-foreground">{t('attendancePage.absent')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -251,7 +253,7 @@ export default function AttendancePage() {
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-orange-600">{lateCount}</p>
-                    <p className="text-sm text-muted-foreground">Late</p>
+                    <p className="text-sm text-muted-foreground">{t('attendancePage.late')}</p>
                   </div>
                 </div>
               </CardContent>
@@ -282,16 +284,16 @@ export default function AttendancePage() {
             <CardContent>
               {students.length === 0 ? (
                 <p className="text-muted-foreground text-center py-8">
-                  No students found in this class. Add students in Settings.
+                  {t('attendancePage.noStudentsDesc')}
                 </p>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Roll No</TableHead>
-                      <TableHead>Student Name</TableHead>
-                      <TableHead className="text-center">Status</TableHead>
-                      <TableHead className="text-center">Actions</TableHead>
+                      <TableHead>{t('attendancePage.rollNo')}</TableHead>
+                      <TableHead>{t('attendancePage.student')}</TableHead>
+                      <TableHead className="text-center">{t('attendancePage.status')}</TableHead>
+                      <TableHead className="text-center">{t('common.actions') || 'Actions'}</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -361,7 +363,7 @@ export default function AttendancePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <CalendarDays className="h-5 w-5" />
-                Select Date
+                {t('attendancePage.selectDate')}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -376,24 +378,24 @@ export default function AttendancePage() {
 
           <Card>
             <CardHeader>
-              <CardTitle>Today's Summary</CardTitle>
-              <CardDescription>Attendance statistics</CardDescription>
+              <CardTitle>{t('attendancePage.todaysSummary')}</CardTitle>
+              <CardDescription>{t('attendancePage.attendanceStatistics')}</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between items-center">
-                <span className="text-sm">Present</span>
+                <span className="text-sm">{t('attendancePage.present')}</span>
                 <span className="font-bold text-green-600">{presentCount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">Absent</span>
+                <span className="text-sm">{t('attendancePage.absent')}</span>
                 <span className="font-bold text-red-600">{absentCount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">Late</span>
+                <span className="text-sm">{t('attendancePage.late')}</span>
                 <span className="font-bold text-orange-600">{lateCount}</span>
               </div>
               <div className="flex justify-between items-center">
-                <span className="text-sm">Attendance Rate</span>
+                <span className="text-sm">{t('attendancePage.attendanceRate')}</span>
                 <span className="font-bold text-blue-600">
                   {students.length > 0 ? Math.round((presentCount / students.length) * 100) : 0}%
                 </span>

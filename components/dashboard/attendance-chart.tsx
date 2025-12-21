@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Bar, BarChart, XAxis, YAxis, ResponsiveContainer } from "recharts"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 const attendanceData = [
   { day: "Mon", present: 2280, absent: 170 },
@@ -12,23 +13,25 @@ const attendanceData = [
   { day: "Fri", present: 2300, absent: 150 },
 ]
 
-const chartConfig = {
-  present: {
-    label: "Present",
-    color: "hsl(var(--chart-1))",
-  },
-  absent: {
-    label: "Absent",
-    color: "hsl(var(--chart-2))",
-  },
-}
-
 export function AttendanceChart() {
+  const { t } = useLanguage()
+
+  const chartConfig = {
+    present: {
+      label: t('dashboard.present'),
+      color: "hsl(var(--chart-1))",
+    },
+    absent: {
+      label: t('dashboard.absent'),
+      color: "hsl(var(--chart-2))",
+    },
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Weekly Attendance</CardTitle>
-        <CardDescription>Student attendance for the current week</CardDescription>
+        <CardTitle>{t('dashboard.weeklyAttendance')}</CardTitle>
+        <CardDescription>{t('dashboard.studentAttendanceWeek')}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[300px] w-full">

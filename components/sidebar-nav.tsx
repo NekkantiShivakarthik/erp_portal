@@ -35,96 +35,103 @@ import {
 } from "@/components/ui/sidebar"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-
-const studentNavItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard/student",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Learning Resources",
-    href: "/dashboard/student/resources",
-    icon: BookOpen,
-  },
-]
-
-const teacherNavItems = [
-  {
-    title: "Dashboard",
-    href: "/dashboard/teacher",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "Attendance",
-    href: "/dashboard/teacher/attendance",
-    icon: ClipboardList,
-  },
-  {
-    title: "Classroom Challenges",
-    href: "/dashboard/teacher/challenges",
-    icon: AlertTriangle,
-  },
-  {
-    title: "Teaching Resources",
-    href: "/dashboard/teacher/resources",
-    icon: BookOpen,
-  },
-  {
-    title: "Training Workshops",
-    href: "/dashboard/teacher/training",
-    icon: Video,
-  },
-]
-
-const infrastructureItems = [
-  {
-    title: "Infrastructure Status",
-    href: "/dashboard/infrastructure",
-    icon: Building2,
-  },
-  {
-    title: "Report Issues",
-    href: "/dashboard/infrastructure/report",
-    icon: Camera,
-  },
-  {
-    title: "Track Requests",
-    href: "/dashboard/infrastructure/track",
-    icon: CheckCircle,
-  },
-]
-
-const managementItems = [
-  {
-    title: "Monitoring Panel",
-    href: "/dashboard/monitoring",
-    icon: TrendingUp,
-  },
-  {
-    title: "Fund Allocation",
-    href: "/dashboard/funds",
-    icon: Wallet,
-  },
-  {
-    title: "Reports",
-    href: "/dashboard/reports",
-    icon: FileText,
-  },
-  {
-    title: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-]
+import { useLanguage } from "@/lib/i18n/language-context"
 
 export function SidebarNav() {
   const pathname = usePathname()
+  const { t } = useLanguage()
   const [userName, setUserName] = useState("User")
   const [userInitials, setUserInitials] = useState("U")
   const [userRole, setUserRole] = useState("Teacher")
   const [employeeId, setEmployeeId] = useState("")
   const [userType, setUserType] = useState("")
+
+  const studentNavItems = [
+    {
+      title: t('sidebar.dashboard'),
+      href: "/dashboard/student",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t('sidebar.learningResources'),
+      href: "/dashboard/student/resources",
+      icon: BookOpen,
+    },
+    {
+      title: t('sidebar.infrastructureReports'),
+      href: "/dashboard/student/infrastructure",
+      icon: Building2,
+    },
+  ]
+
+  const teacherNavItems = [
+    {
+      title: t('sidebar.dashboard'),
+      href: "/dashboard/teacher",
+      icon: LayoutDashboard,
+    },
+    {
+      title: t('sidebar.attendance'),
+      href: "/dashboard/teacher/attendance",
+      icon: ClipboardList,
+    },
+    {
+      title: t('sidebar.classroomChallenges'),
+      href: "/dashboard/teacher/challenges",
+      icon: AlertTriangle,
+    },
+    {
+      title: t('sidebar.teachingResources'),
+      href: "/dashboard/teacher/resources",
+      icon: BookOpen,
+    },
+    {
+      title: t('sidebar.trainingWorkshops'),
+      href: "/dashboard/teacher/training",
+      icon: Video,
+    },
+  ]
+
+  const infrastructureItems = [
+    {
+      title: t('sidebar.infrastructureStatus'),
+      href: "/dashboard/infrastructure",
+      icon: Building2,
+    },
+    {
+      title: t('sidebar.reportIssues'),
+      href: "/dashboard/infrastructure/report",
+      icon: Camera,
+    },
+    {
+      title: t('sidebar.trackRequests'),
+      href: "/dashboard/infrastructure/track",
+      icon: CheckCircle,
+    },
+  ]
+
+  const managementItems = [
+    {
+      title: t('sidebar.monitoringPanel'),
+      href: "/dashboard/monitoring",
+      icon: TrendingUp,
+    },
+    {
+      title: t('sidebar.fundAllocation'),
+      href: "/dashboard/funds",
+      icon: Wallet,
+    },
+    {
+      title: t('sidebar.reports'),
+      href: "/dashboard/reports",
+      icon: FileText,
+    },
+    {
+      title: t('common.settings'),
+      href: "/dashboard/settings",
+      icon: Settings,
+    },
+  ]
 
   useEffect(() => {
     const loadUserInfo = () => {
@@ -176,7 +183,7 @@ export function SidebarNav() {
       <SidebarContent>
         {userType === 'student' ? (
           <SidebarGroup>
-            <SidebarGroupLabel>Student Menu</SidebarGroupLabel>
+            <SidebarGroupLabel>{t('sidebar.studentMenu')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {studentNavItems.map((item) => (
@@ -193,58 +200,60 @@ export function SidebarNav() {
             </SidebarGroupContent>
           </SidebarGroup>
         ) : (
-          <SidebarGroup>
-            <SidebarGroupLabel>Teacher Menu</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {teacherNavItems.map((item) => (
-                  <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href}>
-                      <Link href={item.href}>
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+          <>
+            <SidebarGroup>
+              <SidebarGroupLabel>{t('sidebar.teacherMenu')}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {teacherNavItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href}>
+                        <Link href={item.href}>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>{t('sidebar.infrastructure')}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {infrastructureItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href}>
+                        <Link href={item.href}>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+            <SidebarGroup>
+              <SidebarGroupLabel>{t('sidebar.management')}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {managementItems.map((item) => (
+                    <SidebarMenuItem key={item.href}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href}>
+                        <Link href={item.href}>
+                          <item.icon className="h-4 w-4" />
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </>
         )}
-        <SidebarGroup>
-          <SidebarGroupLabel>Infrastructure</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {infrastructureItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {managementItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton asChild isActive={pathname === item.href}>
-                    <Link href={item.href}>
-                      <item.icon className="h-4 w-4" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center gap-3 mb-3">
@@ -261,13 +270,13 @@ export function SidebarNav() {
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link href="/dashboard/settings">
               <HelpCircle className="h-4 w-4 mr-1" />
-              Help
+              {t('common.help')}
             </Link>
           </Button>
           <Button variant="outline" size="sm" className="flex-1" asChild>
             <Link href="/">
               <LogOut className="h-4 w-4 mr-1" />
-              Logout
+              {t('common.logout')}
             </Link>
           </Button>
         </div>

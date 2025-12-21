@@ -28,6 +28,7 @@ import {
   Clock,
   Eye
 } from "lucide-react"
+import { useLanguage } from "@/lib/i18n/language-context"
 
 // Educational Videos for Students - Class 6 to 10 (Physics Wallah & Other Channels)
 const videos = [
@@ -202,6 +203,7 @@ const getBookCode = (classNum: string, subject: string): string => {
 }
 
 export default function ResourcesPage() {
+  const { t } = useLanguage()
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedSubject, setSelectedSubject] = useState("All")
   const [selectedClass, setSelectedClass] = useState("All")
@@ -297,9 +299,9 @@ export default function ResourcesPage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div>
-        <h1 className="text-2xl font-bold">Learning Resources for Students</h1>
+        <h1 className="text-2xl font-bold">{t('resourcesPage.title')}</h1>
         <p className="text-muted-foreground">
-          Access video lessons and NCERT study notes for Class 6 to Class 10
+          {t('resourcesPage.description')}
         </p>
       </div>
 
@@ -308,7 +310,7 @@ export default function ResourcesPage() {
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Search videos or notes..."
+            placeholder={t('resourcesPage.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -316,7 +318,7 @@ export default function ResourcesPage() {
         </div>
         <Select value={selectedClass} onValueChange={setSelectedClass}>
           <SelectTrigger className="w-[150px]">
-            <SelectValue placeholder="Select Class" />
+            <SelectValue placeholder={t('resourcesPage.allClasses')} />
           </SelectTrigger>
           <SelectContent>
             {classes.map((cls) => (
@@ -326,7 +328,7 @@ export default function ResourcesPage() {
         </Select>
         <Select value={selectedSubject} onValueChange={setSelectedSubject}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Select Subject" />
+            <SelectValue placeholder={t('resourcesPage.allSubjects')} />
           </SelectTrigger>
           <SelectContent>
             {subjects.map((subject) => (

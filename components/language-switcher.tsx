@@ -1,7 +1,5 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -9,62 +7,41 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Languages } from "lucide-react"
+import { Globe } from "lucide-react"
+import { useLanguage, languages } from "@/lib/i18n/language-context"
 
-const languages = [
-  { code: "en", name: "English", nativeName: "English" },
-  { code: "kn", name: "Kannada", nativeName: "ಕನ್ನಡ" },
-  { code: "te", name: "Telugu", nativeName: "తెలుగు" },
-]
+// Language icons/flags as emoji
+const languageIcons: Record<string, string> = {
+  en: "🇬🇧",
+  kn: "🇮🇳",
+  te: "🇮🇳",
+  ta: "🇮🇳",
+}
 
 export function LanguageSwitcher() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const currentLocale = mounted ? (pathname.split("/")[1] || "en") : "en"
-  const currentLanguage = languages.find((lang) => lang.code === currentLocale) || languages[0]
-
-  const switchLanguage = (newLocale: string) => {
-    // Remove current locale from pathname if it exists
-    const pathWithoutLocale = pathname.replace(/^\/(en|kn|te)/, "")
-    
-    // Create new path with new locale
-    const newPath = `/${newLocale}${pathWithoutLocale || "/"}`
-    
-    router.push(newPath)
-  }
-
-  if (!mounted) {
-    return (
-      <Button variant="ghost" size="sm" className="gap-2" suppressHydrationWarning>
-        <Languages className="h-4 w-4" />
-        <span className="hidden sm:inline">English</span>
-      </Button>
-    )
-  }
+  const { locale, setLocale } = useLanguage()
+  
+  const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0]
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="sm" className="gap-2" suppressHydrationWarning>
-          <Languages className="h-4 w-4" />
-          <span className="hidden sm:inline">{currentLanguage.nativeName}</span>
+        <Button variant="ghost" size="sm" className="gap-2 hover:bg-accent">
+          <Globe className="h-4 w-4 text-orange-500" />
+          <span className="text-lg">{languageIcons[locale] || "🌐"}</span>
+          <span className="hidden sm:inline font-medium">{currentLanguage.nativeName}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-48">
         {languages.map((language) => (
           <DropdownMenuItem
             key={language.code}
-            onClick={() => switchLanguage(language.code)}
-            className={currentLocale === language.code ? "bg-accent" : ""}
+            onClick={() => setLocale(language.code)}
+            className={`cursor-pointer ${locale === language.code ? "bg-accent" : ""}`}
           >
+            <span className="text-lg mr-2">{languageIcons[language.code]}</span>
             <span className="font-medium">{language.nativeName}</span>
-            <span className="ml-2 text-muted-foreground">({language.name})</span>
+            <span className="ml-auto text-xs text-muted-foreground">({language.name})</span>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

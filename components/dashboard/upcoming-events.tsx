@@ -3,56 +3,64 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { CalendarDays, Clock } from "lucide-react"
-
-const events = [
-  {
-    id: 1,
-    title: "Annual Day Function",
-    date: "Dec 20, 2024",
-    time: "10:00 AM",
-    type: "event",
-    color: "bg-purple-500",
-  },
-  {
-    id: 2,
-    title: "Parent-Teacher Meeting",
-    date: "Dec 15, 2024",
-    time: "09:00 AM",
-    type: "meeting",
-    color: "bg-blue-500",
-  },
-  {
-    id: 3,
-    title: "Half-Yearly Exams Begin",
-    date: "Dec 18, 2024",
-    time: "08:30 AM",
-    type: "exam",
-    color: "bg-red-500",
-  },
-  {
-    id: 4,
-    title: "Sports Day",
-    date: "Dec 25, 2024",
-    time: "08:00 AM",
-    type: "sports",
-    color: "bg-green-500",
-  },
-  {
-    id: 5,
-    title: "Winter Vacation Begins",
-    date: "Dec 28, 2024",
-    time: "-",
-    type: "holiday",
-    color: "bg-orange-500",
-  },
-]
+import { useLanguage } from "@/lib/i18n/language-context"
 
 export function UpcomingEvents() {
+  const { t } = useLanguage()
+
+  const events = [
+    {
+      id: 1,
+      title: t('dashboard.annualDayFunction'),
+      date: "Dec 20, 2024",
+      time: "10:00 AM",
+      type: "event",
+      typeLabel: t('dashboard.event'),
+      color: "bg-purple-500",
+    },
+    {
+      id: 2,
+      title: t('dashboard.parentTeacherMeeting'),
+      date: "Dec 15, 2024",
+      time: "09:00 AM",
+      type: "meeting",
+      typeLabel: t('dashboard.meeting'),
+      color: "bg-blue-500",
+    },
+    {
+      id: 3,
+      title: t('dashboard.halfYearlyExams'),
+      date: "Dec 18, 2024",
+      time: "08:30 AM",
+      type: "exam",
+      typeLabel: t('dashboard.exam'),
+      color: "bg-red-500",
+    },
+    {
+      id: 4,
+      title: t('dashboard.sportsDay'),
+      date: "Dec 25, 2024",
+      time: "08:00 AM",
+      type: "sports",
+      typeLabel: t('dashboard.sports'),
+      color: "bg-green-500",
+    },
+    {
+      id: 5,
+      title: t('dashboard.winterVacation'),
+      date: "Dec 28, 2024",
+      time: "-",
+      type: "holiday",
+      typeLabel: t('dashboard.holiday'),
+      color: "bg-orange-500",
+    },
+  ]
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Upcoming Events</CardTitle>
-        <CardDescription>School calendar for this month</CardDescription>
+        <CardTitle>{t('dashboard.upcomingEvents')}</CardTitle>
+        <CardDescription>{t('dashboard.schoolCalendar')}</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
@@ -77,7 +85,7 @@ export function UpcomingEvents() {
                   )}
                 </div>
               </div>
-              <Badge variant="outline">{event.type}</Badge>
+              <Badge variant="outline">{event.typeLabel}</Badge>
             </div>
           ))}
         </div>
