@@ -5,7 +5,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
 import { 
   Search,
   Clock,
@@ -15,10 +18,17 @@ import {
   Calendar,
   Eye,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Pencil,
+  Trash2,
+  Building2,
+  Droplets,
+  Lightbulb,
+  Armchair
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { toast } from "sonner"
 
 const statusConfig = {
   pending: { label: "Pending Review", color: "bg-yellow-500", icon: Clock },
@@ -28,14 +38,47 @@ const statusConfig = {
   rejected: { label: "Rejected", color: "bg-red-500", icon: XCircle },
 }
 
+const categories = [
+  { value: "Classroom", label: "Classroom/Building", icon: Building2 },
+  { value: "Plumbing", label: "Plumbing/Sanitation", icon: Droplets },
+  { value: "Electricity", label: "Electrical", icon: Lightbulb },
+  { value: "Furniture", label: "Furniture", icon: Armchair },
+  { value: "Toilet", label: "Toilet", icon: Droplets },
+  { value: "Other", label: "Other", icon: AlertTriangle },
+]
+
+interface Issue {
+  id: string
+  school_id: string | null
+  title: string
+  description: string | null
+  category: string | null
+  status: string | null
+  priority: string | null
+  created_at: string | null
+  schools?: { name: string } | null
+}
+
 export default function TrackRequestsPage() {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
-  const [issues, setIssues] = useState<any[]>([])
-  const [filteredIssues, setFilteredIssues] = useState<any[]>([])
+  const [issues, setIssues] = useState<Issue[]>([])
+  const [schools, setSchools] = useState<any[]>([])
+  const [filteredIssues, setFilteredIssues] = useState<Issue[]>([])
   const [searchTerm, setSearchTerm] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
   const [categoryFilter, setCategoryFilter] = useState('all')
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [selectedIssue, setSelectedIssue] = useState<Issue | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [formData, setFormData] = useState({
+    school_id: '',
+    category: '',
+    title: '',
+    description: '',
+    priority: 'medium',
+  })
   const [stats, setStats] = useState({
     pending: 0,
     approved: 0,
@@ -55,13 +98,17 @@ export default function TrackRequestsPage() {
   const loadData = async () => {
     setLoading(true)
     
-    const { data } = await supabase
-      .from('infrastructure_issues')
-      .select('*, schools(name)')
-      .order('created_at', { ascending: false })
+    const [issuesRes, schoolsRes] = await Promise.all([
+      supabase
+        .from('infrastructure_issues')
+        .select('*, schools(name)')
+        .order('created_at', { ascending: false }),
+      supabase.from('schools').select('*')
+    ])
 
-    const issuesData = data || []
+    const issuesData = issuesRes.data || []
     setIssues(issuesData)
+    setSchools(schoolsRes.data || [])
     
     setStats({
       pending: issuesData.filter(i => i.status === 'pending').length,
@@ -96,11 +143,89 @@ export default function TrackRequestsPage() {
   }
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    await supabase.from('infrastructure_issues').update({ 
+    const { error } = await supabase.from('infrastructure_issues').update({ 
       status: newStatus,
-      resolved_date: newStatus === 'resolved' ? new Date().toISOString() : null
+      resolved_date: newStatus === 'resolved' ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString()
     }).eq('id', id)
-    loadData()
+    
+    if (error) {
+      toast.error('Failed to update status')
+    } else {
+      toast.success('Status updated successfully')
+      loadData()
+    }
+  }
+
+  const openEditDialog = (issue: Issue) => {
+    setSelectedIssue(issue)
+    setFormData({
+      school_id: issue.school_id || '',
+      category: issue.category || '',
+      title: issue.title,
+      description: issue.description || '',
+      priority: issue.priority || 'medium',
+    })
+    setIsEditDialogOpen(true)
+  }
+
+  const openDeleteDialog = (issue: Issue) => {
+    setSelectedIssue(issue)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const handleEdit = async () => {
+    if (!selectedIssue || !formData.title || !formData.category) {
+      toast.error('Please fill in required fields')
+      return
+    }
+    
+    setIsSubmitting(true)
+    
+    const { error } = await supabase.from('infrastructure_issues')
+      .update({
+        school_id: formData.school_id || null,
+        category: formData.category,
+        title: formData.title,
+        description: formData.description || null,
+        priority: formData.priority,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', selectedIssue.id)
+    
+    if (error) {
+      toast.error('Failed to update issue')
+      console.error(error)
+    } else {
+      toast.success('Issue updated successfully')
+      setIsEditDialogOpen(false)
+      setSelectedIssue(null)
+      loadData()
+    }
+    
+    setIsSubmitting(false)
+  }
+
+  const handleDelete = async () => {
+    if (!selectedIssue) return
+    
+    setIsSubmitting(true)
+    
+    const { error } = await supabase.from('infrastructure_issues')
+      .delete()
+      .eq('id', selectedIssue.id)
+    
+    if (error) {
+      toast.error('Failed to delete issue')
+      console.error(error)
+    } else {
+      toast.success('Issue deleted successfully')
+      setIsDeleteDialogOpen(false)
+      setSelectedIssue(null)
+      loadData()
+    }
+    
+    setIsSubmitting(false)
   }
 
   if (loading) {
@@ -113,6 +238,127 @@ export default function TrackRequestsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Edit Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={(open) => { setIsEditDialogOpen(open); if (!open) setSelectedIssue(null); }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Edit Infrastructure Issue</DialogTitle>
+            <DialogDescription>
+              Update the issue details
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label>School *</Label>
+              <Select value={formData.school_id} onValueChange={(v) => setFormData({...formData, school_id: v})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select school" />
+                </SelectTrigger>
+                <SelectContent>
+                  {schools.map((school) => (
+                    <SelectItem key={school.id} value={school.id}>
+                      {school.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Category *</Label>
+              <Select value={formData.category} onValueChange={(v) => setFormData({...formData, category: v})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.value} value={cat.value}>
+                      {cat.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-title">Issue Title *</Label>
+              <Input 
+                id="edit-title" 
+                placeholder="Brief description of the issue"
+                value={formData.title}
+                onChange={(e) => setFormData({...formData, title: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Priority</Label>
+              <Select value={formData.priority} onValueChange={(v) => setFormData({...formData, priority: v})}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-description">Description</Label>
+              <Textarea 
+                id="edit-description" 
+                placeholder="Detailed description..."
+                rows={4}
+                value={formData.description}
+                onChange={(e) => setFormData({...formData, description: e.target.value})}
+              />
+            </div>
+            <Button 
+              className="w-full bg-orange-500 hover:bg-orange-600"
+              onClick={handleEdit}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                'Update Issue'
+              )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={(open) => { setIsDeleteDialogOpen(open); if (!open) setSelectedIssue(null); }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Infrastructure Issue</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this issue? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setIsDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleDelete}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold">Track Infrastructure Requests</h1>
@@ -151,11 +397,12 @@ export default function TrackRequestsPage() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Categories</SelectItem>
-            <SelectItem value="electrical">Electrical</SelectItem>
-            <SelectItem value="plumbing">Plumbing</SelectItem>
-            <SelectItem value="furniture">Furniture</SelectItem>
-            <SelectItem value="building">Building</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            <SelectItem value="Electricity">Electrical</SelectItem>
+            <SelectItem value="Plumbing">Plumbing</SelectItem>
+            <SelectItem value="Furniture">Furniture</SelectItem>
+            <SelectItem value="Classroom">Classroom</SelectItem>
+            <SelectItem value="Toilet">Toilet</SelectItem>
+            <SelectItem value="Other">Other</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -234,7 +481,7 @@ export default function TrackRequestsPage() {
                         <span>•</span>
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
-                          {new Date(issue.created_at).toLocaleDateString()}
+                          {issue.created_at ? new Date(issue.created_at).toLocaleDateString() : 'N/A'}
                         </span>
                       </div>
                     </div>
@@ -242,7 +489,7 @@ export default function TrackRequestsPage() {
                     {/* Actions */}
                     <div className="flex flex-col gap-2">
                       <Select 
-                        value={issue.status} 
+                        value={issue.status || 'pending'} 
                         onValueChange={(v) => handleStatusChange(issue.id, v)}
                       >
                         <SelectTrigger className="w-40">
@@ -256,6 +503,26 @@ export default function TrackRequestsPage() {
                           <SelectItem value="rejected">Rejected</SelectItem>
                         </SelectContent>
                       </Select>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => openEditDialog(issue)}
+                        >
+                          <Pencil className="h-4 w-4 mr-1" />
+                          Edit
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="flex-1 text-destructive hover:text-destructive"
+                          onClick={() => openDeleteDialog(issue)}
+                        >
+                          <Trash2 className="h-4 w-4 mr-1" />
+                          Delete
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </CardContent>

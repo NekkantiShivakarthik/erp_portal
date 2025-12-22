@@ -24,13 +24,15 @@ import {
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { createClient } from "@/lib/supabase/client"
+import { toast } from "sonner"
 
 const categories = [
-  { value: "building", label: "Building Structure", icon: Building2 },
-  { value: "plumbing", label: "Plumbing/Sanitation", icon: Droplets },
-  { value: "electrical", label: "Electrical", icon: Lightbulb },
-  { value: "furniture", label: "Furniture", icon: Armchair },
-  { value: "other", label: "Other", icon: AlertTriangle },
+  { value: "Classroom", label: "Classroom/Building", icon: Building2 },
+  { value: "Plumbing", label: "Plumbing/Sanitation", icon: Droplets },
+  { value: "Electricity", label: "Electrical", icon: Lightbulb },
+  { value: "Furniture", label: "Furniture", icon: Armchair },
+  { value: "Toilet", label: "Toilet", icon: Droplets },
+  { value: "Other", label: "Other", icon: AlertTriangle },
 ]
 
 export default function ReportIssuePage() {
@@ -53,27 +55,55 @@ export default function ReportIssuePage() {
 
   const loadSchools = async () => {
     setLoading(true)
-    const { data } = await supabase.from('schools').select('*')
+    const { data, error } = await supabase.from('schools').select('*')
+    if (error) {
+      console.error('Error loading schools:', error)
+      toast.error('Failed to load schools')
+    }
     setSchools(data || [])
     setLoading(false)
   }
 
+  const resetForm = () => {
+    setFormData({
+      school_id: '',
+      category: '',
+      title: '',
+      description: '',
+      priority: 'medium',
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!formData.school_id || !formData.category || !formData.title) return
+    
+    if (!formData.school_id || !formData.category || !formData.title) {
+      toast.error('Please fill in all required fields')
+      return
+    }
     
     setIsSubmitting(true)
     
-    await supabase.from('infrastructure_issues').insert({
+    const { data, error } = await supabase.from('infrastructure_issues').insert({
       school_id: formData.school_id,
       category: formData.category,
       title: formData.title,
-      description: formData.description,
+      description: formData.description || null,
       priority: formData.priority,
       status: 'pending',
-    })
+      reported_date: new Date().toISOString(),
+    }).select()
     
+    if (error) {
+      console.error('Error submitting report:', error)
+      toast.error(`Failed to submit report: ${error.message}`)
+      setIsSubmitting(false)
+      return
+    }
+    
+    toast.success('Infrastructure issue reported successfully!')
     setIsSubmitting(false)
+    resetForm()
     router.push('/dashboard/infrastructure/track')
   }
 

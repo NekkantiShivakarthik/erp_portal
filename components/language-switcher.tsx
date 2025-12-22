@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -20,8 +21,25 @@ const languageIcons: Record<string, string> = {
 
 export function LanguageSwitcher() {
   const { locale, setLocale } = useLanguage()
+  const [mounted, setMounted] = useState(false)
+  
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
   
   const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0]
+
+  // Show a placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="sm" className="gap-2 hover:bg-accent">
+        <Globe className="h-4 w-4 text-orange-500" />
+        <span className="text-lg">🌐</span>
+        <span className="hidden sm:inline font-medium">Language</span>
+      </Button>
+    )
+  }
 
   return (
     <DropdownMenu>

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   Building2, 
   Clock,
@@ -10,17 +12,42 @@ import {
   CheckCircle,
   Loader2,
   Wrench,
-  AlertCircle
+  AlertCircle,
+  Search,
+  Calendar,
+  Droplets,
+  Lightbulb,
+  Armchair
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
+
+const statusConfig = {
+  pending: { label: "Pending Review", color: "bg-yellow-500", icon: Clock },
+  approved: { label: "Approved", color: "bg-purple-500", icon: CheckCircle },
+  "in-progress": { label: "In Progress", color: "bg-blue-500", icon: Wrench },
+  resolved: { label: "Resolved", color: "bg-green-500", icon: CheckCircle },
+  rejected: { label: "Rejected", color: "bg-red-500", icon: AlertTriangle },
+}
+
+const categoryIcons: Record<string, string> = {
+  'Electricity': '⚡',
+  'Plumbing': '🚰',
+  'Furniture': '🪑',
+  'Classroom': '🏫',
+  'Toilet': '🚽',
+  'Other': '🔧',
+}
 
 export default function StudentInfrastructurePage() {
   const supabase = createClient()
   const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [issues, setIssues] = useState<any[]>([])
-  const [schoolName, setSchoolName] = useState("")
+  const [filteredIssues, setFilteredIssues] = useState<any[]>([])
+  const [searchTerm, setSearchTerm] = useState('')
+  const [statusFilter, setStatusFilter] = useState('all')
+  const [categoryFilter, setCategoryFilter] = useState('all')
   const [stats, setStats] = useState({
     total: 0,
     pending: 0,
@@ -32,91 +59,22 @@ export default function StudentInfrastructurePage() {
     loadData()
   }, [])
 
+  useEffect(() => {
+    filterIssues()
+  }, [issues, searchTerm, statusFilter, categoryFilter])
+
   const loadData = async () => {
     setLoading(true)
     
-    const school = localStorage.getItem('schoolName')
-    const schoolId = localStorage.getItem('schoolId')
-    setSchoolName(school || '')
+    // Fetch all infrastructure issues from database
+    const { data: issuesData, error } = await supabase
+      .from('infrastructure_issues')
+      .select('*, schools(name)')
+      .order('created_at', { ascending: false })
 
-    // For demo student, show demo data
-    const studentId = localStorage.getItem('studentId')
-    
-    if (studentId === 'demo-student-001') {
-      // Demo infrastructure issues
-      const demoIssues = [
-        {
-          id: 'demo-issue-1',
-          title: 'Broken Ceiling Fan in Classroom 5A',
-          description: 'The ceiling fan in classroom 5A is not working properly and makes loud noise.',
-          category: 'electrical',
-          priority: 'medium',
-          status: 'in-progress',
-          created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-          schools: { name: 'Demo Government School' }
-        },
-        {
-          id: 'demo-issue-2',
-          title: 'Leaking Water Tap in Boys Toilet',
-          description: 'Water tap in the boys toilet on ground floor is leaking continuously.',
-          category: 'plumbing',
-          priority: 'high',
-          status: 'pending',
-          created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-          schools: { name: 'Demo Government School' }
-        },
-        {
-          id: 'demo-issue-3',
-          title: 'Broken Desk in Library',
-          description: 'One of the study desks in the library has a broken leg.',
-          category: 'furniture',
-          priority: 'low',
-          status: 'resolved',
-          created_at: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
-          schools: { name: 'Demo Government School' }
-        },
-        {
-          id: 'demo-issue-4',
-          title: 'Flickering Tube Light in Corridor',
-          description: 'The tube light in the main corridor keeps flickering.',
-          category: 'electrical',
-          priority: 'medium',
-          status: 'approved',
-          created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          schools: { name: 'Demo Government School' }
-        },
-        {
-          id: 'demo-issue-5',
-          title: 'Crack in Classroom Wall',
-          description: 'There is a visible crack on the wall of classroom 3B.',
-          category: 'building',
-          priority: 'high',
-          status: 'in-progress',
-          created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-          schools: { name: 'Demo Government School' }
-        }
-      ]
-      
-      setIssues(demoIssues)
-      setStats({
-        total: demoIssues.length,
-        pending: demoIssues.filter(i => i.status === 'pending').length,
-        inProgress: demoIssues.filter(i => i.status === 'in-progress' || i.status === 'approved').length,
-        resolved: demoIssues.filter(i => i.status === 'resolved').length,
-      })
-      setLoading(false)
-      return
+    if (error) {
+      console.error('Error loading infrastructure issues:', error)
     }
-
-    // Fetch real data for actual students
-    let query = supabase.from('infrastructure_issues').select('*, schools(name)').order('created_at', { ascending: false })
-    
-    // If student has a school ID, filter by that school
-    if (schoolId) {
-      query = query.eq('school_id', schoolId)
-    }
-
-    const { data: issuesData } = await query
 
     const issues = issuesData || []
     setIssues(issues)
@@ -131,33 +89,33 @@ export default function StudentInfrastructurePage() {
     setLoading(false)
   }
 
+  const filterIssues = () => {
+    let filtered = [...issues]
+    
+    if (searchTerm) {
+      filtered = filtered.filter(i => 
+        i.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        i.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    }
+    
+    if (statusFilter !== 'all') {
+      filtered = filtered.filter(i => i.status === statusFilter)
+    }
+    
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(i => i.category === categoryFilter)
+    }
+    
+    setFilteredIssues(filtered)
+  }
+
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'electrical': return '⚡'
-      case 'plumbing': return '🚰'
-      case 'furniture': return '🪑'
-      case 'building': return '🏗️'
-      default: return '🔧'
-    }
+    return categoryIcons[category] || '🔧'
   }
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'resolved': return 'bg-green-500'
-      case 'in-progress': return 'bg-blue-500'
-      case 'approved': return 'bg-purple-500'
-      default: return 'bg-orange-500'
-    }
-  }
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'resolved': return t('infrastructure.resolved')
-      case 'in-progress': return t('infrastructure.inProgress')
-      case 'approved': return t('infrastructure.inProgress')
-      case 'pending': return t('infrastructure.pending')
-      default: return status
-    }
+  const getStatusInfo = (status: string) => {
+    return statusConfig[status as keyof typeof statusConfig] || statusConfig.pending
   }
 
   if (loading) {
@@ -234,6 +192,45 @@ export default function StudentInfrastructurePage() {
         </Card>
       </div>
 
+      {/* Search and Filters */}
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search by title or description..." 
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Status" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Status</SelectItem>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="approved">Approved</SelectItem>
+            <SelectItem value="in-progress">In Progress</SelectItem>
+            <SelectItem value="resolved">Resolved</SelectItem>
+          </SelectContent>
+        </Select>
+        <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Category" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Categories</SelectItem>
+            <SelectItem value="Electricity">Electrical</SelectItem>
+            <SelectItem value="Plumbing">Plumbing</SelectItem>
+            <SelectItem value="Furniture">Furniture</SelectItem>
+            <SelectItem value="Classroom">Classroom</SelectItem>
+            <SelectItem value="Toilet">Toilet</SelectItem>
+            <SelectItem value="Other">Other</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       {/* Issues List */}
       <Card>
         <CardHeader>
@@ -246,56 +243,68 @@ export default function StudentInfrastructurePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {issues.length === 0 ? (
+          {filteredIssues.length === 0 ? (
             <div className="text-center py-12">
               <CheckCircle className="h-12 w-12 mx-auto text-green-500 mb-4" />
               <h3 className="font-semibold text-lg mb-2">{t('infrastructure.noIssues')}</h3>
               <p className="text-muted-foreground">
-                {t('infrastructure.greatNews')}
+                {searchTerm || statusFilter !== 'all' || categoryFilter !== 'all' 
+                  ? 'No issues match your filters.' 
+                  : t('infrastructure.greatNews')}
               </p>
             </div>
           ) : (
             <div className="space-y-4">
-              {issues.map((issue) => (
-                <div
-                  key={issue.id}
-                  className="rounded-lg border p-4 hover:bg-accent/30 transition-colors"
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex items-start gap-3">
-                      <span className="text-2xl">{getCategoryIcon(issue.category)}</span>
-                      <div>
-                        <h3 className="font-semibold">{issue.title}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {issue.description}
-                        </p>
-                        <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
-                          <span className="capitalize">{issue.category}</span>
-                          <span>•</span>
-                          <span>{new Date(issue.created_at).toLocaleDateString('en-IN', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}</span>
+              {filteredIssues.map((issue) => {
+                const statusInfo = getStatusInfo(issue.status)
+                return (
+                  <div
+                    key={issue.id}
+                    className="rounded-lg border p-4 hover:bg-accent/30 transition-colors"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <span className="text-2xl">{getCategoryIcon(issue.category)}</span>
+                        <div>
+                          <h3 className="font-semibold">{issue.title}</h3>
+                          {issue.description && (
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {issue.description}
+                            </p>
+                          )}
+                          <div className="flex items-center gap-2 mt-2 text-xs text-muted-foreground">
+                            <span>{issue.category}</span>
+                            <span>•</span>
+                            <span>{(issue.schools as any)?.name || 'School'}</span>
+                            <span>•</span>
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-3 w-3" />
+                              {issue.created_at ? new Date(issue.created_at).toLocaleDateString('en-IN', {
+                                year: 'numeric',
+                                month: 'short',
+                                day: 'numeric'
+                              }) : 'N/A'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge 
-                        variant={issue.priority === 'high' ? 'destructive' : issue.priority === 'medium' ? 'default' : 'secondary'}
-                      >
-                        {issue.priority} {t('infrastructure.priority')}
-                      </Badge>
-                      <Badge 
-                        variant="outline"
-                        className={`${getStatusColor(issue.status)} text-white border-0`}
-                      >
-                        {getStatusLabel(issue.status)}
-                      </Badge>
+                      <div className="flex flex-col items-end gap-2">
+                        <Badge 
+                          variant={issue.priority === 'high' ? 'destructive' : issue.priority === 'medium' ? 'default' : 'secondary'}
+                        >
+                          {issue.priority} priority
+                        </Badge>
+                        <Badge 
+                          variant="outline"
+                          className={`${statusInfo.color} text-white border-0`}
+                        >
+                          {statusInfo.label}
+                        </Badge>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           )}
         </CardContent>
