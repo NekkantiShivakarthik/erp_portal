@@ -55,12 +55,16 @@ export default function ReportIssuePage() {
 
   const loadSchools = async () => {
     setLoading(true)
-    const { data, error } = await supabase.from('schools').select('*')
-    if (error) {
-      console.error('Error loading schools:', error)
-      toast.error('Failed to load schools')
+    try {
+      const { data, error } = await supabase.from('schools').select('*')
+      if (error) {
+        console.warn('Could not load schools:', error.message || 'Database may not be set up yet')
+      }
+      setSchools(data || [])
+    } catch (err: any) {
+      console.warn('Schools fetch failed:', err?.message)
+      setSchools([])
     }
-    setSchools(data || [])
     setLoading(false)
   }
 

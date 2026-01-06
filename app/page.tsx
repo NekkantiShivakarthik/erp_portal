@@ -42,11 +42,31 @@ export default function LoginPage() {
     try {
       // Handle student login separately
       if (userType === "student") {
-        // Check for demo student credentials
-        if (rollNumber === "STU001" && password === "student123") {
-          // Demo student login - no database required
+        // Check for demo student credentials (fallback if DB not set up)
+        if ((rollNumber === "STU001" || rollNumber === "STU1001") && password === "student123") {
+          // Try database first
+          const { data: demoStudent } = await supabase
+            .from('students')
+            .select('*, schools(name)')
+            .eq('roll_no', rollNumber)
+            .eq('password', password)
+            .single()
+          
+          if (demoStudent) {
+            localStorage.setItem('userType', 'student')
+            localStorage.setItem('rollNumber', rollNumber)
+            localStorage.setItem('studentId', demoStudent.id)
+            localStorage.setItem('userId', demoStudent.id)
+            localStorage.setItem('userName', demoStudent.name)
+            localStorage.setItem('schoolId', demoStudent.school_id || '')
+            localStorage.setItem('schoolName', (demoStudent.schools as any)?.name || '')
+            window.location.href = "/dashboard/student"
+            return
+          }
+          
+          // Fallback demo student login - no database required
           localStorage.setItem('userType', 'student')
-          localStorage.setItem('rollNumber', 'STU001')
+          localStorage.setItem('rollNumber', rollNumber)
           localStorage.setItem('studentId', 'demo-student-001')
           localStorage.setItem('userId', 'demo-student-001')
           localStorage.setItem('userName', 'Demo Student')
@@ -61,7 +81,7 @@ export default function LoginPage() {
         const { data: student, error: dbError } = await supabase
           .from('students')
           .select('*, schools(name)')
-          .eq('roll_number', rollNumber)
+          .eq('roll_no', rollNumber)  // Database column is roll_no
           .eq('password', password)
           .single()
         
@@ -84,7 +104,7 @@ export default function LoginPage() {
         return
       }
 
-      // Handle teacher/official login
+      // Handle teacher/official/headmaster login
       const { data: user, error: dbError } = await supabase
         .from('teachers')
         .select('*, schools(name)')
@@ -93,13 +113,45 @@ export default function LoginPage() {
         .single()
       
       if (dbError || !user) {
-        setError("Invalid Employee ID or Password. Please register first in the Settings page.")
+        // Demo fallback - check for demo credentials
+        const demoCredentials: Record<string, { password: string, role: string, name: string }> = {
+          'HM001': { password: 'headmaster123', role: 'headmaster', name: 'Rajesh Kumar (Demo)' },
+          'TCH001': { password: 'teacher123', role: 'teacher', name: 'Priya Sharma (Demo)' },
+          'TCH002': { password: 'teacher123', role: 'teacher', name: 'Arun Verma (Demo)' },
+          'TCH003': { password: 'teacher123', role: 'teacher', name: 'Lakshmi Devi (Demo)' },
+          'TCH004': { password: 'teacher123', role: 'teacher', name: 'Mohammed Ali (Demo)' },
+          'TCH005': { password: 'teacher123', role: 'teacher', name: 'Sunita Rao (Demo)' },
+        }
+        
+        const demo = demoCredentials[employeeId]
+        if (demo && demo.password === password) {
+          // Check if role matches
+          if ((userType === 'teacher' && demo.role === 'teacher') || 
+              (userType === 'headmaster' && demo.role === 'headmaster') ||
+              (userType === 'official' && demo.role === 'headmaster')) {
+            localStorage.setItem('userType', demo.role)
+            localStorage.setItem('employeeId', employeeId)
+            localStorage.setItem('userId', `demo-${employeeId}`)
+            localStorage.setItem('userName', demo.name)
+            localStorage.setItem('schoolId', 'demo-school-001')
+            localStorage.setItem('schoolName', 'Demo Government School')
+            
+            if (demo.role === 'headmaster') {
+              window.location.href = "/dashboard/teacher"
+            } else {
+              window.location.href = "/dashboard/teacher"
+            }
+            return
+          }
+        }
+        
+        setError("Invalid Employee ID or Password. Please check your credentials or set up demo data in Settings.")
         setIsLoading(false)
         return
       }
 
-      // Check if role matches selected user type
-      if (user.role !== userType) {
+      // Check if role matches selected user type (allow headmaster to login as teacher)
+      if (user.role !== userType && !(user.role === 'headmaster' && (userType === 'teacher' || userType === 'headmaster'))) {
         setError(`This account is registered as "${user.role}". Please select the correct role.`)
         setIsLoading(false)
         return
@@ -132,19 +184,19 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen gradient-mesh-bg flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Floating Educational Icons */}
+      {/* Animated Background Shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <BookOpen className="absolute top-[10%] left-[5%] h-16 w-16 text-primary/10 animate-pulse" />
-        <GraduationCap className="absolute top-[15%] right-[10%] h-20 w-20 text-primary/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
-        <PenTool className="absolute bottom-[20%] left-[8%] h-12 w-12 text-primary/10 animate-pulse" style={{ animationDelay: '1s' }} />
-        <Calculator className="absolute top-[60%] right-[5%] h-14 w-14 text-primary/10 animate-pulse" style={{ animationDelay: '1.5s' }} />
-        <Globe className="absolute bottom-[10%] right-[15%] h-18 w-18 text-primary/10 animate-pulse" style={{ animationDelay: '2s' }} />
-        <Microscope className="absolute top-[40%] left-[3%] h-10 w-10 text-primary/10 animate-pulse" style={{ animationDelay: '0.8s' }} />
+        <div className="absolute top-[5%] right-[30%] h-40 w-40 rounded-full bg-primary/10 blur-3xl animate-pulse" />
+        <div className="absolute bottom-[15%] left-[20%] h-56 w-56 rounded-full bg-accent/15 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-[50%] right-[10%] h-32 w-32 rounded-full bg-chart-2/15 blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
         
-        {/* Decorative circles */}
-        <div className="absolute top-[5%] right-[30%] h-32 w-32 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute bottom-[15%] left-[20%] h-48 w-48 rounded-full bg-accent/20 blur-3xl" />
-        <div className="absolute top-[50%] right-[10%] h-24 w-24 rounded-full bg-chart-2/10 blur-2xl" />
+        {/* Floating Educational Icons */}
+        <BookOpen className="absolute top-[10%] left-[5%] h-16 w-16 text-primary/10 animate-bounce" style={{ animationDuration: '3s' }} />
+        <GraduationCap className="absolute top-[15%] right-[10%] h-20 w-20 text-primary/10 animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }} />
+        <PenTool className="absolute bottom-[20%] left-[8%] h-12 w-12 text-primary/10 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }} />
+        <Calculator className="absolute top-[60%] right-[5%] h-14 w-14 text-primary/10 animate-bounce" style={{ animationDuration: '4s', animationDelay: '1.5s' }} />
+        <Globe className="absolute bottom-[10%] right-[15%] h-16 w-16 text-primary/10 animate-bounce" style={{ animationDuration: '3s', animationDelay: '2s' }} />
+        <Microscope className="absolute top-[40%] left-[3%] h-10 w-10 text-primary/10 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '0.8s' }} />
       </div>
 
       {/* Theme Toggle */}
@@ -152,31 +204,32 @@ export default function LoginPage() {
         <ThemeToggle />
       </div>
       
-      <div className="relative w-full max-w-md z-10">
+      <div className="relative w-full max-w-md z-10 animate-fade-in-up">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="flex items-center gap-3 bg-card/80 backdrop-blur-lg rounded-2xl px-6 py-3 shadow-xl border border-border/50">
-              <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg">
-                <GraduationCap className="h-7 w-7 text-primary-foreground" />
+            <div className="flex items-center gap-4 bg-card/80 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-2xl border border-border/50 hover-lift">
+              <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg pulse-glow">
+                <GraduationCap className="h-8 w-8 text-primary-foreground" />
               </div>
               <div className="text-left">
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-chart-2 bg-clip-text text-transparent">
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-chart-2 to-primary bg-clip-text text-transparent">
                   ShikshaSetu
                 </h1>
-                <p className="text-xs text-muted-foreground">Government School Portal</p>
+                <p className="text-sm text-muted-foreground">Government School Portal</p>
               </div>
             </div>
           </div>
-          <p className="text-sm text-muted-foreground max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-4">
             Secure platform for teachers and officials to monitor, support, and improve government schools
           </p>
         </div>
 
-        <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-lg hover-lift">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl text-center">Official Login</CardTitle>
-            <CardDescription className="text-center">
-              Enter your official credentials issued by the Education Department
+        <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-xl hover-lift overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-chart-2 to-primary" />
+          <CardHeader className="space-y-1 pb-4 pt-6">
+            <CardTitle className="text-2xl text-center font-bold">Welcome Back</CardTitle>
+            <CardDescription className="text-center text-base">
+              Enter your official credentials to access the portal
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -285,67 +338,80 @@ export default function LoginPage() {
 
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg"
+                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg text-base py-6 font-semibold transition-all hover:shadow-xl hover:scale-[1.02]"
                 disabled={isLoading || !userType}
               >
-                {isLoading ? "Signing in..." : "Sign In"}
+                {isLoading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="h-4 w-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Signing in...
+                  </span>
+                ) : (
+                  "Sign In"
+                )}
               </Button>
             </form>
 
             {/* Info Box */}
             <div className="mt-6 pt-4 border-t border-border/50">
               {userType === "student" && (
-                <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4 mb-4">
-                  <h4 className="text-sm font-semibold text-green-600 dark:text-green-400 mb-2">🎓 Demo Student Credentials</h4>
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-center justify-between bg-background/50 rounded px-3 py-2">
+                <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-xl p-4 mb-4">
+                  <h4 className="text-sm font-semibold text-green-600 dark:text-green-400 mb-3 flex items-center gap-2">
+                    <span className="h-6 w-6 rounded-full bg-green-500/20 flex items-center justify-center">🎓</span>
+                    Demo Student Credentials
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center justify-between bg-background/60 rounded-lg px-4 py-2.5">
                       <span className="text-muted-foreground">Roll Number:</span>
-                      <code className="font-mono font-semibold">STU001</code>
+                      <code className="font-mono font-bold text-green-600 dark:text-green-400">STU001</code>
                     </div>
-                    <div className="flex items-center justify-between bg-background/50 rounded px-3 py-2">
+                    <div className="flex items-center justify-between bg-background/60 rounded-lg px-4 py-2.5">
                       <span className="text-muted-foreground">Password:</span>
-                      <code className="font-mono font-semibold">student123</code>
+                      <code className="font-mono font-bold text-green-600 dark:text-green-400">student123</code>
                     </div>
                   </div>
                 </div>
               )}
-              <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
-                <h4 className="text-sm font-semibold text-primary mb-2">ℹ️ How to Login</h4>
+              <div className="bg-gradient-to-r from-primary/5 to-primary/10 border border-primary/20 rounded-xl p-4">
+                <h4 className="text-sm font-semibold text-primary mb-3 flex items-center gap-2">
+                  <span className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center">ℹ️</span>
+                  How to Login
+                </h4>
                 {userType === "student" ? (
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <p>1. Students are registered in <strong>Dashboard → Student</strong></p>
-                    <p>2. Use your Roll Number and Password provided by your teacher</p>
-                    <p>3. Access attendance records and learning resources</p>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">1.</span> Students are registered in <strong className="text-foreground">Dashboard → Student</strong></p>
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">2.</span> Use your Roll Number and Password provided by your teacher</p>
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">3.</span> Access attendance records and learning resources</p>
                   </div>
                 ) : (
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <p>1. First, register users in the <strong>Settings → Teachers</strong> tab</p>
-                    <p>2. Create Employee ID and Password during registration</p>
-                    <p>3. Select your role and enter credentials to login</p>
+                  <div className="space-y-2 text-sm text-muted-foreground">
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">1.</span> First, register users in the <strong className="text-foreground">Settings → Teachers</strong> tab</p>
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">2.</span> Create Employee ID and Password during registration</p>
+                    <p className="flex items-start gap-2"><span className="font-bold text-primary">3.</span> Select your role and enter credentials to login</p>
                   </div>
                 )}
               </div>
             </div>
 
-            <div className="mt-4">
-              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground">
-                <Shield className="h-4 w-4" />
+            <div className="mt-6">
+              <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground bg-muted/50 rounded-lg p-3">
+                <Shield className="h-4 w-4 text-primary" />
                 <span>This is a restricted government portal. Unauthorized access is prohibited.</span>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <div className="mt-6 text-center">
-          <p className="text-xs text-muted-foreground">
-            © 2024 Department of Education, Government of India
+        <div className="mt-8 text-center">
+          <p className="text-sm text-muted-foreground font-medium">
+            © 2026 Department of Education, Government of India
           </p>
-          <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
-            <span className="hover:text-foreground cursor-pointer transition-colors">Privacy Policy</span>
-            <span>•</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Terms of Use</span>
-            <span>•</span>
-            <span className="hover:text-foreground cursor-pointer transition-colors">Help</span>
+          <div className="flex items-center justify-center gap-6 mt-3 text-sm text-muted-foreground">
+            <span className="hover:text-primary cursor-pointer transition-colors">Privacy Policy</span>
+            <span className="text-border">•</span>
+            <span className="hover:text-primary cursor-pointer transition-colors">Terms of Use</span>
+            <span className="text-border">•</span>
+            <span className="hover:text-primary cursor-pointer transition-colors">Help</span>
           </div>
         </div>
       </div>

@@ -24,10 +24,12 @@ import {
   Building2,
   Droplets,
   Lightbulb,
-  Armchair
+  Armchair,
+  WifiOff
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { getDemoData, DemoDataStore } from "@/lib/demo-data"
 import { toast } from "sonner"
 
 const statusConfig = {
@@ -62,6 +64,7 @@ interface Issue {
 export default function TrackRequestsPage() {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   const [issues, setIssues] = useState<Issue[]>([])
   const [schools, setSchools] = useState<any[]>([])
   const [filteredIssues, setFilteredIssues] = useState<Issue[]>([])
@@ -95,28 +98,60 @@ export default function TrackRequestsPage() {
     filterIssues()
   }, [issues, searchTerm, statusFilter, categoryFilter])
 
-  const loadData = async () => {
-    setLoading(true)
+  const loadDemoData = () => {
+    const demoStore = getDemoData()
     
-    const [issuesRes, schoolsRes] = await Promise.all([
-      supabase
-        .from('infrastructure_issues')
-        .select('*, schools(name)')
-        .order('created_at', { ascending: false }),
-      supabase.from('schools').select('*')
-    ])
-
-    const issuesData = issuesRes.data || []
+    const issuesData = demoStore.infrastructureIssues.map(issue => ({
+      ...issue,
+      schools: demoStore.schools.find(s => s.id === issue.school_id)
+    }))
+    
     setIssues(issuesData)
-    setSchools(schoolsRes.data || [])
+    setSchools(demoStore.schools)
     
     setStats({
       pending: issuesData.filter(i => i.status === 'pending').length,
-      approved: issuesData.filter(i => i.status === 'approved').length,
+      approved: 0,
       'in-progress': issuesData.filter(i => i.status === 'in-progress').length,
       resolved: issuesData.filter(i => i.status === 'resolved').length,
-      rejected: issuesData.filter(i => i.status === 'rejected').length,
+      rejected: 0,
     })
+    
+    setIsOfflineMode(true)
+  }
+
+  const loadData = async () => {
+    setLoading(true)
+    
+    try {
+      const [issuesRes, schoolsRes] = await Promise.all([
+        supabase
+          .from('infrastructure_issues')
+          .select('*, schools(name)')
+          .order('created_at', { ascending: false }),
+        supabase.from('schools').select('*')
+      ])
+
+      if (issuesRes.error || schoolsRes.error) {
+        loadDemoData()
+        setLoading(false)
+        return
+      }
+
+      const issuesData = issuesRes.data || []
+      setIssues(issuesData)
+      setSchools(schoolsRes.data || [])
+      
+      setStats({
+        pending: issuesData.filter(i => i.status === 'pending').length,
+        approved: issuesData.filter(i => i.status === 'approved').length,
+        'in-progress': issuesData.filter(i => i.status === 'in-progress').length,
+        resolved: issuesData.filter(i => i.status === 'resolved').length,
+        rejected: issuesData.filter(i => i.status === 'rejected').length,
+      })
+    } catch (error) {
+      loadDemoData()
+    }
     
     setLoading(false)
   }

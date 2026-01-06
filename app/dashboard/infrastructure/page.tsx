@@ -22,16 +22,19 @@ import {
   Clock,
   Plus,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  WifiOff
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
+import { getDemoData, DemoDataStore } from "@/lib/demo-data"
 
 export default function InfrastructurePage() {
   const supabase = createClient()
   const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   const [issues, setIssues] = useState<any[]>([])
   const [schools, setSchools] = useState<any[]>([])
   const [stats, setStats] = useState({
@@ -53,24 +56,55 @@ export default function InfrastructurePage() {
     loadData()
   }, [])
 
-  const loadData = async () => {
-    setLoading(true)
+  const loadDemoData = () => {
+    const demoStore = getDemoData()
     
-    const [issuesRes, schoolsRes] = await Promise.all([
-      supabase.from('infrastructure_issues').select('*, schools(name)').order('created_at', { ascending: false }),
-      supabase.from('schools').select('*'),
-    ])
-
-    const issuesData = issuesRes.data || []
+    const issuesData = demoStore.infrastructureIssues.map(issue => ({
+      ...issue,
+      schools: demoStore.schools.find(s => s.id === issue.school_id)
+    }))
+    
     setIssues(issuesData)
-    setSchools(schoolsRes.data || [])
+    setSchools(demoStore.schools)
     
     setStats({
       total: issuesData.length,
       pending: issuesData.filter(i => i.status === 'pending').length,
-      inProgress: issuesData.filter(i => i.status === 'in-progress' || i.status === 'approved').length,
+      inProgress: issuesData.filter(i => i.status === 'in-progress').length,
       resolved: issuesData.filter(i => i.status === 'resolved').length,
     })
+    
+    setIsOfflineMode(true)
+  }
+
+  const loadData = async () => {
+    setLoading(true)
+    
+    try {
+      const [issuesRes, schoolsRes] = await Promise.all([
+        supabase.from('infrastructure_issues').select('*, schools(name)').order('created_at', { ascending: false }),
+        supabase.from('schools').select('*'),
+      ])
+
+      if (issuesRes.error || schoolsRes.error) {
+        loadDemoData()
+        setLoading(false)
+        return
+      }
+
+      const issuesData = issuesRes.data || []
+      setIssues(issuesData)
+      setSchools(schoolsRes.data || [])
+      
+      setStats({
+        total: issuesData.length,
+        pending: issuesData.filter(i => i.status === 'pending').length,
+        inProgress: issuesData.filter(i => i.status === 'in-progress' || i.status === 'approved').length,
+        resolved: issuesData.filter(i => i.status === 'resolved').length,
+      })
+    } catch (error) {
+      loadDemoData()
+    }
     
     setLoading(false)
   }
@@ -78,14 +112,27 @@ export default function InfrastructurePage() {
   const handleCreateIssue = async () => {
     if (!newIssue.school_id || !newIssue.title || !newIssue.category) return
 
-    await supabase.from('infrastructure_issues').insert({
-      school_id: newIssue.school_id,
-      title: newIssue.title,
-      description: newIssue.description,
-      category: newIssue.category,
-      priority: newIssue.priority,
-      status: 'pending',
-    })
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      demoStore.addInfrastructureIssue({
+        school_id: newIssue.school_id,
+        title: newIssue.title,
+        description: newIssue.description,
+        category: newIssue.category,
+        priority: newIssue.priority as 'low' | 'medium' | 'high',
+        status: 'pending',
+        reported_by: 'current-user',
+      })
+    } else {
+      await supabase.from('infrastructure_issues').insert({
+        school_id: newIssue.school_id,
+        title: newIssue.title,
+        description: newIssue.description,
+        category: newIssue.category,
+        priority: newIssue.priority,
+        status: 'pending',
+      })
+    }
 
     setNewIssue({ school_id: '', title: '', description: '', category: '', priority: 'medium' })
     setDialogOpen(false)
@@ -104,6 +151,25 @@ export default function InfrastructurePage() {
 
   return (
     <div className="space-y-6">
+      {/* Demo Mode Banner */}
+      {isOfflineMode && (
+        <Card className="border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 dark:border-amber-600">
+          <CardContent className="py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                <WifiOff className="h-5 w-5 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-amber-800 dark:text-amber-300">Demo Mode</h4>
+                <p className="text-sm text-amber-700 dark:text-amber-400">
+                  Showing demo infrastructure data. New issues will be saved locally.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

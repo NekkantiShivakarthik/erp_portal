@@ -166,32 +166,34 @@ export function SidebarNav() {
   }, [])
 
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b px-6 py-4">
-        <Link href="/dashboard/teacher" className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white">
+    <Sidebar className="border-r-0">
+      <SidebarHeader className="border-b px-6 py-5 bg-gradient-to-b from-sidebar to-sidebar/95">
+        <Link href="/dashboard/teacher" className="flex items-center gap-3 group">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 text-white shadow-lg group-hover:shadow-orange-500/30 transition-shadow">
             <GraduationCap className="h-6 w-6" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold bg-gradient-to-r from-orange-600 to-green-600 bg-clip-text text-transparent">
+            <span className="text-lg font-bold bg-gradient-to-r from-orange-400 to-green-400 bg-clip-text text-transparent">
               ShikshaSetu
             </span>
-            <span className="text-xs text-muted-foreground">Government Portal</span>
+            <span className="text-xs text-sidebar-foreground/60">Government Portal</span>
           </div>
         </Link>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="px-3 py-4">
         {userType === 'student' ? (
           <SidebarGroup>
-            <SidebarGroupLabel>{t('sidebar.studentMenu')}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-xs tracking-wider mb-2">{t('sidebar.studentMenu')}</SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="space-y-1">
                 {studentNavItems.map((item) => (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href}>
-                      <Link href={item.href}>
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.title}</span>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-xl py-3 transition-all ${pathname === item.href ? 'bg-sidebar-accent shadow-md' : 'hover:bg-sidebar-accent/50'}`}>
+                      <Link href={item.href} className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${pathname === item.href ? 'bg-primary text-primary-foreground' : 'bg-sidebar-accent'}`}>
+                          <item.icon className="h-4 w-4" />
+                        </div>
+                        <span className="font-medium">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -202,15 +204,17 @@ export function SidebarNav() {
         ) : (
           <>
             <SidebarGroup>
-              <SidebarGroupLabel>{t('sidebar.teacherMenu')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-xs tracking-wider mb-2">{t('sidebar.teacherMenu')}</SidebarGroupLabel>
               <SidebarGroupContent>
-                <SidebarMenu>
+                <SidebarMenu className="space-y-1">
                   {teacherNavItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href}>
-                        <Link href={item.href}>
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-xl py-3 transition-all ${pathname === item.href ? 'bg-sidebar-accent shadow-md' : 'hover:bg-sidebar-accent/50'}`}>
+                        <Link href={item.href} className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${pathname === item.href ? 'bg-primary text-primary-foreground' : 'bg-sidebar-accent'}`}>
+                            <item.icon className="h-4 w-4" />
+                          </div>
+                          <span className="font-medium">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -219,15 +223,17 @@ export function SidebarNav() {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>{t('sidebar.infrastructure')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-xs tracking-wider mb-2">{t('sidebar.infrastructure')}</SidebarGroupLabel>
               <SidebarGroupContent>
-                <SidebarMenu>
+                <SidebarMenu className="space-y-1">
                   {infrastructureItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href}>
-                        <Link href={item.href}>
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-xl py-3 transition-all ${pathname === item.href ? 'bg-sidebar-accent shadow-md' : 'hover:bg-sidebar-accent/50'}`}>
+                        <Link href={item.href} className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${pathname === item.href ? 'bg-primary text-primary-foreground' : 'bg-sidebar-accent'}`}>
+                            <item.icon className="h-4 w-4" />
+                          </div>
+                          <span className="font-medium">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -236,15 +242,17 @@ export function SidebarNav() {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel>{t('sidebar.management')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-sidebar-foreground/50 uppercase text-xs tracking-wider mb-2">{t('sidebar.management')}</SidebarGroupLabel>
               <SidebarGroupContent>
-                <SidebarMenu>
+                <SidebarMenu className="space-y-1">
                   {managementItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href}>
-                        <Link href={item.href}>
-                          <item.icon className="h-4 w-4" />
-                          <span>{item.title}</span>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-xl py-3 transition-all ${pathname === item.href ? 'bg-sidebar-accent shadow-md' : 'hover:bg-sidebar-accent/50'}`}>
+                        <Link href={item.href} className="flex items-center gap-3">
+                          <div className={`p-2 rounded-lg ${pathname === item.href ? 'bg-primary text-primary-foreground' : 'bg-sidebar-accent'}`}>
+                            <item.icon className="h-4 w-4" />
+                          </div>
+                          <span className="font-medium">{item.title}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
@@ -255,25 +263,25 @@ export function SidebarNav() {
           </>
         )}
       </SidebarContent>
-      <SidebarFooter className="border-t p-4">
-        <div className="flex items-center gap-3 mb-3">
-          <Avatar className="h-9 w-9">
+      <SidebarFooter className="border-t p-4 bg-gradient-to-t from-sidebar to-sidebar/95">
+        <div className="flex items-center gap-3 mb-4 p-3 rounded-xl bg-sidebar-accent/50">
+          <Avatar className="h-10 w-10 ring-2 ring-primary/30">
             <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback className="bg-orange-100 text-orange-600">{userInitials}</AvatarFallback>
+            <AvatarFallback className="bg-gradient-to-br from-orange-400 to-orange-500 text-white font-semibold">{userInitials}</AvatarFallback>
           </Avatar>
-          <div className="flex flex-col flex-1">
-            <span className="text-sm font-medium">{userName}</span>
-            <span className="text-xs text-muted-foreground">{userRole} • {employeeId}</span>
+          <div className="flex flex-col flex-1 min-w-0">
+            <span className="text-sm font-semibold truncate">{userName}</span>
+            <span className="text-xs text-sidebar-foreground/60 truncate">{userRole} • {employeeId}</span>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <Button variant="outline" size="sm" className="flex-1 bg-sidebar-accent hover:bg-sidebar-accent/80 border-sidebar-border" asChild>
             <Link href="/dashboard/settings">
               <HelpCircle className="h-4 w-4 mr-1" />
               {t('common.help')}
             </Link>
           </Button>
-          <Button variant="outline" size="sm" className="flex-1" asChild>
+          <Button variant="outline" size="sm" className="flex-1 bg-sidebar-accent hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 border-sidebar-border" asChild>
             <Link href="/">
               <LogOut className="h-4 w-4 mr-1" />
               {t('common.logout')}

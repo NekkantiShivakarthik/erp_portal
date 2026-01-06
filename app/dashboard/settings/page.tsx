@@ -17,11 +17,16 @@ import {
   Trash2,
   Save,
   Loader2,
-  Pencil
+  Pencil,
+  AlertTriangle,
+  WifiOff,
+  Database,
+  CheckCircle
 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
+import { getDemoData, DemoDataStore } from "@/lib/demo-data"
 
 type School = {
   id: string
@@ -60,7 +65,8 @@ type Class = {
 type Student = {
   id: string
   name: string
-  roll_no: string | null
+  roll_no: string | null  // Database column name
+  password: string | null
   class_id: string | null
   school_id: string | null
   parent_phone: string | null
@@ -84,31 +90,147 @@ export default function SettingsPage() {
   const [schoolForm, setSchoolForm] = useState({ name: "", code: "", district: "", address: "" })
   const [teacherForm, setTeacherForm] = useState({ name: "", email: "", phone: "", subject: "", school_id: "", employee_id: "", password: "", role: "teacher" })
   const [classForm, setClassForm] = useState({ name: "", section: "", grade: "", school_id: "" })
-  const [studentForm, setStudentForm] = useState({ name: "", roll_no: "", parent_phone: "", school_id: "", class_id: "" })
+  const [studentForm, setStudentForm] = useState({ name: "", roll_number: "", password: "", parent_phone: "", school_id: "", class_id: "" })
 
   // Edit states
   const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null)
   const [editTeacherForm, setEditTeacherForm] = useState({ name: "", email: "", phone: "", subject: "", school_id: "", employee_id: "", password: "", role: "teacher" })
+  const [setupLoading, setSetupLoading] = useState(false)
+
+  // Demo data for offline mode
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
 
   // Load all data
   useEffect(() => {
     loadData()
   }, [])
 
+  const loadDemoData = () => {
+    const demoStore = getDemoData()
+    setSchools(demoStore.schools as any)
+    setTeachers(demoStore.teachers as any)
+    setClasses(demoStore.classes as any)
+    setStudents(demoStore.students as any)
+    setIsOfflineMode(true)
+  }
+
   const loadData = async () => {
     setLoading(true)
-    const [schoolsRes, teachersRes, classesRes, studentsRes] = await Promise.all([
-      supabase.from('schools').select('*').order('created_at', { ascending: false }),
-      supabase.from('teachers').select('*').order('created_at', { ascending: false }),
-      supabase.from('classes').select('*').order('created_at', { ascending: false }),
-      supabase.from('students').select('*').order('created_at', { ascending: false }),
-    ])
-    
-    if (schoolsRes.data) setSchools(schoolsRes.data)
-    if (teachersRes.data) setTeachers(teachersRes.data)
-    if (classesRes.data) setClasses(classesRes.data)
-    if (studentsRes.data) setStudents(studentsRes.data)
+    try {
+      const [schoolsRes, teachersRes, classesRes, studentsRes] = await Promise.all([
+        supabase.from('schools').select('*').order('created_at', { ascending: false }),
+        supabase.from('teachers').select('*').order('created_at', { ascending: false }),
+        supabase.from('classes').select('*').order('created_at', { ascending: false }),
+        supabase.from('students').select('*').order('created_at', { ascending: false }),
+      ])
+      
+      // Check if we got data or errors
+      if (schoolsRes.error || teachersRes.error) {
+        console.warn('Supabase not available, using demo mode')
+        loadDemoData()
+      } else {
+        setIsOfflineMode(false)
+        if (schoolsRes.data) setSchools(schoolsRes.data)
+        if (teachersRes.data) setTeachers(teachersRes.data)
+        if (classesRes.data) setClasses(classesRes.data)
+        if (studentsRes.data) setStudents(studentsRes.data)
+      }
+    } catch (err) {
+      console.warn('Could not load data, using demo mode:', err)
+      loadDemoData()
+    }
     setLoading(false)
+  }
+
+  // Quick Setup - Add Demo Data
+  const setupDemoData = async () => {
+    setSetupLoading(true)
+    try {
+      // 1. Add Demo School
+      const { data: schoolData, error: schoolError } = await supabase.from('schools').insert({
+        name: 'Government High School',
+        code: 'GHS-001',
+        district: 'Bangalore Urban',
+        address: '123 Education Street, Bangalore - 560001',
+      }).select().single()
+
+      if (schoolError || !schoolData) {
+        const errorMsg = schoolError?.message || (schoolError as any)?.name || 'Connection failed'
+        console.error('Error creating school:', errorMsg)
+        
+        if (errorMsg.includes('fetch') || errorMsg.includes('network') || errorMsg.includes('Failed to fetch')) {
+          alert(`⚠️ Cannot connect to Supabase!\n\nPossible causes:\n1. Your Supabase project may be paused (free tier)\n2. Network connectivity issues\n3. Database tables not created\n\nPlease:\n1. Go to supabase.com/dashboard\n2. Check if your project is active\n3. Run the SQL from supabase/migrations/001_create_erp_schema.sql\n\nYou can still use demo credentials to login without database.`)
+        } else {
+          alert(`Failed to create school: ${errorMsg}\n\nPlease run the schema migration in Supabase SQL Editor first.`)
+        }
+        setSetupLoading(false)
+        return
+      }
+
+      const schoolId = schoolData.id
+
+      // 2. Add Classes (1st to 10th)
+      const classesData = [
+        { name: 'Class 1-A', grade: 1, section: 'A', school_id: schoolId },
+        { name: 'Class 2-A', grade: 2, section: 'A', school_id: schoolId },
+        { name: 'Class 3-A', grade: 3, section: 'A', school_id: schoolId },
+        { name: 'Class 4-A', grade: 4, section: 'A', school_id: schoolId },
+        { name: 'Class 5-A', grade: 5, section: 'A', school_id: schoolId },
+        { name: 'Class 6-A', grade: 6, section: 'A', school_id: schoolId },
+        { name: 'Class 7-A', grade: 7, section: 'A', school_id: schoolId },
+        { name: 'Class 8-A', grade: 8, section: 'A', school_id: schoolId },
+        { name: 'Class 9-A', grade: 9, section: 'A', school_id: schoolId },
+        { name: 'Class 10-A', grade: 10, section: 'A', school_id: schoolId },
+      ]
+      
+      const { data: insertedClasses } = await supabase.from('classes').insert(classesData).select()
+      
+      // 3. Add Teachers and Headmaster
+      const teachersData = [
+        { name: 'Rajesh Kumar', employee_id: 'HM001', password: 'headmaster123', role: 'headmaster', email: 'rajesh@school.gov.in', phone: '9876543210', subject: 'Administration', school_id: schoolId },
+        { name: 'Priya Sharma', employee_id: 'TCH001', password: 'teacher123', role: 'teacher', email: 'priya@school.gov.in', phone: '9876543211', subject: 'Mathematics', school_id: schoolId },
+        { name: 'Arun Verma', employee_id: 'TCH002', password: 'teacher123', role: 'teacher', email: 'arun@school.gov.in', phone: '9876543212', subject: 'Science', school_id: schoolId },
+        { name: 'Lakshmi Devi', employee_id: 'TCH003', password: 'teacher123', role: 'teacher', email: 'lakshmi@school.gov.in', phone: '9876543213', subject: 'English', school_id: schoolId },
+        { name: 'Mohammed Ali', employee_id: 'TCH004', password: 'teacher123', role: 'teacher', email: 'ali@school.gov.in', phone: '9876543214', subject: 'Social Studies', school_id: schoolId },
+        { name: 'Sunita Rao', employee_id: 'TCH005', password: 'teacher123', role: 'teacher', email: 'sunita@school.gov.in', phone: '9876543215', subject: 'Hindi', school_id: schoolId },
+      ]
+      
+      await supabase.from('teachers').insert(teachersData)
+
+      // 4. Add Students to various classes
+      const class10 = insertedClasses?.find(c => c.grade === 10)
+      const class9 = insertedClasses?.find(c => c.grade === 9)
+      const class8 = insertedClasses?.find(c => c.grade === 8)
+
+      const studentsData = [
+        // Class 10 students
+        { name: 'Amit Patel', roll_no: 'STU1001', password: 'student123', class_id: class10?.id, school_id: schoolId, parent_phone: '9812345001' },
+        { name: 'Sneha Gupta', roll_no: 'STU1002', password: 'student123', class_id: class10?.id, school_id: schoolId, parent_phone: '9812345002' },
+        { name: 'Rahul Singh', roll_no: 'STU1003', password: 'student123', class_id: class10?.id, school_id: schoolId, parent_phone: '9812345003' },
+        { name: 'Ananya Reddy', roll_no: 'STU1004', password: 'student123', class_id: class10?.id, school_id: schoolId, parent_phone: '9812345004' },
+        { name: 'Vikram Joshi', roll_no: 'STU1005', password: 'student123', class_id: class10?.id, school_id: schoolId, parent_phone: '9812345005' },
+        // Class 9 students
+        { name: 'Meera Nair', roll_no: 'STU0901', password: 'student123', class_id: class9?.id, school_id: schoolId, parent_phone: '9812345006' },
+        { name: 'Arjun Menon', roll_no: 'STU0902', password: 'student123', class_id: class9?.id, school_id: schoolId, parent_phone: '9812345007' },
+        { name: 'Kavya Sharma', roll_no: 'STU0903', password: 'student123', class_id: class9?.id, school_id: schoolId, parent_phone: '9812345008' },
+        { name: 'Sanjay Kumar', roll_no: 'STU0904', password: 'student123', class_id: class9?.id, school_id: schoolId, parent_phone: '9812345009' },
+        { name: 'Divya Pillai', roll_no: 'STU0905', password: 'student123', class_id: class9?.id, school_id: schoolId, parent_phone: '9812345010' },
+        // Class 8 students
+        { name: 'Rohan Das', roll_no: 'STU0801', password: 'student123', class_id: class8?.id, school_id: schoolId, parent_phone: '9812345011' },
+        { name: 'Priyanka Iyer', roll_no: 'STU0802', password: 'student123', class_id: class8?.id, school_id: schoolId, parent_phone: '9812345012' },
+        { name: 'Karthik Rajan', roll_no: 'STU0803', password: 'student123', class_id: class8?.id, school_id: schoolId, parent_phone: '9812345013' },
+        { name: 'Anjali Bose', roll_no: 'STU0804', password: 'student123', class_id: class8?.id, school_id: schoolId, parent_phone: '9812345014' },
+        { name: 'Vivek Saxena', roll_no: 'STU0805', password: 'student123', class_id: class8?.id, school_id: schoolId, parent_phone: '9812345015' },
+      ]
+
+      await supabase.from('students').insert(studentsData)
+
+      // Reload data
+      await loadData()
+    } catch (err) {
+      console.error('Error setting up demo data:', err)
+    }
+    setSetupLoading(false)
   }
 
   // Add School
@@ -132,19 +254,39 @@ export default function SettingsPage() {
   const addTeacher = async () => {
     if (!teacherForm.name || !teacherForm.school_id || !teacherForm.employee_id || !teacherForm.password) return
     setLoading(true)
-    const { error } = await supabase.from('teachers').insert({
-      name: teacherForm.name,
-      email: teacherForm.email || null,
-      phone: teacherForm.phone || null,
-      subject: teacherForm.subject || null,
-      school_id: teacherForm.school_id,
-      employee_id: teacherForm.employee_id,
-      password: teacherForm.password,
-      role: teacherForm.role || 'teacher',
-    })
-    if (!error) {
+    
+    if (isOfflineMode) {
+      // Add to demo data store
+      const demoStore = DemoDataStore.getInstance()
+      const newTeacher = {
+        id: `teacher-${Date.now()}`,
+        name: teacherForm.name,
+        email: teacherForm.email || null,
+        phone: teacherForm.phone || null,
+        subject: teacherForm.subject || null,
+        school_id: teacherForm.school_id,
+        employee_id: teacherForm.employee_id,
+        password: teacherForm.password,
+        role: teacherForm.role || 'teacher',
+      }
+      demoStore.addTeacher(newTeacher)
       setTeacherForm({ name: "", email: "", phone: "", subject: "", school_id: "", employee_id: "", password: "", role: "teacher" })
       loadData()
+    } else {
+      const { error } = await supabase.from('teachers').insert({
+        name: teacherForm.name,
+        email: teacherForm.email || null,
+        phone: teacherForm.phone || null,
+        subject: teacherForm.subject || null,
+        school_id: teacherForm.school_id,
+        employee_id: teacherForm.employee_id,
+        password: teacherForm.password,
+        role: teacherForm.role || 'teacher',
+      })
+      if (!error) {
+        setTeacherForm({ name: "", email: "", phone: "", subject: "", school_id: "", employee_id: "", password: "", role: "teacher" })
+        loadData()
+      }
     }
     setLoading(false)
   }
@@ -153,33 +295,68 @@ export default function SettingsPage() {
   const addClass = async () => {
     if (!classForm.name || !classForm.school_id) return
     setLoading(true)
-    const { error } = await supabase.from('classes').insert({
-      name: classForm.name,
-      section: classForm.section || null,
-      grade: classForm.grade ? parseInt(classForm.grade) : null,
-      school_id: classForm.school_id,
-    })
-    if (!error) {
+    
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      const newClass = {
+        id: `class-${Date.now()}`,
+        name: classForm.name,
+        section: classForm.section || null,
+        grade: classForm.grade ? parseInt(classForm.grade) : null,
+        school_id: classForm.school_id,
+      }
+      demoStore.addClass(newClass)
       setClassForm({ name: "", section: "", grade: "", school_id: "" })
       loadData()
+    } else {
+      const { error } = await supabase.from('classes').insert({
+        name: classForm.name,
+        section: classForm.section || null,
+        grade: classForm.grade ? parseInt(classForm.grade) : null,
+        school_id: classForm.school_id,
+      })
+      if (!error) {
+        setClassForm({ name: "", section: "", grade: "", school_id: "" })
+        loadData()
+      }
     }
     setLoading(false)
   }
 
   // Add Student
   const addStudent = async () => {
-    if (!studentForm.name || !studentForm.school_id) return
+    if (!studentForm.name || !studentForm.school_id || !studentForm.roll_number || !studentForm.password) return
     setLoading(true)
-    const { error } = await supabase.from('students').insert({
-      name: studentForm.name,
-      roll_no: studentForm.roll_no || null,
-      parent_phone: studentForm.parent_phone || null,
-      school_id: studentForm.school_id,
-      class_id: studentForm.class_id || null,
-    })
-    if (!error) {
-      setStudentForm({ name: "", roll_no: "", parent_phone: "", school_id: "", class_id: "" })
+    
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      const newStudent = {
+        id: `student-${Date.now()}`,
+        name: studentForm.name,
+        roll_no: studentForm.roll_number,
+        password: studentForm.password,
+        parent_phone: studentForm.parent_phone || null,
+        school_id: studentForm.school_id,
+        class_id: studentForm.class_id || null,
+      }
+      demoStore.addStudent(newStudent)
+      setStudentForm({ name: "", roll_number: "", password: "", parent_phone: "", school_id: "", class_id: "" })
       loadData()
+    } else {
+      const { error } = await supabase.from('students').insert({
+        name: studentForm.name,
+        roll_no: studentForm.roll_number,  // Database column is roll_no
+        password: studentForm.password,
+        parent_phone: studentForm.parent_phone || null,
+        school_id: studentForm.school_id,
+        class_id: studentForm.class_id || null,
+      })
+      if (!error) {
+        setStudentForm({ name: "", roll_number: "", password: "", parent_phone: "", school_id: "", class_id: "" })
+        loadData()
+      } else {
+        console.error('Error adding student:', error)
+      }
     }
     setLoading(false)
   }
@@ -187,14 +364,26 @@ export default function SettingsPage() {
   // Delete functions
   const deleteSchool = async (id: string) => {
     setLoading(true)
-    await supabase.from('schools').delete().eq('id', id)
-    loadData()
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      demoStore.deleteSchool(id)
+      loadData()
+    } else {
+      await supabase.from('schools').delete().eq('id', id)
+      loadData()
+    }
   }
 
   const deleteTeacher = async (id: string) => {
     setLoading(true)
-    await supabase.from('teachers').delete().eq('id', id)
-    loadData()
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      demoStore.deleteTeacher(id)
+      loadData()
+    } else {
+      await supabase.from('teachers').delete().eq('id', id)
+      loadData()
+    }
   }
 
   // Edit Teacher
@@ -215,49 +404,169 @@ export default function SettingsPage() {
   const updateTeacher = async () => {
     if (!editingTeacher || !editTeacherForm.name || !editTeacherForm.school_id) return
     setLoading(true)
-    const updateData: any = {
-      name: editTeacherForm.name,
-      email: editTeacherForm.email || null,
-      phone: editTeacherForm.phone || null,
-      subject: editTeacherForm.subject || null,
-      school_id: editTeacherForm.school_id,
-      employee_id: editTeacherForm.employee_id || null,
-      role: editTeacherForm.role || 'teacher',
-    }
-    // Only update password if provided
-    if (editTeacherForm.password) {
-      updateData.password = editTeacherForm.password
-    }
-    const { error } = await supabase.from('teachers').update(updateData).eq('id', editingTeacher.id)
     
-    if (!error) {
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      const updateData: any = {
+        id: editingTeacher.id,
+        name: editTeacherForm.name,
+        email: editTeacherForm.email || null,
+        phone: editTeacherForm.phone || null,
+        subject: editTeacherForm.subject || null,
+        school_id: editTeacherForm.school_id,
+        employee_id: editTeacherForm.employee_id || null,
+        role: editTeacherForm.role || 'teacher',
+        password: editTeacherForm.password || editingTeacher.password,
+      }
+      demoStore.updateTeacher(editingTeacher.id, updateData)
       setEditingTeacher(null)
       loadData()
+    } else {
+      const updateData: any = {
+        name: editTeacherForm.name,
+        email: editTeacherForm.email || null,
+        phone: editTeacherForm.phone || null,
+        subject: editTeacherForm.subject || null,
+        school_id: editTeacherForm.school_id,
+        employee_id: editTeacherForm.employee_id || null,
+        role: editTeacherForm.role || 'teacher',
+      }
+      // Only update password if provided
+      if (editTeacherForm.password) {
+        updateData.password = editTeacherForm.password
+      }
+      const { error } = await supabase.from('teachers').update(updateData).eq('id', editingTeacher.id)
+      
+      if (!error) {
+        setEditingTeacher(null)
+        loadData()
+      }
     }
     setLoading(false)
   }
 
   const deleteClass = async (id: string) => {
     setLoading(true)
-    await supabase.from('classes').delete().eq('id', id)
-    loadData()
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      demoStore.deleteClass(id)
+      loadData()
+    } else {
+      await supabase.from('classes').delete().eq('id', id)
+      loadData()
+    }
   }
 
   const deleteStudent = async (id: string) => {
     setLoading(true)
-    await supabase.from('students').delete().eq('id', id)
-    loadData()
+    if (isOfflineMode) {
+      const demoStore = DemoDataStore.getInstance()
+      demoStore.deleteStudent(id)
+      loadData()
+    } else {
+      await supabase.from('students').delete().eq('id', id)
+      loadData()
+    }
   }
 
   return (
     <div className="space-y-6">
+      {/* Offline Mode Banner */}
+      {isOfflineMode && (
+        <Card className="border-yellow-400 bg-yellow-50 dark:bg-yellow-950/30 dark:border-yellow-600">
+          <CardContent className="py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-yellow-100 dark:bg-yellow-900/50 flex items-center justify-center">
+                <AlertTriangle className="h-5 w-5 text-yellow-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-yellow-800 dark:text-yellow-300">Demo Mode Active</h4>
+                <p className="text-sm text-yellow-700 dark:text-yellow-400">
+                  Supabase is not connected. Showing demo data. To enable full functionality, restore your Supabase project at supabase.com/dashboard
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Page Header */}
-      <div>
-        <h1 className="text-2xl font-bold">{t('settingsPage.title')}</h1>
-        <p className="text-muted-foreground">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-bold tracking-tight">{t('settingsPage.title')}</h1>
+        <p className="text-muted-foreground text-lg">
           {t('settingsPage.description')}
         </p>
       </div>
+
+      {/* Quick Setup Card - Only show if no data exists and online */}
+      {schools.length === 0 && !isOfflineMode && (
+        <Card className="border-2 border-dashed border-primary/30 bg-gradient-to-br from-primary/5 to-primary/10">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <Plus className="h-5 w-5 text-primary" />
+              </div>
+              Quick Setup - Add Demo Data
+            </CardTitle>
+            <CardDescription className="text-base">
+              Get started quickly by adding sample schools, teachers, classes, and students with login credentials.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="bg-card rounded-lg p-4 mb-4 border">
+              <h4 className="font-semibold mb-2">This will create:</h4>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>✓ 1 Government High School</li>
+                <li>✓ 10 Classes (Class 1 to 10)</li>
+                <li>✓ 1 Headmaster (ID: <code className="bg-muted px-1 rounded">HM001</code> / Password: <code className="bg-muted px-1 rounded">headmaster123</code>)</li>
+                <li>✓ 5 Teachers (ID: <code className="bg-muted px-1 rounded">TCH001</code>-<code className="bg-muted px-1 rounded">TCH005</code> / Password: <code className="bg-muted px-1 rounded">teacher123</code>)</li>
+                <li>✓ 15 Students with login credentials (Password: <code className="bg-muted px-1 rounded">student123</code>)</li>
+              </ul>
+            </div>
+            <Button onClick={setupDemoData} disabled={setupLoading} className="bg-gradient-to-r from-primary to-primary/80">
+              {setupLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Setting up...
+                </>
+              ) : (
+                <>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Setup Demo Data
+                </>
+              )}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Login Credentials Reference Card */}
+      <Card className="border-blue-200 bg-blue-50/50 dark:bg-blue-950/20 dark:border-blue-800">
+        <CardContent className="py-4">
+          <div className="flex items-start gap-4">
+            <div className="h-10 w-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center shrink-0">
+              <Users className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-semibold text-blue-800 dark:text-blue-300 mb-2">Login Credentials Summary</h4>
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
+                <div>
+                  <p className="font-medium text-blue-700 dark:text-blue-400">🎓 Students</p>
+                  <p className="text-blue-600 dark:text-blue-300">Roll Number + Password</p>
+                </div>
+                <div>
+                  <p className="font-medium text-blue-700 dark:text-blue-400">👨‍🏫 Teachers</p>
+                  <p className="text-blue-600 dark:text-blue-300">Employee ID + Password</p>
+                </div>
+                <div>
+                  <p className="font-medium text-blue-700 dark:text-blue-400">🏫 Headmaster</p>
+                  <p className="text-blue-600 dark:text-blue-300">Employee ID + Password</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
@@ -751,16 +1060,33 @@ export default function SettingsPage() {
 
         {/* Students Tab */}
         <TabsContent value="students" className="space-y-4">
+          <Card className="border-green-200 bg-green-50/50 dark:bg-green-950/20 dark:border-green-800">
+            <CardContent className="py-4">
+              <div className="flex items-start gap-3">
+                <div className="h-10 w-10 rounded-lg bg-green-100 dark:bg-green-900/30 flex items-center justify-center shrink-0">
+                  <GraduationCap className="h-5 w-5 text-green-600" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-green-800 dark:text-green-300">Student Login Credentials</h4>
+                  <p className="text-sm text-green-700 dark:text-green-400">
+                    When you add a student, create their <strong>Roll Number</strong> and <strong>Password</strong>. 
+                    Students use these credentials to log into the portal and view their attendance & resources.
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Plus className="h-5 w-5" />
-                Add New Student
+                Register New Student
               </CardTitle>
-              <CardDescription>Enter student details to add to the system</CardDescription>
+              <CardDescription>Enter student details and create their login credentials</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                 <div className="space-y-2">
                   <Label htmlFor="student-name">Student Name *</Label>
                   <Input
@@ -769,6 +1095,27 @@ export default function SettingsPage() {
                     value={studentForm.name}
                     onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })}
                   />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="student-roll-number">Roll Number (Login ID) *</Label>
+                  <Input
+                    id="student-roll-number"
+                    placeholder="e.g., STU001"
+                    value={studentForm.roll_number}
+                    onChange={(e) => setStudentForm({ ...studentForm, roll_number: e.target.value.toUpperCase() })}
+                  />
+                  <p className="text-xs text-muted-foreground">This will be used to login</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="student-password">Password *</Label>
+                  <Input
+                    id="student-password"
+                    type="password"
+                    placeholder="Create password"
+                    value={studentForm.password}
+                    onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })}
+                  />
+                  <p className="text-xs text-muted-foreground">Student will use this to login</p>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="student-school">School *</Label>
@@ -797,15 +1144,6 @@ export default function SettingsPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="student-roll">Roll No</Label>
-                  <Input
-                    id="student-roll"
-                    placeholder="e.g., 001"
-                    value={studentForm.roll_no}
-                    onChange={(e) => setStudentForm({ ...studentForm, roll_no: e.target.value })}
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="student-phone">Parent Phone</Label>
                   <Input
                     id="student-phone"
@@ -815,9 +1153,9 @@ export default function SettingsPage() {
                   />
                 </div>
               </div>
-              <Button onClick={addStudent} className="mt-4" disabled={loading || schools.length === 0}>
+              <Button onClick={addStudent} className="mt-4" disabled={loading || schools.length === 0 || !studentForm.name || !studentForm.roll_number || !studentForm.password}>
                 {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                Add Student
+                Register Student
               </Button>
               {schools.length === 0 && (
                 <p className="text-sm text-orange-600 mt-2">Please add a school first before adding students.</p>
@@ -828,18 +1166,19 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Registered Students ({students.length})</CardTitle>
+              <CardDescription>Students can login using their Roll Number and Password</CardDescription>
             </CardHeader>
             <CardContent>
               {students.length === 0 ? (
-                <p className="text-muted-foreground text-center py-8">No students added yet. Add your first student above.</p>
+                <p className="text-muted-foreground text-center py-8">No students added yet. Register your first student above.</p>
               ) : (
                 <Table>
                   <TableHeader>
                     <TableRow>
                       <TableHead>Name</TableHead>
+                      <TableHead>Roll Number (Login)</TableHead>
                       <TableHead>School</TableHead>
                       <TableHead>Class</TableHead>
-                      <TableHead>Roll No</TableHead>
                       <TableHead>Parent Phone</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
@@ -848,9 +1187,13 @@ export default function SettingsPage() {
                     {students.map((student) => (
                       <TableRow key={student.id}>
                         <TableCell className="font-medium">{student.name}</TableCell>
+                        <TableCell>
+                          <code className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded text-sm font-mono">
+                            {student.roll_no || "-"}
+                          </code>
+                        </TableCell>
                         <TableCell>{schools.find(s => s.id === student.school_id)?.name || "-"}</TableCell>
                         <TableCell>{classes.find(c => c.id === student.class_id)?.name || "-"}</TableCell>
-                        <TableCell>{student.roll_no || "-"}</TableCell>
                         <TableCell>{student.parent_phone || "-"}</TableCell>
                         <TableCell className="text-right">
                           <Button variant="destructive" size="sm" onClick={() => deleteStudent(student.id)}>

@@ -66,25 +66,34 @@ export default function StudentInfrastructurePage() {
   const loadData = async () => {
     setLoading(true)
     
-    // Fetch all infrastructure issues from database
-    const { data: issuesData, error } = await supabase
-      .from('infrastructure_issues')
-      .select('*, schools(name)')
-      .order('created_at', { ascending: false })
+    try {
+      // Fetch all infrastructure issues from database
+      const { data: issuesData, error } = await supabase
+        .from('infrastructure_issues')
+        .select('*, schools(name)')
+        .order('created_at', { ascending: false })
 
-    if (error) {
-      console.error('Error loading infrastructure issues:', error)
+      if (error) {
+        // Log error details for debugging
+        console.warn('Could not load infrastructure issues from database:', error.message || 'Unknown error')
+        // Continue with empty array - table might not exist yet
+      }
+
+      const issues = issuesData || []
+      setIssues(issues)
+      
+      setStats({
+        total: issues.length,
+        pending: issues.filter(i => i.status === 'pending').length,
+        inProgress: issues.filter(i => i.status === 'in-progress' || i.status === 'approved').length,
+        resolved: issues.filter(i => i.status === 'resolved').length,
+      })
+    } catch (err) {
+      console.warn('Infrastructure issues fetch failed:', err)
+      // Set empty state on error
+      setIssues([])
+      setStats({ total: 0, pending: 0, inProgress: 0, resolved: 0 })
     }
-
-    const issues = issuesData || []
-    setIssues(issues)
-    
-    setStats({
-      total: issues.length,
-      pending: issues.filter(i => i.status === 'pending').length,
-      inProgress: issues.filter(i => i.status === 'in-progress' || i.status === 'approved').length,
-      resolved: issues.filter(i => i.status === 'resolved').length,
-    })
     
     setLoading(false)
   }

@@ -25,10 +25,12 @@ import {
   IndianRupee,
   Plus,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  WifiOff
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { getDemoData } from "@/lib/demo-data"
 import { toast } from "sonner"
 import { useLanguage } from "@/lib/i18n/language-context"
 
@@ -36,6 +38,7 @@ export default function FundsPage() {
   const supabase = createClient()
   const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   const [funds, setFunds] = useState<any[]>([])
   const [transactions, setTransactions] = useState<any[]>([])
   const [schools, setSchools] = useState<any[]>([])
@@ -65,33 +68,80 @@ export default function FundsPage() {
     loadData()
   }, [])
 
-  const loadData = async () => {
-    setLoading(true)
+  const loadDemoFunds = () => {
+    const demoStore = getDemoData()
     
-    const [fundsRes, transactionsRes, schoolsRes] = await Promise.all([
-      supabase.from('funds').select('*, schools(name)'),
-      supabase.from('fund_transactions').select('*, schools(name), funds(category)').order('created_at', { ascending: false }),
-      supabase.from('schools').select('*'),
-    ])
-
-    const fundsData = fundsRes.data || []
-    const transactionsData = transactionsRes.data || []
-
-    setFunds(fundsData)
-    setTransactions(transactionsData)
-    setSchools(schoolsRes.data || [])
-
-    const totalAllocated = fundsData.reduce((sum, f) => sum + (f.allocated_amount || 0), 0)
-    const totalUtilized = fundsData.reduce((sum, f) => sum + (f.utilized_amount || 0), 0)
-    const pendingTxns = transactionsData.filter(t => t.status === 'pending').length
-
+    // Demo funds data
+    const demoFundsData = [
+      { id: 'fund-001', school_id: 'school-001', category: 'Samagra Shiksha', allocated_amount: 1500000, utilized_amount: 1100000, financial_year: '2024-25', schools: { name: 'Government High School' } },
+      { id: 'fund-002', school_id: 'school-001', category: 'Mid Day Meal', allocated_amount: 800000, utilized_amount: 650000, financial_year: '2024-25', schools: { name: 'Government High School' } },
+      { id: 'fund-003', school_id: 'school-001', category: 'Infrastructure', allocated_amount: 500000, utilized_amount: 320000, financial_year: '2024-25', schools: { name: 'Government High School' } },
+    ]
+    
+    // Demo transactions
+    const demoTransactions = [
+      { id: 'txn-001', fund_id: 'fund-001', school_id: 'school-001', description: 'Science Lab Equipment', amount: 150000, category: 'Samagra Shiksha', status: 'completed', created_at: new Date(Date.now() - 86400000 * 2).toISOString(), schools: { name: 'Government High School' }, funds: { category: 'Samagra Shiksha' } },
+      { id: 'txn-002', fund_id: 'fund-002', school_id: 'school-001', description: 'Monthly Meal Supply', amount: 80000, category: 'Mid Day Meal', status: 'completed', created_at: new Date(Date.now() - 86400000 * 5).toISOString(), schools: { name: 'Government High School' }, funds: { category: 'Mid Day Meal' } },
+      { id: 'txn-003', fund_id: 'fund-003', school_id: 'school-001', description: 'Classroom Repairs', amount: 75000, category: 'Infrastructure', status: 'pending', created_at: new Date(Date.now() - 86400000).toISOString(), schools: { name: 'Government High School' }, funds: { category: 'Infrastructure' } },
+      { id: 'txn-004', fund_id: 'fund-001', school_id: 'school-001', description: 'Digital Learning Tablets', amount: 200000, category: 'Samagra Shiksha', status: 'pending', created_at: new Date().toISOString(), schools: { name: 'Government High School' }, funds: { category: 'Samagra Shiksha' } },
+    ]
+    
+    setFunds(demoFundsData)
+    setTransactions(demoTransactions)
+    setSchools(demoStore.schools)
+    
+    const totalAllocated = demoFundsData.reduce((sum, f) => sum + f.allocated_amount, 0)
+    const totalUtilized = demoFundsData.reduce((sum, f) => sum + f.utilized_amount, 0)
+    const pendingTxns = demoTransactions.filter(t => t.status === 'pending').length
+    
     setSummary({
       totalAllocated,
       totalUtilized,
       totalPending: totalAllocated - totalUtilized,
-      percentUtilized: totalAllocated > 0 ? Math.round((totalUtilized / totalAllocated) * 100) : 0,
+      percentUtilized: Math.round((totalUtilized / totalAllocated) * 100),
       pendingTransactions: pendingTxns,
     })
+    
+    setIsOfflineMode(true)
+  }
+
+  const loadData = async () => {
+    setLoading(true)
+    
+    try {
+      const [fundsRes, transactionsRes, schoolsRes] = await Promise.all([
+        supabase.from('funds').select('*, schools(name)'),
+        supabase.from('fund_transactions').select('*, schools(name), funds(category)').order('created_at', { ascending: false }),
+        supabase.from('schools').select('*'),
+      ])
+
+      if (fundsRes.error || schoolsRes.error) {
+        loadDemoFunds()
+        setLoading(false)
+        return
+      }
+
+      const fundsData = fundsRes.data || []
+      const transactionsData = transactionsRes.data || []
+
+      setFunds(fundsData)
+      setTransactions(transactionsData)
+      setSchools(schoolsRes.data || [])
+
+      const totalAllocated = fundsData.reduce((sum, f) => sum + (f.allocated_amount || 0), 0)
+      const totalUtilized = fundsData.reduce((sum, f) => sum + (f.utilized_amount || 0), 0)
+      const pendingTxns = transactionsData.filter(t => t.status === 'pending').length
+
+      setSummary({
+        totalAllocated,
+        totalUtilized,
+        totalPending: totalAllocated - totalUtilized,
+        percentUtilized: totalAllocated > 0 ? Math.round((totalUtilized / totalAllocated) * 100) : 0,
+        pendingTransactions: pendingTxns,
+      })
+    } catch (error) {
+      loadDemoFunds()
+    }
     
     setLoading(false)
   }
@@ -218,6 +268,25 @@ export default function FundsPage() {
 
   return (
     <div className="space-y-6">
+      {/* Demo Mode Banner */}
+      {isOfflineMode && (
+        <Card className="border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 dark:border-amber-600">
+          <CardContent className="py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                <WifiOff className="h-5 w-5 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-amber-800 dark:text-amber-300">Demo Mode</h4>
+                <p className="text-sm text-amber-700 dark:text-amber-400">
+                  Showing sample fund allocation data. Connect to Supabase for real data.
+                </p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

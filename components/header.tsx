@@ -69,32 +69,39 @@ export function Header() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background px-6">
+    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-xl px-4 md:px-6 shadow-sm">
       <SidebarTrigger className="md:hidden">
         <Menu className="h-5 w-5" />
       </SidebarTrigger>
       
       <div className="flex flex-1 items-center gap-4">
         <div className="hidden md:block">
-          <h1 className="text-lg font-semibold">{t('header.welcomeBack')}, {userName}</h1>
-          {schoolName && <p className="text-sm text-muted-foreground">{schoolName}</p>}
+          <h1 className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
+            {t('header.welcomeBack')}, <span className="text-primary">{userName}</span>
+          </h1>
+          {schoolName && (
+            <p className="text-sm text-muted-foreground flex items-center gap-1.5">
+              <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              {schoolName}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 md:gap-2">
         <LanguageSwitcher />
         
         <ThemeToggle />
         
-        <Button variant="ghost" size="icon" suppressHydrationWarning>
+        <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" suppressHydrationWarning>
           <HelpCircle className="h-5 w-5" />
         </Button>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative" suppressHydrationWarning>
+            <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-primary/10" suppressHydrationWarning>
               <Bell className="h-5 w-5" />
-              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs bg-orange-500">
+              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs bg-gradient-to-r from-orange-500 to-red-500 border-2 border-background notification-badge">
                 4
               </Badge>
             </Button>
@@ -114,13 +121,13 @@ export function Header() {
                 {t('header.newTrainingDesc')}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer hover:bg-primary/5 rounded-lg">
               <span className="font-medium">{t('header.attendanceReminder')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.attendanceReminderDesc')}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer hover:bg-primary/5 rounded-lg">
               <span className="font-medium">{t('header.monthlyReportDue')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.monthlyReportDueDesc')}
@@ -131,27 +138,27 @@ export function Header() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-9 w-9 rounded-full" suppressHydrationWarning>
-              <Avatar className="h-9 w-9">
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all" suppressHydrationWarning>
+              <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-primary/10 text-primary">{userInitials}</AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">{userInitials}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span>{userName}</span>
+                <span className="font-semibold">{userName}</span>
                 <span className="text-xs font-normal text-muted-foreground">{schoolName || t('header.educationPortal')}</span>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>{t('header.myProfile')}</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-            <DropdownMenuItem>{t('header.helpSupport')}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t('header.myProfile')}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer">{t('header.helpSupport')}</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/" className="text-red-600 cursor-pointer">{t('header.logout')}</Link>
+              <Link href="/" className="text-red-600 cursor-pointer flex items-center gap-2">{t('header.logout')}</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -374,6 +374,7 @@ export type Database = {
           id: string
           name: string
           parent_phone: string | null
+          password: string | null
           roll_no: string | null
           school_id: string | null
           updated_at: string | null
@@ -384,6 +385,7 @@ export type Database = {
           id?: string
           name: string
           parent_phone?: string | null
+          password?: string | null
           roll_no?: string | null
           school_id?: string | null
           updated_at?: string | null
@@ -394,6 +396,7 @@ export type Database = {
           id?: string
           name?: string
           parent_phone?: string | null
+          password?: string | null
           roll_no?: string | null
           school_id?: string | null
           updated_at?: string | null

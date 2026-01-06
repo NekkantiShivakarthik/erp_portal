@@ -16,10 +16,12 @@ import {
   Users,
   CalendarDays,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  AlertTriangle
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
+import { getDemoData, DemoStudent, DemoClass } from "@/lib/demo-data"
 
 type Student = {
   id: string
@@ -46,6 +48,7 @@ export default function AttendancePage() {
   const { t } = useLanguage()
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   const [selectedClass, setSelectedClass] = useState("")
   const [date, setDate] = useState<Date | undefined>(new Date())
   const [students, setStudents] = useState<Student[]>([])
@@ -65,19 +68,74 @@ export default function AttendancePage() {
   }, [selectedClass, date])
 
   const loadClasses = async () => {
-    const { data } = await supabase.from('classes').select('*').order('name')
-    if (data) {
-      setClasses(data)
-      if (data.length > 0) {
+    try {
+      const { data, error } = await supabase.from('classes').select('*').order('name')
+      if (error) throw error
+      
+      if (data && data.length > 0) {
+        setClasses(data)
         setSelectedClass(data[0].id)
+        setIsOfflineMode(false)
+      } else {
+        // No data, use demo
+        loadDemoClasses()
       }
+    } catch (e) {
+      // Supabase unavailable, use demo data
+      loadDemoClasses()
     }
     setLoading(false)
   }
 
+  const loadDemoClasses = () => {
+    setIsOfflineMode(true)
+    const demoStore = getDemoData()
+    const demoClasses = demoStore.classes.map(c => ({
+      id: c.id,
+      name: c.name,
+      grade: c.grade,
+      section: c.section,
+      school_id: c.school_id,
+      created_at: c.created_at
+    }))
+    setClasses(demoClasses)
+    if (demoClasses.length > 0) {
+      setSelectedClass(demoClasses[0].id)
+    }
+  }
+
   const loadStudents = async () => {
     setLoading(true)
-    // Load students for the selected class
+    
+    if (isOfflineMode) {
+      // Load from demo data
+      const demoStore = getDemoData()
+      const demoStudents = demoStore.getStudentsByClass(selectedClass).map(s => ({
+        id: s.id,
+        name: s.name,
+        roll_no: s.roll_no,
+        class_id: s.class_id,
+        school_id: s.school_id,
+        parent_phone: s.parent_phone,
+        created_at: s.created_at,
+        updated_at: s.updated_at
+      }))
+      setStudents(demoStudents)
+      
+      // Load existing attendance from demo
+      const dateStr = date?.toISOString().split('T')[0] || ''
+      const demoAttendance = demoStore.getAttendanceByDate(dateStr)
+      const attendanceMap: Record<string, string> = {}
+      demoStudents.forEach(s => {
+        const record = demoAttendance.find(a => a.student_id === s.id)
+        attendanceMap[s.id] = record?.status || 'present'
+      })
+      setAttendance(attendanceMap)
+      setLoading(false)
+      return
+    }
+
+    // Load students for the selected class from Supabase
     const { data: studentsData } = await supabase
       .from('students')
       .select('*')
@@ -116,6 +174,24 @@ export default function AttendancePage() {
     setSaving(true)
     
     const dateStr = date.toISOString().split('T')[0]
+    const teacherId = localStorage.getItem('userId') || 'teacher-01'
+    
+    if (isOfflineMode) {
+      // Save to demo data store
+      const demoStore = getDemoData()
+      students.forEach(student => {
+        demoStore.markAttendance(
+          student.id, 
+          selectedClass, 
+          dateStr, 
+          (attendance[student.id] || 'present') as 'present' | 'absent' | 'late',
+          teacherId
+        )
+      })
+      setSaving(false)
+      alert('Attendance saved successfully! (Demo mode)')
+      return
+    }
     
     // Delete existing attendance for this class and date
     await supabase
@@ -176,6 +252,20 @@ export default function AttendancePage() {
 
   return (
     <div className="space-y-6">
+      {/* Offline Mode Banner */}
+      {isOfflineMode && (
+        <Card className="border-yellow-400 bg-yellow-50 dark:bg-yellow-950/30 dark:border-yellow-600">
+          <CardContent className="py-3">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="h-5 w-5 text-yellow-600" />
+              <span className="text-sm text-yellow-800 dark:text-yellow-300">
+                <strong>Demo Mode:</strong> Attendance will be saved locally. Connect Supabase for cloud storage.
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

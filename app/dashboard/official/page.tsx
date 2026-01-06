@@ -19,15 +19,19 @@ import {
   FileText,
   Building2,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  WifiOff,
+  GraduationCap
 } from "lucide-react"
 import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
+import { getDemoData } from "@/lib/demo-data"
 import { toast } from "sonner"
 
 export default function OfficialDashboard() {
   const supabase = createClient()
   const [loading, setLoading] = useState(true)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   const [districtOverview, setDistrictOverview] = useState({
     totalSchools: 0,
     totalStudents: 0,
@@ -46,6 +50,36 @@ export default function OfficialDashboard() {
     loadDashboardData()
   }, [])
 
+  const loadDemoData = () => {
+    const demoStore = getDemoData()
+    const stats = demoStore.getStats()
+    
+    // Calculate attendance from demo data
+    const today = new Date().toISOString().split('T')[0]
+    const todayAttendance = demoStore.attendance.filter(a => a.date === today)
+    const presentCount = todayAttendance.filter(a => a.status === 'present').length
+    const avgAttendance = todayAttendance.length > 0 ? (presentCount / todayAttendance.length * 100) : 85 // Default to 85% if no data
+    
+    // Demo funds
+    const fundsAllocated = 2500000 // 25 Lakhs
+    const fundsUtilized = 1800000 // 18 Lakhs
+    
+    setDistrictOverview({
+      totalSchools: stats.totalSchools,
+      totalStudents: stats.totalStudents,
+      totalTeachers: stats.totalTeachers,
+      avgAttendance: avgAttendance,
+      infrastructureIssues: stats.pendingIssues,
+      resolvedThisMonth: 3,
+      fundsAllocated: fundsAllocated,
+      fundsUtilized: fundsUtilized,
+      utilizationRate: (fundsUtilized / fundsAllocated * 100),
+    })
+    
+    setTopSchools(demoStore.schools)
+    setIsOfflineMode(true)
+  }
+
   const loadDashboardData = async () => {
     setLoading(true)
     
@@ -61,6 +95,12 @@ export default function OfficialDashboard() {
         supabase.from('attendance').select('*').eq('date', new Date().toISOString().split('T')[0]),
         supabase.from('schools').select('*').limit(5)
       ])
+
+      // Check if we got data from Supabase
+      if (schoolsRes.error || !schoolsRes.data) {
+        loadDemoData()
+        return
+      }
 
       // Calculate attendance
       const attendanceData = attendanceRes.data || []
@@ -104,9 +144,10 @@ export default function OfficialDashboard() {
       setAlerts(alertsData)
       
       setTopSchools(schoolsDataRes.data || [])
-    } catch (error) {
-      console.error('Error loading dashboard data:', error)
-      toast.error('Failed to load dashboard data')
+    } catch (error: any) {
+      // Tables may not exist yet - use demo data
+      console.warn('Dashboard data not available, using demo data:', error?.message)
+      loadDemoData()
     } finally {
       setLoading(false)
     }
@@ -124,6 +165,29 @@ export default function OfficialDashboard() {
 
   return (
     <div className="space-y-6">
+      {/* Demo Mode Banner */}
+      {isOfflineMode && (
+        <Card className="border-amber-400 bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 dark:border-amber-600">
+          <CardContent className="py-4">
+            <div className="flex items-center gap-3">
+              <div className="h-10 w-10 rounded-lg bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
+                <WifiOff className="h-5 w-5 text-amber-600" />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-amber-800 dark:text-amber-300">Demo Mode Active</h4>
+                <p className="text-sm text-amber-700 dark:text-amber-400">
+                  Showing demo district data. All features work with local data.
+                </p>
+              </div>
+              <Badge variant="outline" className="border-amber-500 text-amber-700">
+                <GraduationCap className="h-3 w-3 mr-1" />
+                Demo
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>

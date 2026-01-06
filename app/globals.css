@@ -286,3 +286,279 @@
   opacity: 1;
 }
 
+/* Enhanced Card Styles */
+.card-gradient {
+  background: linear-gradient(145deg, var(--card) 0%, oklch(0.97 0.01 250) 100%);
+}
+
+.dark .card-gradient {
+  background: linear-gradient(145deg, var(--card) 0%, oklch(0.2 0.02 250) 100%);
+}
+
+/* Animated Shimmer Effect */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Pulse Glow Animation */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px oklch(0.65 0.2 250 / 0.2); }
+  50% { box-shadow: 0 0 40px oklch(0.65 0.2 250 / 0.4); }
+}
+
+.pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+/* Fade In Up Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s ease-out forwards;
+}
+
+/* Stagger Animation Delays */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+
+/* Enhanced Stats Card */
+.stats-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stats-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, oklch(0.65 0.2 250 / 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+.stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -10px oklch(0 0 0 / 0.15);
+}
+
+.dark .stats-card:hover {
+  box-shadow: 0 20px 40px -10px oklch(0 0 0 / 0.4);
+}
+
+/* Icon Badge Styles */
+.icon-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  padding: 10px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.icon-badge:hover {
+  transform: scale(1.1);
+}
+
+/* Quick Action Cards */
+.quick-action-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid oklch(0.9 0.01 250);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.dark .quick-action-card {
+  border-color: oklch(0.3 0.02 250);
+}
+
+.quick-action-card:hover {
+  border-color: oklch(0.65 0.2 250);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -10px oklch(0.65 0.2 250 / 0.3);
+}
+
+.quick-action-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, oklch(0.65 0.2 250), oklch(0.7 0.18 160));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.quick-action-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* Enhanced Progress Bar */
+.progress-animated {
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* Status Indicator Dots */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.status-dot-success { background: oklch(0.65 0.2 145); }
+.status-dot-warning { background: oklch(0.75 0.18 75); }
+.status-dot-danger { background: oklch(0.65 0.22 25); }
+
+/* Beautiful Focus Styles */
+input:focus, select:focus, textarea:focus, button:focus-visible {
+  outline: none;
+  ring: 2px;
+  ring-color: oklch(0.65 0.2 250 / 0.5);
+  ring-offset: 2px;
+}
+
+/* Tooltip Enhancement */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 6px 12px;
+  background: oklch(0.2 0.02 250);
+  color: oklch(0.95 0 0);
+  font-size: 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Page Transition */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+/* Enhanced Sidebar Styles */
+.sidebar-item-active {
+  position: relative;
+  background: linear-gradient(90deg, oklch(0.65 0.2 250 / 0.15), transparent);
+}
+
+.sidebar-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: oklch(0.65 0.2 250);
+  border-radius: 0 2px 2px 0;
+}
+
+/* Loading Skeleton */
+.skeleton {
+  background: linear-gradient(90deg, oklch(0.9 0.01 250) 25%, oklch(0.95 0.005 250) 50%, oklch(0.9 0.01 250) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, oklch(0.25 0.02 250) 25%, oklch(0.3 0.02 250) 50%, oklch(0.25 0.02 250) 75%);
+}
+
+/* Notification Badge Animation */
+@keyframes bounce-subtle {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.notification-badge {
+  animation: bounce-subtle 2s ease-in-out infinite;
+}
+
+/* Enhanced Button Styles */
+.btn-primary-gradient {
+  background: linear-gradient(135deg, oklch(0.55 0.2 250), oklch(0.65 0.2 250));
+  transition: all 0.3s ease;
+}
+
+.btn-primary-gradient:hover {
+  background: linear-gradient(135deg, oklch(0.5 0.2 250), oklch(0.6 0.2 250));
+  box-shadow: 0 4px 20px oklch(0.55 0.2 250 / 0.4);
+  transform: translateY(-1px);
+}
+
+/* Calendar Day Styles */
+.calendar-day-present {
+  background: oklch(0.9 0.1 145 / 0.5);
+  border-radius: 50%;
+}
+
+.calendar-day-absent {
+  background: oklch(0.9 0.15 25 / 0.5);
+  border-radius: 50%;
+}
+
+.calendar-day-late {
+  background: oklch(0.9 0.12 75 / 0.5);
+  border-radius: 50%;
+}
+
