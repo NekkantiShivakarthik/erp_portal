@@ -69,20 +69,20 @@ export function Header() {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-xl px-4 md:px-6 shadow-sm">
+    <header className="sticky top-0 z-50 flex h-16 items-center gap-4 border-b-2 border-pink-200/50 dark:border-pink-800/30 bg-gradient-to-r from-pink-50/90 via-white/90 to-purple-50/90 dark:from-pink-950/80 dark:via-background/90 dark:to-purple-950/80 backdrop-blur-xl px-4 md:px-6 shadow-sm">
       <SidebarTrigger className="md:hidden">
-        <Menu className="h-5 w-5" />
+        <Menu className="h-5 w-5 text-pink-500" />
       </SidebarTrigger>
       
       <div className="flex flex-1 items-center gap-4">
         <div className="hidden md:block">
-          <h1 className="text-lg font-semibold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text">
-            {t('header.welcomeBack')}, <span className="text-primary">{userName}</span>
+          <h1 className="text-lg font-semibold">
+            {t('header.welcomeBack')}, <span className="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">{userName}</span> ✨
           </h1>
           {schoolName && (
             <p className="text-sm text-muted-foreground flex items-center gap-1.5">
-              <span className="inline-block w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-              {schoolName}
+              <span className="inline-block w-2 h-2 rounded-full bg-pink-400 animate-pulse" />
+              {schoolName} 🏫
             </p>
           )}
         </div>
@@ -93,42 +93,42 @@ export function Header() {
         
         <ThemeToggle />
         
-        <Button variant="ghost" size="icon" className="rounded-full hover:bg-primary/10" suppressHydrationWarning>
+        <Button variant="ghost" size="icon" className="rounded-full hover:bg-pink-100 dark:hover:bg-pink-900/30 text-pink-500" suppressHydrationWarning>
           <HelpCircle className="h-5 w-5" />
         </Button>
         
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-primary/10" suppressHydrationWarning>
+            <Button variant="ghost" size="icon" className="relative rounded-full hover:bg-pink-100 dark:hover:bg-pink-900/30 text-pink-500" suppressHydrationWarning>
               <Bell className="h-5 w-5" />
-              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs bg-gradient-to-r from-orange-500 to-red-500 border-2 border-background notification-badge">
+              <Badge className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs bg-gradient-to-r from-pink-500 to-rose-500 border-2 border-background notification-badge">
                 4
               </Badge>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>{t('header.notifications')}</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">{t('header.infraApproved')}</span>
+          <DropdownMenuContent align="end" className="w-80 border-2 border-pink-200/50 dark:border-pink-800/30 rounded-2xl">
+            <DropdownMenuLabel className="flex items-center gap-2">🔔 {t('header.notifications')}</DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-pink-200/50 dark:bg-pink-800/30" />
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">
+              <span className="font-medium">✅ {t('header.infraApproved')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.infraApprovedDesc')}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer">
-              <span className="font-medium">{t('header.newTraining')}</span>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">
+              <span className="font-medium">📚 {t('header.newTraining')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.newTrainingDesc')}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer hover:bg-primary/5 rounded-lg">
-              <span className="font-medium">{t('header.attendanceReminder')}</span>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">
+              <span className="font-medium">📋 {t('header.attendanceReminder')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.attendanceReminderDesc')}
               </span>
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer hover:bg-primary/5 rounded-lg">
-              <span className="font-medium">{t('header.monthlyReportDue')}</span>
+            <DropdownMenuItem className="flex flex-col items-start gap-1 cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">
+              <span className="font-medium">📊 {t('header.monthlyReportDue')}</span>
               <span className="text-xs text-muted-foreground">
                 {t('header.monthlyReportDueDesc')}
               </span>
@@ -138,27 +138,27 @@ export function Header() {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-primary/20 hover:ring-primary/40 transition-all" suppressHydrationWarning>
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full ring-2 ring-pink-300/50 hover:ring-pink-400/60 dark:ring-pink-600/30 dark:hover:ring-pink-500/50 transition-all" suppressHydrationWarning>
               <Avatar className="h-10 w-10">
                 <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-gradient-to-br from-primary/20 to-primary/10 text-primary font-semibold">{userInitials}</AvatarFallback>
+                <AvatarFallback className="bg-gradient-to-br from-pink-400 to-purple-400 text-white font-semibold">{userInitials}</AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="w-56 border-2 border-pink-200/50 dark:border-pink-800/30 rounded-2xl">
             <DropdownMenuLabel>
               <div className="flex flex-col">
-                <span className="font-semibold">{userName}</span>
+                <span className="font-semibold">{userName} ✨</span>
                 <span className="text-xs font-normal text-muted-foreground">{schoolName || t('header.educationPortal')}</span>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer">{t('header.myProfile')}</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">{t('header.helpSupport')}</DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-pink-200/50 dark:bg-pink-800/30" />
+            <DropdownMenuItem className="cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">👤 {t('header.myProfile')}</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">⚙️ Settings</DropdownMenuItem>
+            <DropdownMenuItem className="cursor-pointer rounded-xl hover:bg-pink-50 dark:hover:bg-pink-900/20">💝 {t('header.helpSupport')}</DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-pink-200/50 dark:bg-pink-800/30" />
             <DropdownMenuItem asChild>
-              <Link href="/" className="text-red-600 cursor-pointer flex items-center gap-2">{t('header.logout')}</Link>
+              <Link href="/" className="text-red-500 cursor-pointer flex items-center gap-2 rounded-xl hover:bg-red-50 dark:hover:bg-red-900/20">👋 {t('header.logout')}</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

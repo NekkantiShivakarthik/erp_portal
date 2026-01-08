@@ -184,19 +184,22 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen gradient-mesh-bg flex items-center justify-center p-4 relative overflow-hidden">
-      {/* Animated Background Shapes */}
+      {/* Animated Kawaii Background Shapes 🌸 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-[5%] right-[30%] h-40 w-40 rounded-full bg-primary/10 blur-3xl animate-pulse" />
-        <div className="absolute bottom-[15%] left-[20%] h-56 w-56 rounded-full bg-accent/15 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-[50%] right-[10%] h-32 w-32 rounded-full bg-chart-2/15 blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[5%] right-[30%] h-40 w-40 rounded-full bg-pink-400/20 blur-3xl animate-pulse" />
+        <div className="absolute bottom-[15%] left-[20%] h-56 w-56 rounded-full bg-purple-300/20 blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-[50%] right-[10%] h-32 w-32 rounded-full bg-sky-300/20 blur-2xl animate-pulse" style={{ animationDelay: '2s' }} />
+        <div className="absolute top-[70%] left-[40%] h-24 w-24 rounded-full bg-rose-300/15 blur-2xl animate-pulse" style={{ animationDelay: '1.5s' }} />
         
-        {/* Floating Educational Icons */}
-        <BookOpen className="absolute top-[10%] left-[5%] h-16 w-16 text-primary/10 animate-bounce" style={{ animationDuration: '3s' }} />
-        <GraduationCap className="absolute top-[15%] right-[10%] h-20 w-20 text-primary/10 animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }} />
-        <PenTool className="absolute bottom-[20%] left-[8%] h-12 w-12 text-primary/10 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '1s' }} />
-        <Calculator className="absolute top-[60%] right-[5%] h-14 w-14 text-primary/10 animate-bounce" style={{ animationDuration: '4s', animationDelay: '1.5s' }} />
-        <Globe className="absolute bottom-[10%] right-[15%] h-16 w-16 text-primary/10 animate-bounce" style={{ animationDuration: '3s', animationDelay: '2s' }} />
-        <Microscope className="absolute top-[40%] left-[3%] h-10 w-10 text-primary/10 animate-bounce" style={{ animationDuration: '3.5s', animationDelay: '0.8s' }} />
+        {/* Floating Cute Icons 💕 */}
+        <div className="absolute top-[10%] left-[5%] text-4xl animate-bounce opacity-30" style={{ animationDuration: '3s' }}>🌸</div>
+        <div className="absolute top-[15%] right-[10%] text-5xl animate-bounce opacity-25" style={{ animationDuration: '4s', animationDelay: '0.5s' }}>✨</div>
+        <div className="absolute bottom-[20%] left-[8%] text-3xl animate-bounce opacity-30" style={{ animationDuration: '3.5s', animationDelay: '1s' }}>💖</div>
+        <div className="absolute top-[60%] right-[5%] text-4xl animate-bounce opacity-25" style={{ animationDuration: '4s', animationDelay: '1.5s' }}>🎀</div>
+        <div className="absolute bottom-[10%] right-[15%] text-4xl animate-bounce opacity-30" style={{ animationDuration: '3s', animationDelay: '2s' }}>⭐</div>
+        <div className="absolute top-[40%] left-[3%] text-3xl animate-bounce opacity-25" style={{ animationDuration: '3.5s', animationDelay: '0.8s' }}>🌟</div>
+        <BookOpen className="absolute top-[25%] left-[15%] h-12 w-12 text-pink-300/30 animate-bounce" style={{ animationDuration: '3s' }} />
+        <GraduationCap className="absolute bottom-[30%] right-[20%] h-14 w-14 text-purple-300/30 animate-bounce" style={{ animationDuration: '4s', animationDelay: '0.5s' }} />
       </div>
 
       {/* Theme Toggle */}
@@ -207,27 +210,27 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md z-10 animate-fade-in-up">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="flex items-center gap-4 bg-card/80 backdrop-blur-xl rounded-2xl px-6 py-4 shadow-2xl border border-border/50 hover-lift">
-              <div className="h-14 w-14 rounded-xl bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center shadow-lg pulse-glow">
-                <GraduationCap className="h-8 w-8 text-primary-foreground" />
+            <div className="flex items-center gap-4 bg-card/90 backdrop-blur-xl rounded-3xl px-6 py-4 shadow-2xl border-2 border-pink-200/50 dark:border-pink-800/30 hover-lift">
+              <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-pink-400 to-purple-500 flex items-center justify-center shadow-lg pulse-glow">
+                <GraduationCap className="h-8 w-8 text-white" />
               </div>
               <div className="text-left">
-                <h1 className="text-3xl font-bold bg-gradient-to-r from-primary via-chart-2 to-primary bg-clip-text text-transparent">
-                  ShikshaSetu
+                <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                  ShikshaSetu ✨
                 </h1>
-                <p className="text-sm text-muted-foreground">Government School Portal</p>
+                <p className="text-sm text-muted-foreground">Government School Portal 🎀</p>
               </div>
             </div>
           </div>
           <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-4">
-            Secure platform for teachers and officials to monitor, support, and improve government schools
+            ✨ Secure platform for teachers and officials to monitor, support, and improve government schools 💕
           </p>
         </div>
 
-        <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-xl hover-lift overflow-hidden">
-          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-chart-2 to-primary" />
+        <Card className="border-2 border-pink-200/50 dark:border-pink-800/30 shadow-2xl bg-card/90 backdrop-blur-xl hover-lift overflow-hidden rounded-3xl">
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pink-400 via-purple-400 to-pink-400" />
           <CardHeader className="space-y-1 pb-4 pt-6">
-            <CardTitle className="text-2xl text-center font-bold">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl text-center font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">Welcome Back 💖</CardTitle>
             <CardDescription className="text-center text-base">
               Enter your official credentials to access the portal
             </CardDescription>
