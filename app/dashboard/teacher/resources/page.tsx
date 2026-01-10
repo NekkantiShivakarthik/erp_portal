@@ -290,7 +290,6 @@ export default function ResourcesPage() {
   })
 
   // Calculate stats
-  const totalDownloads = notes.reduce((sum, note) => sum + note.downloads, 0)
   const totalViews = videos.reduce((sum, video) => sum + video.views, 0)
   const subjectCount = new Set(notes.map(n => n.subject)).size
   const classCount = new Set(notes.map(n => n.class)).size

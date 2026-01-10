@@ -14,10 +14,7 @@ import {
   Wrench,
   AlertCircle,
   Search,
-  Calendar,
-  Droplets,
-  Lightbulb,
-  Armchair
+  Calendar
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"

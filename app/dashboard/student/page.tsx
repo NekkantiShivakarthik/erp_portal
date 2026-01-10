@@ -15,7 +15,6 @@ import {
   BookOpen,
   FileText,
   Video,
-  Download,
   ExternalLink,
   Building2,
   AlertTriangle

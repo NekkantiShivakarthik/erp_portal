@@ -21,7 +21,7 @@ import {
 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
-import { getDemoData, DemoStudent, DemoClass } from "@/lib/demo-data"
+import { getDemoData } from "@/lib/demo-data"
 
 type Student = {
   id: string

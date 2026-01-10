@@ -5,18 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select"
 import { 
-  TrendingUp, 
-  TrendingDown,
   School,
   Users,
   AlertTriangle,
-  CheckCircle,
-  Clock,
   BarChart3,
   MapPin,
-  Eye,
   Loader2,
   AlertCircle
 } from "lucide-react"

@@ -19,14 +19,13 @@ import {
   Loader2,
   Pencil,
   AlertTriangle,
-  WifiOff,
-  Database,
-  CheckCircle
+  Palette
 } from "lucide-react"
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { createClient } from "@/lib/supabase/client"
 import { useLanguage } from "@/lib/i18n/language-context"
 import { getDemoData, DemoDataStore } from "@/lib/demo-data"
+import { AppearanceSettings } from "@/components/appearance-settings"
 
 type School = {
   id: string
@@ -569,7 +568,7 @@ export default function SettingsPage() {
       </Card>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="schools" className="flex items-center gap-2">
             <School className="h-4 w-4" />
             {t('settingsPage.schools')}
@@ -585,6 +584,10 @@ export default function SettingsPage() {
           <TabsTrigger value="students" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             {t('settingsPage.students')}
+          </TabsTrigger>
+          <TabsTrigger value="appearance" className="flex items-center gap-2">
+            <Palette className="h-4 w-4" />
+            Appearance
           </TabsTrigger>
         </TabsList>
 
@@ -1207,6 +1210,11 @@ export default function SettingsPage() {
               )}
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Appearance Tab */}
+        <TabsContent value="appearance" className="space-y-4">
+          <AppearanceSettings />
         </TabsContent>
       </Tabs>
     </div>

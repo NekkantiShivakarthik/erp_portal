@@ -1,8 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { GraduationCap, Lock, User, Building2, Eye, EyeOff, Shield, BookOpen, PenTool, Calculator, Globe, Microscope } from "lucide-react"
+import { GraduationCap, Lock, User, Building2, Eye, EyeOff, Shield, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -19,7 +18,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
-  const router = useRouter()
   const supabase = createClient()
 
   // Clear previous user data when login page loads (logout effect)
