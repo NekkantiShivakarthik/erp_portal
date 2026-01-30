@@ -17,13 +17,12 @@ export default function DashboardLayout({
       <ThemeColorProvider>
         <LanguageProvider>
           <SidebarProvider>
-          <div className="flex min-h-screen w-full bg-gradient-to-br from-muted/30 via-background to-muted/20 dark:from-muted/10 dark:via-background dark:to-muted/10">
+          <div className="flex min-h-screen w-full bg-background">
             <SidebarNav />
             <div className="flex flex-1 flex-col">
               <Header />
-              <main className="flex-1 overflow-auto gradient-mesh-bg p-4 md:p-6 lg:p-8 relative">
-                <div className="floating-icons-bg absolute inset-0 pointer-events-none opacity-40" />
-                <div className="relative z-10 animate-fade-in-up max-w-7xl mx-auto">
+              <main className="flex-1 overflow-auto bg-muted/30 p-4 md:p-6 lg:p-8">
+                <div className="animate-fade-in-up max-w-7xl mx-auto">
                   {children}
                 </div>
               </main>

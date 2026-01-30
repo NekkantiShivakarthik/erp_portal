@@ -49,240 +49,201 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  /* Default Neutral Theme */
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --radius: 0.5rem;
+  /* Professional Theme - Light Mode */
+  --background: oklch(0.99 0 0);
+  --foreground: oklch(0.15 0 0);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+  --card-foreground: oklch(0.15 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.965 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.965 0 0);
-  --muted-foreground: oklch(0.455 0 0);
-  --accent: oklch(0.965 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --success: oklch(0.6 0.18 145);
-  --warning: oklch(0.75 0.18 70);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  /* Chart colors */
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  /* Sidebar */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.965 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
-/* Custom Theme Variables - Applied when custom theme is active */
-[data-custom-theme="true"] {
-  --background: var(--custom-background, oklch(1 0 0));
-  --foreground: var(--custom-foreground, oklch(0.145 0 0));
-  --card: var(--custom-card, oklch(1 0 0));
-  --card-foreground: var(--custom-card-foreground, oklch(0.145 0 0));
-  --popover: var(--custom-card, oklch(1 0 0));
-  --popover-foreground: var(--custom-card-foreground, oklch(0.145 0 0));
-  --primary: var(--custom-primary, oklch(0.6 0.18 240));
-  --accent: var(--custom-accent, oklch(0.965 0 0));
-  --muted: var(--custom-muted, oklch(0.965 0 0));
-  --border: var(--custom-border, oklch(0.922 0 0));
-  --input: var(--custom-input, oklch(0.922 0 0));
-  --sidebar: var(--custom-sidebar, oklch(0.985 0 0));
-  --sidebar-foreground: var(--custom-sidebar-foreground, oklch(0.145 0 0));
-  --sidebar-accent: var(--custom-sidebar-accent, oklch(0.965 0 0));
-  --sidebar-border: var(--custom-sidebar-border, oklch(0.922 0 0));
-  --sidebar-primary: var(--custom-primary, oklch(0.6 0.18 240));
-  --destructive: var(--custom-destructive, oklch(0.577 0.245 27.325));
-  --success: var(--custom-success, oklch(0.6 0.18 145));
-  --warning: var(--custom-warning, oklch(0.75 0.18 70));
-}
-
-/* Background Styles */
-[data-bg-style="gradient"] {
-  background: linear-gradient(135deg, var(--background) 0%, var(--muted) 100%) !important;
-}
-
-[data-bg-style="mesh"] main {
-  background: 
-    radial-gradient(at 20% 20%, var(--primary) 0px, transparent 50%),
-    radial-gradient(at 80% 80%, var(--accent) 0px, transparent 50%),
-    var(--background) !important;
-  background-attachment: fixed;
-}
-
-[data-bg-style="pattern"] main {
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-  background-color: var(--background);
+  --popover-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.45 0.15 250);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.15 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.15 0 0);
+  --destructive: oklch(0.55 0.22 25);
+  --success: oklch(0.55 0.18 145);
+  --warning: oklch(0.7 0.18 70);
+  --border: oklch(0.9 0 0);
+  --input: oklch(0.9 0 0);
+  --ring: oklch(0.45 0.15 250);
+  /* Chart colors - Professional palette */
+  --chart-1: oklch(0.55 0.18 250);
+  --chart-2: oklch(0.55 0.15 180);
+  --chart-3: oklch(0.55 0.18 145);
+  --chart-4: oklch(0.65 0.18 45);
+  --chart-5: oklch(0.55 0.15 290);
+  /* Sidebar - Clean and professional */
+  --sidebar: oklch(0.98 0 0);
+  --sidebar-foreground: oklch(0.15 0 0);
+  --sidebar-primary: oklch(0.45 0.15 250);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.95 0 0);
+  --sidebar-accent-foreground: oklch(0.15 0 0);
+  --sidebar-border: oklch(0.9 0 0);
+  --sidebar-ring: oklch(0.45 0.15 250);
 }
 
 .dark {
-  /* Dark mode - Neutral Theme */
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.556 0 0);
+  /* Professional Theme - Dark Mode */
+  --background: oklch(0.13 0 0);
+  --foreground: oklch(0.95 0 0);
+  --card: oklch(0.18 0 0);
+  --card-foreground: oklch(0.95 0 0);
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.95 0 0);
+  --primary: oklch(0.6 0.15 250);
+  --primary-foreground: oklch(0.13 0 0);
+  --secondary: oklch(0.22 0 0);
+  --secondary-foreground: oklch(0.95 0 0);
+  --muted: oklch(0.22 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+  --accent: oklch(0.22 0 0);
+  --accent-foreground: oklch(0.95 0 0);
+  --destructive: oklch(0.6 0.2 25);
+  --success: oklch(0.6 0.18 145);
+  --warning: oklch(0.75 0.18 70);
+  --border: oklch(0.25 0 0);
+  --input: oklch(0.25 0 0);
+  --ring: oklch(0.6 0.15 250);
   /* Chart colors for dark mode */
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.6 0.18 250);
+  --chart-2: oklch(0.6 0.15 180);
+  --chart-3: oklch(0.65 0.18 145);
+  --chart-4: oklch(0.7 0.18 45);
+  --chart-5: oklch(0.6 0.15 290);
   /* Dark sidebar */
-  --sidebar: oklch(0.145 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.556 0 0);
+  --sidebar: oklch(0.13 0 0);
+  --sidebar-foreground: oklch(0.95 0 0);
+  --sidebar-primary: oklch(0.6 0.15 250);
+  --sidebar-primary-foreground: oklch(0.95 0 0);
+  --sidebar-accent: oklch(0.22 0 0);
+  --sidebar-accent-foreground: oklch(0.95 0 0);
+  --sidebar-border: oklch(0.25 0 0);
+  --sidebar-ring: oklch(0.6 0.15 250);
 }
 
 /* Blue Theme */
 [data-theme-color="blue"] {
-  --primary: oklch(0.6 0.18 240);
+  --primary: oklch(0.55 0.18 250);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.6 0.18 240);
-  --chart-1: oklch(0.6 0.18 240);
-  --sidebar-primary: oklch(0.6 0.18 240);
+  --ring: oklch(0.55 0.18 250);
+  --chart-1: oklch(0.55 0.18 250);
+  --sidebar-primary: oklch(0.55 0.18 250);
 }
 [data-theme-color="blue"].dark,
 .dark[data-theme-color="blue"] {
-  --primary: oklch(0.65 0.18 240);
+  --primary: oklch(0.6 0.18 250);
   --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.65 0.18 240);
-  --chart-1: oklch(0.65 0.18 240);
-  --sidebar-primary: oklch(0.65 0.18 240);
+  --ring: oklch(0.6 0.18 250);
+  --chart-1: oklch(0.6 0.18 250);
+  --sidebar-primary: oklch(0.6 0.18 250);
 }
 
 /* Green Theme */
 [data-theme-color="green"] {
-  --primary: oklch(0.6 0.18 145);
+  --primary: oklch(0.55 0.18 145);
   --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.55 0.18 145);
+  --chart-1: oklch(0.55 0.18 145);
+  --sidebar-primary: oklch(0.55 0.18 145);
+}
+[data-theme-color="green"].dark,
+.dark[data-theme-color="green"] {
+  --primary: oklch(0.6 0.18 145);
+  --primary-foreground: oklch(0.15 0 0);
   --ring: oklch(0.6 0.18 145);
   --chart-1: oklch(0.6 0.18 145);
   --sidebar-primary: oklch(0.6 0.18 145);
 }
-[data-theme-color="green"].dark,
-.dark[data-theme-color="green"] {
-  --primary: oklch(0.7 0.18 145);
-  --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.18 145);
-  --chart-1: oklch(0.7 0.18 145);
-  --sidebar-primary: oklch(0.7 0.18 145);
-}
 
 /* Purple Theme */
 [data-theme-color="purple"] {
-  --primary: oklch(0.6 0.2 295);
+  --primary: oklch(0.5 0.2 290);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.6 0.2 295);
-  --chart-1: oklch(0.6 0.2 295);
-  --sidebar-primary: oklch(0.6 0.2 295);
+  --ring: oklch(0.5 0.2 290);
+  --chart-1: oklch(0.5 0.2 290);
+  --sidebar-primary: oklch(0.5 0.2 290);
 }
 [data-theme-color="purple"].dark,
 .dark[data-theme-color="purple"] {
-  --primary: oklch(0.7 0.2 295);
+  --primary: oklch(0.6 0.2 290);
   --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.2 295);
-  --chart-1: oklch(0.7 0.2 295);
-  --sidebar-primary: oklch(0.7 0.2 295);
+  --ring: oklch(0.6 0.2 290);
+  --chart-1: oklch(0.6 0.2 290);
+  --sidebar-primary: oklch(0.6 0.2 290);
 }
 
 /* Orange Theme */
 [data-theme-color="orange"] {
-  --primary: oklch(0.65 0.2 45);
+  --primary: oklch(0.6 0.18 45);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.65 0.2 45);
-  --chart-1: oklch(0.65 0.2 45);
-  --sidebar-primary: oklch(0.65 0.2 45);
+  --ring: oklch(0.6 0.18 45);
+  --chart-1: oklch(0.6 0.18 45);
+  --sidebar-primary: oklch(0.6 0.18 45);
 }
 [data-theme-color="orange"].dark,
 .dark[data-theme-color="orange"] {
-  --primary: oklch(0.72 0.2 45);
+  --primary: oklch(0.65 0.18 45);
   --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.72 0.2 45);
-  --chart-1: oklch(0.72 0.2 45);
-  --sidebar-primary: oklch(0.72 0.2 45);
+  --ring: oklch(0.65 0.18 45);
+  --chart-1: oklch(0.65 0.18 45);
+  --sidebar-primary: oklch(0.65 0.18 45);
 }
 
 /* Rose Theme */
 [data-theme-color="rose"] {
-  --primary: oklch(0.6 0.2 10);
+  --primary: oklch(0.55 0.18 15);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.6 0.2 10);
-  --chart-1: oklch(0.6 0.2 10);
-  --sidebar-primary: oklch(0.6 0.2 10);
+  --ring: oklch(0.55 0.18 15);
+  --chart-1: oklch(0.55 0.18 15);
+  --sidebar-primary: oklch(0.55 0.18 15);
 }
 [data-theme-color="rose"].dark,
 .dark[data-theme-color="rose"] {
-  --primary: oklch(0.7 0.2 10);
+  --primary: oklch(0.6 0.18 15);
   --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.2 10);
-  --chart-1: oklch(0.7 0.2 10);
-  --sidebar-primary: oklch(0.7 0.2 10);
+  --ring: oklch(0.6 0.18 15);
+  --chart-1: oklch(0.6 0.18 15);
+  --sidebar-primary: oklch(0.6 0.18 15);
 }
 
 /* Teal Theme */
 [data-theme-color="teal"] {
-  --primary: oklch(0.6 0.15 180);
+  --primary: oklch(0.55 0.15 180);
   --primary-foreground: oklch(0.99 0 0);
+  --ring: oklch(0.55 0.15 180);
+  --chart-1: oklch(0.55 0.15 180);
+  --sidebar-primary: oklch(0.55 0.15 180);
+}
+[data-theme-color="teal"].dark,
+.dark[data-theme-color="teal"] {
+  --primary: oklch(0.6 0.15 180);
+  --primary-foreground: oklch(0.15 0 0);
   --ring: oklch(0.6 0.15 180);
   --chart-1: oklch(0.6 0.15 180);
   --sidebar-primary: oklch(0.6 0.15 180);
 }
-[data-theme-color="teal"].dark,
-.dark[data-theme-color="teal"] {
-  --primary: oklch(0.7 0.15 180);
-  --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.7 0.15 180);
-  --chart-1: oklch(0.7 0.15 180);
-  --sidebar-primary: oklch(0.7 0.15 180);
-}
 
 /* Indigo Theme */
 [data-theme-color="indigo"] {
-  --primary: oklch(0.55 0.2 265);
+  --primary: oklch(0.5 0.2 265);
   --primary-foreground: oklch(0.99 0 0);
-  --ring: oklch(0.55 0.2 265);
-  --chart-1: oklch(0.55 0.2 265);
-  --sidebar-primary: oklch(0.55 0.2 265);
+  --ring: oklch(0.5 0.2 265);
+  --chart-1: oklch(0.5 0.2 265);
+  --sidebar-primary: oklch(0.5 0.2 265);
 }
 [data-theme-color="indigo"].dark,
 .dark[data-theme-color="indigo"] {
-  --primary: oklch(0.65 0.2 265);
+  --primary: oklch(0.6 0.2 265);
   --primary-foreground: oklch(0.15 0 0);
-  --ring: oklch(0.65 0.2 265);
-  --chart-1: oklch(0.65 0.2 265);
-  --sidebar-primary: oklch(0.65 0.2 265);
+  --ring: oklch(0.6 0.2 265);
+  --chart-1: oklch(0.6 0.2 265);
+  --sidebar-primary: oklch(0.6 0.2 265);
 }
 
 @layer base {
@@ -294,134 +255,36 @@
   }
 }
 
-/* Subtle Background Pattern */
-.edu-bg-pattern {
-  position: relative;
-  overflow: hidden;
-}
-
-.edu-bg-pattern::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23737373' fill-opacity='0.04'%3E%3Ccircle cx='15' cy='15' r='3'/%3E%3Ccircle cx='85' cy='25' r='2'/%3E%3Ccircle cx='45' cy='85' r='4'/%3E%3Ccircle cx='75' cy='75' r='2'/%3E%3Crect x='48' y='48' width='4' height='4' rx='1'/%3E%3Crect x='20' y='70' width='3' height='3' rx='0.5'/%3E%3Crect x='80' y='55' width='3' height='3' rx='0.5'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 100px 100px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.dark .edu-bg-pattern::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='%23ff9eb5' fill-opacity='0.08'%3E%3Ccircle cx='15' cy='15' r='4'/%3E%3Ccircle cx='85' cy='25' r='3'/%3E%3Ccircle cx='45' cy='85' r='5'/%3E%3Ccircle cx='75' cy='75' r='3'/%3E%3Cpath d='M50 20 L52 26 L58 26 L53 30 L55 36 L50 32 L45 36 L47 30 L42 26 L48 26 Z'/%3E%3Cpath d='M25 55 Q30 45 35 55 Q30 50 25 55'/%3E%3Cpath d='M70 50 Q75 40 80 50 Q75 45 70 50'/%3E%3C/g%3E%3C/svg%3E");
-}
-
-/* Floating Sanrio Kawaii Icons Background 🌸💕 */
-.floating-icons-bg {
-  position: relative;
-}
-
-.floating-icons-bg::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: 
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath fill='%23ffb6c1' fill-opacity='0.25' d='M15 5 Q20 0 25 5 Q20 10 25 15 Q20 20 15 15 Q10 20 5 15 Q10 10 5 5 Q10 0 15 5'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%23ffc0cb' fill-opacity='0.2' d='M12 4 L13 8 L17 8 L14 11 L15 15 L12 12 L9 15 L10 11 L7 8 L11 8 Z'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Ccircle fill='%23ffb6c1' fill-opacity='0.15' cx='10' cy='10' r='4'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cpath fill='%23dda0dd' fill-opacity='0.18' d='M14 2 Q18 6 22 6 Q22 12 26 14 Q22 16 22 22 Q18 22 14 26 Q10 22 6 22 Q6 16 2 14 Q6 12 6 6 Q10 6 14 2'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%2387ceeb' fill-opacity='0.2' d='M8 1 C12 1 15 4 15 8 C15 12 12 15 8 15 C4 15 1 12 1 8 C1 4 4 1 8 1 M6 6 L6 7 L7 7 L7 6 Z M9 6 L9 7 L10 7 L10 6 Z M5 9 Q8 12 11 9'/%3E%3C/svg%3E");
-  background-position: 
-    5% 10%,
-    90% 15%,
-    15% 80%,
-    85% 75%,
-    50% 45%;
-  background-size: 
-    50px 50px,
-    40px 40px,
-    35px 35px,
-    55px 55px,
-    30px 30px;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.8;
-}
-
-.dark .floating-icons-bg::before {
-  opacity: 0.5;
-}
-
-/* Kawaii Gradient Mesh Background 🌈💖 */
-.gradient-mesh-bg {
-  background: 
-    radial-gradient(at 20% 20%, oklch(0.9 0.1 350 / 0.25) 0px, transparent 50%),
-    radial-gradient(at 80% 80%, oklch(0.88 0.1 200 / 0.2) 0px, transparent 50%),
-    radial-gradient(at 40% 60%, oklch(0.9 0.08 280 / 0.15) 0px, transparent 50%),
-    radial-gradient(at 70% 30%, oklch(0.92 0.06 80 / 0.12) 0px, transparent 40%),
-    var(--background);
-}
-
-.dark .gradient-mesh-bg {
-  background: 
-    radial-gradient(at 20% 20%, oklch(0.45 0.12 350 / 0.25) 0px, transparent 50%),
-    radial-gradient(at 80% 80%, oklch(0.42 0.1 200 / 0.2) 0px, transparent 50%),
-    radial-gradient(at 40% 60%, oklch(0.4 0.08 280 / 0.15) 0px, transparent 50%),
-    radial-gradient(at 70% 30%, oklch(0.45 0.06 80 / 0.1) 0px, transparent 40%),
-    var(--background);
-}
-
-/* Cute Glass Card Effect ✨ */
-.glass-card {
-  background: oklch(0.99 0.02 350 / 0.85);
-  backdrop-filter: blur(12px);
-  border: 2px solid oklch(0.92 0.08 350);
-  box-shadow: 0 4px 20px oklch(0.75 0.15 350 / 0.15);
-}
-
-.dark .glass-card {
-  background: oklch(0.22 0.03 350 / 0.85);
-  border: 2px solid oklch(0.35 0.05 350);
-  box-shadow: 0 4px 20px oklch(0.75 0.15 350 / 0.1);
-}
-
-/* Cute Kawaii Scrollbar 🎀 */
+/* Professional Scrollbar */
 ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: oklch(0.95 0.03 350);
-  border-radius: 10px;
+  background: var(--muted);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, oklch(0.8 0.12 350), oklch(0.75 0.15 350));
-  border-radius: 10px;
-  border: 2px solid oklch(0.95 0.03 350);
+  background: oklch(0.7 0 0);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, oklch(0.75 0.15 350), oklch(0.7 0.18 350));
+  background: oklch(0.6 0 0);
 }
 
 .dark ::-webkit-scrollbar-track {
-  background: oklch(0.2 0.03 350);
+  background: oklch(0.2 0 0);
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, oklch(0.5 0.1 350), oklch(0.45 0.12 350));
-  border: 2px solid oklch(0.2 0.03 350);
+  background: oklch(0.4 0 0);
 }
 
 .dark ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, oklch(0.55 0.12 350), oklch(0.5 0.14 350));
+  background: oklch(0.5 0 0);
 }
 
 /* Smooth Transitions */
@@ -431,215 +294,70 @@
   transition-duration: 150ms;
 }
 
-/* Kawaii Card Hover Effects 💕 */
+/* Card Hover Effects */
 .hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .hover-lift:hover {
-  transform: translateY(-4px) scale(1.01);
-  box-shadow: 0 15px 35px -8px oklch(0.75 0.15 350 / 0.25), 0 10px 15px -5px oklch(0.8 0.1 350 / 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .dark .hover-lift:hover {
-  box-shadow: 0 15px 35px -8px oklch(0.75 0.15 350 / 0.15), 0 10px 15px -5px oklch(0.5 0.1 350 / 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Cute Animated Gradient Border 🌸 */
-.gradient-border {
-  position: relative;
-  background: var(--card);
-  border-radius: var(--radius);
-}
-
-.gradient-border::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: calc(var(--radius) + 2px);
-  background: linear-gradient(135deg, oklch(0.75 0.15 350), oklch(0.78 0.12 200), oklch(0.8 0.1 280), oklch(0.75 0.15 350));
-  background-size: 300% 300%;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: gradient-rotate 4s ease infinite;
-}
-
-@keyframes gradient-rotate {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-}
-
-.gradient-border:hover::before {
-  opacity: 1;
-}
-
-/* Kawaii Enhanced Card Styles 🎀 */
-.card-gradient {
-  background: linear-gradient(145deg, oklch(0.99 0.02 350) 0%, oklch(0.96 0.04 350) 100%);
-  border: 2px solid oklch(0.92 0.06 350);
-}
-
-.dark .card-gradient {
-  background: linear-gradient(145deg, oklch(0.22 0.03 350) 0%, oklch(0.25 0.04 350) 100%);
-  border: 2px solid oklch(0.32 0.05 350);
-}
-
-/* Sparkle Shimmer Effect ✨ */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-.shimmer {
-  background: linear-gradient(90deg, transparent, oklch(0.95 0.08 350 / 0.4), oklch(1 0 0 / 0.2), oklch(0.95 0.08 350 / 0.4), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2.5s infinite;
-}
-
-/* Cute Pulse Glow Animation 💖 */
-@keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px oklch(0.75 0.15 350 / 0.3); }
-  50% { box-shadow: 0 0 40px oklch(0.75 0.15 350 / 0.5), 0 0 60px oklch(0.78 0.12 200 / 0.2); }
-}
-
-.pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
-}
-
-/* Kawaii Bounce Animation 🎀 */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-/* Stagger Animation Delays */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-
-/* Cute Stats Card 💕 */
+/* Stats Card */
 .stats-card {
   position: relative;
   overflow: hidden;
-  border-radius: 1.25rem !important;
-  border: 2px solid oklch(0.92 0.06 350) !important;
-}
-
-.stats-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, oklch(0.75 0.15 350 / 0.15) 0%, transparent 70%);
-  border-radius: 50%;
-  transform: translate(30%, -30%);
-}
-
-.stats-card::after {
-  content: '✨';
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 16px;
-  opacity: 0.6;
+  border-radius: var(--radius);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .stats-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 20px 45px -12px oklch(0.75 0.15 350 / 0.3);
-  border-color: oklch(0.75 0.15 350) !important;
-}
-
-.dark .stats-card {
-  border-color: oklch(0.35 0.06 350) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .dark .stats-card:hover {
-  box-shadow: 0 20px 45px -12px oklch(0.75 0.15 350 / 0.2);
-  border-color: oklch(0.65 0.12 350) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Kawaii Icon Badge Styles 🌸 */
+/* Quick Action Cards */
+.quick-action-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: all 0.2s ease;
+  background: var(--card);
+}
+
+.dark .quick-action-card {
+  border-color: var(--border);
+  background: var(--card);
+}
+
+.quick-action-card:hover {
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Icon Badge Styles */
 .icon-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
+  border-radius: var(--radius);
   padding: 12px;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
-  background: linear-gradient(135deg, oklch(0.95 0.05 350 / 0.8), oklch(0.92 0.06 350 / 0.6));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: var(--muted);
 }
 
 .icon-badge:hover {
-  transform: scale(1.15) rotate(5deg);
-  box-shadow: 0 5px 15px oklch(0.75 0.15 350 / 0.3);
-}
-
-/* Cute Quick Action Cards 💖 */
-.quick-action-card {
-  position: relative;
-  overflow: hidden;
-  border: 2px solid oklch(0.92 0.06 350);
-  border-radius: 16px;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  background: linear-gradient(145deg, oklch(0.99 0.02 350) 0%, oklch(0.97 0.03 350) 100%);
-}
-
-.dark .quick-action-card {
-  border-color: oklch(0.35 0.05 350);
-  background: linear-gradient(145deg, oklch(0.22 0.03 350) 0%, oklch(0.25 0.04 350) 100%);
-}
-
-.quick-action-card:hover {
-  border-color: oklch(0.75 0.15 350);
-  transform: translateY(-4px) scale(1.02);
-  box-shadow: 0 15px 35px -10px oklch(0.75 0.15 350 / 0.35);
-}
-
-.quick-action-card::before {
-  content: '♡';
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 12px;
-  color: oklch(0.75 0.15 350);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.quick-action-card:hover::before {
-  opacity: 1;
-}
-
-.quick-action-card::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, oklch(0.75 0.15 350), oklch(0.78 0.12 200), oklch(0.8 0.1 280));
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
-  border-radius: 4px 4px 0 0;
-}
-
-.quick-action-card:hover::after {
-  transform: scaleX(1);
+  transform: scale(1.05);
 }
 
 /* Enhanced Progress Bar */
@@ -655,61 +373,30 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
   animation: shimmer 2s infinite;
 }
 
-/* Kawaii Status Indicator Dots 💕 */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Status Indicator Dots */
 .status-dot {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  animation: pulse 2s ease-in-out infinite;
-  box-shadow: 0 0 8px currentColor;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.7; transform: scale(1.1); }
-}
+.status-dot-success { background: var(--success); }
+.status-dot-warning { background: var(--warning); }
+.status-dot-danger { background: var(--destructive); }
 
-.status-dot-success { background: oklch(0.7 0.18 160); color: oklch(0.7 0.18 160); }
-.status-dot-warning { background: oklch(0.8 0.15 80); color: oklch(0.8 0.15 80); }
-.status-dot-danger { background: oklch(0.7 0.18 25); color: oklch(0.7 0.18 25); }
-
-/* Beautiful Focus Styles */
+/* Focus Styles */
 input:focus, select:focus, textarea:focus, button:focus-visible {
   outline: none;
-  ring: 2px;
-  ring-color: oklch(0.65 0.2 250 / 0.5);
-  ring-offset: 2px;
-}
-
-/* Tooltip Enhancement */
-[data-tooltip] {
-  position: relative;
-}
-
-[data-tooltip]::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-8px);
-  padding: 6px 12px;
-  background: oklch(0.2 0.02 250);
-  color: oklch(0.95 0 0);
-  font-size: 12px;
-  border-radius: 6px;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-}
-
-[data-tooltip]:hover::after {
-  opacity: 1;
-  visibility: visible;
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--ring);
 }
 
 /* Page Transition */
@@ -724,10 +411,32 @@ input:focus, select:focus, textarea:focus, button:focus-visible {
   transition: opacity 0.3s, transform 0.3s;
 }
 
-/* Enhanced Sidebar Styles */
+/* Animation for content */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+/* Stagger Animation Delays */
+.stagger-1 { animation-delay: 0.05s; }
+.stagger-2 { animation-delay: 0.1s; }
+.stagger-3 { animation-delay: 0.15s; }
+.stagger-4 { animation-delay: 0.2s; }
+
+/* Sidebar Active Item */
 .sidebar-item-active {
   position: relative;
-  background: linear-gradient(90deg, oklch(0.65 0.2 250 / 0.15), transparent);
+  background: var(--accent);
 }
 
 .sidebar-item-active::before {
@@ -737,156 +446,108 @@ input:focus, select:focus, textarea:focus, button:focus-visible {
   top: 0;
   bottom: 0;
   width: 3px;
-  background: oklch(0.65 0.2 250);
+  background: var(--primary);
   border-radius: 0 2px 2px 0;
 }
 
 /* Loading Skeleton */
 .skeleton {
-  background: linear-gradient(90deg, oklch(0.9 0.01 250) 25%, oklch(0.95 0.005 250) 50%, oklch(0.9 0.01 250) 75%);
+  background: linear-gradient(90deg, var(--muted) 25%, var(--accent) 50%, var(--muted) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
 }
 
-.dark .skeleton {
-  background: linear-gradient(90deg, oklch(0.25 0.02 250) 25%, oklch(0.3 0.02 250) 50%, oklch(0.25 0.02 250) 75%);
-}
-
-/* Kawaii Notification Badge Animation 🔔💖 */
-@keyframes bounce-subtle {
-  0%, 100% { transform: scale(1); }
-  25% { transform: scale(1.15) rotate(-5deg); }
-  50% { transform: scale(1.1); }
-  75% { transform: scale(1.15) rotate(5deg); }
-}
-
+/* Notification Badge */
 .notification-badge {
-  animation: bounce-subtle 2s ease-in-out infinite;
-  background: linear-gradient(135deg, oklch(0.75 0.15 350), oklch(0.7 0.18 350)) !important;
+  background: var(--destructive);
 }
 
-/* Cute Primary Button Styles 🎀 */
+/* Button Primary - Professional */
 .btn-primary-gradient {
-  background: linear-gradient(135deg, oklch(0.75 0.15 350), oklch(0.7 0.18 350));
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border-radius: 12px;
-  font-weight: 600;
+  background: var(--primary);
+  transition: all 0.2s ease;
+  border-radius: var(--radius);
+  font-weight: 500;
 }
 
 .btn-primary-gradient:hover {
-  background: linear-gradient(135deg, oklch(0.7 0.18 350), oklch(0.65 0.2 350));
-  box-shadow: 0 8px 25px oklch(0.75 0.15 350 / 0.45);
-  transform: translateY(-2px) scale(1.02);
+  opacity: 0.9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-/* Kawaii Calendar Day Styles 📅💖 */
+/* Calendar Day Styles */
 .calendar-day-present {
-  background: linear-gradient(135deg, oklch(0.88 0.12 160 / 0.6), oklch(0.85 0.1 160 / 0.4));
-  border-radius: 50%;
-  border: 2px solid oklch(0.7 0.15 160);
+  background: oklch(0.9 0.1 145);
+  border-radius: 4px;
+  border: 1px solid oklch(0.6 0.15 145);
 }
 
 .calendar-day-absent {
-  background: linear-gradient(135deg, oklch(0.88 0.15 25 / 0.6), oklch(0.85 0.12 25 / 0.4));
-  border-radius: 50%;
-  border: 2px solid oklch(0.7 0.18 25);
+  background: oklch(0.9 0.1 25);
+  border-radius: 4px;
+  border: 1px solid oklch(0.6 0.15 25);
 }
 
 .calendar-day-late {
-  background: linear-gradient(135deg, oklch(0.9 0.12 80 / 0.6), oklch(0.87 0.1 80 / 0.4));
-  border-radius: 50%;
-  border: 2px solid oklch(0.8 0.15 80);
+  background: oklch(0.92 0.1 70);
+  border-radius: 4px;
+  border: 1px solid oklch(0.7 0.15 70);
 }
 
-/* Extra Kawaii Additions 🌸✨ */
-
-/* Cute floating hearts animation */
-@keyframes float-hearts {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  25% { transform: translateY(-10px) rotate(5deg); }
-  50% { transform: translateY(-5px) rotate(0deg); }
-  75% { transform: translateY(-15px) rotate(-5deg); }
-}
-
-.float-animation {
-  animation: float-hearts 4s ease-in-out infinite;
-}
-
-/* Sparkle text effect */
-.sparkle-text {
-  background: linear-gradient(90deg, oklch(0.75 0.15 350), oklch(0.78 0.12 200), oklch(0.8 0.1 280), oklch(0.75 0.15 350));
-  background-size: 300% 100%;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: sparkle-move 3s linear infinite;
-}
-
-@keyframes sparkle-move {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 300% 50%; }
-}
-
-/* Cute ribbon corner decoration */
-.ribbon-corner {
+/* Tooltip Enhancement */
+[data-tooltip] {
   position: relative;
 }
 
-.ribbon-corner::before {
-  content: '🎀';
+[data-tooltip]::after {
+  content: attr(data-tooltip);
   position: absolute;
-  top: -5px;
-  left: -5px;
-  font-size: 20px;
-  z-index: 10;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 6px 12px;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 12px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
 }
 
-/* Heart bullet points */
-.heart-list li::marker {
-  content: '♡ ';
-  color: oklch(0.75 0.15 350);
+[data-tooltip]:hover::after {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Soft shadow for cards */
 .soft-shadow {
   box-shadow: 
-    0 2px 4px oklch(0.75 0.15 350 / 0.1),
-    0 8px 16px oklch(0.75 0.15 350 / 0.1),
-    0 16px 32px oklch(0.75 0.15 350 / 0.05);
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Pastel tag styles */
-.pastel-tag {
-  background: linear-gradient(135deg, oklch(0.92 0.06 350), oklch(0.9 0.08 350));
-  color: oklch(0.5 0.12 350);
+.dark .soft-shadow {
+  box-shadow: 
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tag styles */
+.tag {
+  background: var(--muted);
+  color: var(--muted-foreground);
   padding: 4px 12px;
-  border-radius: 20px;
+  border-radius: var(--radius);
   font-size: 12px;
-  font-weight: 600;
-  border: 1px solid oklch(0.85 0.08 350);
+  font-weight: 500;
+  border: 1px solid var(--border);
 }
 
-/* Cute input focus */
+/* Professional Input focus */
 input:focus, select:focus, textarea:focus {
   outline: none;
-  border-color: oklch(0.75 0.15 350) !important;
-  box-shadow: 0 0 0 3px oklch(0.75 0.15 350 / 0.2), 0 0 15px oklch(0.75 0.15 350 / 0.1) !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px oklch(0.55 0.15 250 / 0.15) !important;
 }
-
-/* Wobble animation for icons */
-@keyframes wobble {
-  0%, 100% { transform: rotate(0deg); }
-  25% { transform: rotate(-10deg); }
-  75% { transform: rotate(10deg); }
-}
-
-.wobble-hover:hover {
-  animation: wobble 0.5s ease-in-out;
-}
-
-/* Pastel gradient backgrounds */
-.bg-pastel-pink { background: linear-gradient(135deg, oklch(0.95 0.06 350), oklch(0.92 0.08 350)); }
-.bg-pastel-blue { background: linear-gradient(135deg, oklch(0.92 0.06 200), oklch(0.88 0.08 200)); }
-.bg-pastel-purple { background: linear-gradient(135deg, oklch(0.92 0.06 280), oklch(0.88 0.08 280)); }
-.bg-pastel-yellow { background: linear-gradient(135deg, oklch(0.95 0.06 80), oklch(0.92 0.08 80)); }
-.bg-pastel-mint { background: linear-gradient(135deg, oklch(0.92 0.06 160), oklch(0.88 0.08 160)); }
