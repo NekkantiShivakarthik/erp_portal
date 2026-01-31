@@ -6,11 +6,9 @@ export type ThemeColor =
   | "neutral"
   | "blue" 
   | "green"
-  | "purple"
-  | "orange"
-  | "rose"
   | "teal"
   | "indigo"
+  | "slate"
 
 interface ThemeColorContextType {
   themeColor: ThemeColor
@@ -23,11 +21,9 @@ export const themeColors: { name: ThemeColor; label: string; color: string }[] =
   { name: "neutral", label: "Neutral", color: "#737373" },
   { name: "blue", label: "Blue", color: "#3b82f6" },
   { name: "green", label: "Green", color: "#22c55e" },
-  { name: "purple", label: "Purple", color: "#a855f7" },
-  { name: "orange", label: "Orange", color: "#f97316" },
-  { name: "rose", label: "Rose", color: "#f43f5e" },
   { name: "teal", label: "Teal", color: "#14b8a6" },
   { name: "indigo", label: "Indigo", color: "#6366f1" },
+  { name: "slate", label: "Slate", color: "#64748b" },
 ]
 
 export function ThemeColorProvider({ children }: { children: ReactNode }) {
