@@ -166,30 +166,30 @@ export function SidebarNav() {
 
   return (
     <Sidebar className="border-r-0">
-      <SidebarHeader className="border-b border-pink-200 dark:border-pink-900/30 px-6 py-5 bg-gradient-to-b from-pink-50 to-pink-100/50 dark:from-pink-950/30 dark:to-pink-900/20">
+      <SidebarHeader className="border-b border-slate-200 dark:border-slate-800 px-6 py-5 bg-gradient-to-b from-slate-50 to-slate-100/50 dark:from-slate-900 dark:to-slate-800/50">
         <Link href="/dashboard/teacher" className="flex items-center gap-3 group">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-pink-400 to-pink-500 text-white shadow-lg group-hover:shadow-pink-400/40 transition-all group-hover:scale-110 group-hover:rotate-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-lg group-hover:shadow-blue-400/40 transition-all group-hover:scale-110 group-hover:rotate-3">
             <GraduationCap className="h-6 w-6" />
           </div>
           <div className="flex flex-col">
-            <span className="text-lg font-bold bg-gradient-to-r from-pink-500 to-purple-400 bg-clip-text text-transparent">
-              ShikshaSetu ✨
+            <span className="text-lg font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
+              ShikshaSetu
             </span>
-            <span className="text-xs text-pink-400/70 dark:text-pink-300/50">Government Portal 🎀</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500">Government Portal</span>
           </div>
         </Link>
       </SidebarHeader>
-      <SidebarContent className="px-3 py-4 bg-gradient-to-b from-pink-50/50 to-white dark:from-pink-950/20 dark:to-background">
+      <SidebarContent className="px-3 py-4 bg-gradient-to-b from-slate-50/50 to-white dark:from-slate-900/50 dark:to-background">
         {userType === 'student' ? (
           <SidebarGroup>
-            <SidebarGroupLabel className="text-pink-400/70 dark:text-pink-300/50 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">🌸 {t('sidebar.studentMenu')}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-slate-400 dark:text-slate-500 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">{t('sidebar.studentMenu')}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="space-y-1">
                 {studentNavItems.map((item) => (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-pink-100 to-pink-50 dark:from-pink-900/30 dark:to-pink-800/20 shadow-md border-2 border-pink-200 dark:border-pink-700/30' : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'}`}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-700/50 shadow-md border-2 border-slate-200 dark:border-slate-700' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
                       <Link href={item.href} className="flex items-center gap-3">
-                        <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-pink-400 to-pink-500 text-white shadow-sm' : 'bg-pink-100 dark:bg-pink-900/30 text-pink-500'}`}>
+                        <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
                           <item.icon className="h-4 w-4" />
                         </div>
                         <span className="font-medium">{item.title}</span>
@@ -203,14 +203,14 @@ export function SidebarNav() {
         ) : (
           <>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-pink-400/70 dark:text-pink-300/50 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">💕 {t('sidebar.teacherMenu')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-slate-400 dark:text-slate-500 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">{t('sidebar.teacherMenu')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="space-y-1">
                   {teacherNavItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-pink-100 to-pink-50 dark:from-pink-900/30 dark:to-pink-800/20 shadow-md border-2 border-pink-200 dark:border-pink-700/30' : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'}`}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-700/50 shadow-md border-2 border-slate-200 dark:border-slate-700' : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}>
                         <Link href={item.href} className="flex items-center gap-3">
-                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-pink-400 to-pink-500 text-white shadow-sm' : 'bg-pink-100 dark:bg-pink-900/30 text-pink-500'}`}>
+                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
                             <item.icon className="h-4 w-4" />
                           </div>
                           <span className="font-medium">{item.title}</span>
@@ -222,14 +222,14 @@ export function SidebarNav() {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-pink-400/70 dark:text-pink-300/50 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">🏫 {t('sidebar.infrastructure')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-slate-500 dark:text-slate-400 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">{t('sidebar.infrastructure')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="space-y-1">
                   {infrastructureItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-pink-100 to-pink-50 dark:from-pink-900/30 dark:to-pink-800/20 shadow-md border-2 border-pink-200 dark:border-pink-700/30' : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'}`}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-md border-2 border-slate-200 dark:border-slate-700' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
                         <Link href={item.href} className="flex items-center gap-3">
-                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-pink-400 to-pink-500 text-white shadow-sm' : 'bg-pink-100 dark:bg-pink-900/30 text-pink-500'}`}>
+                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
                             <item.icon className="h-4 w-4" />
                           </div>
                           <span className="font-medium">{item.title}</span>
@@ -241,14 +241,14 @@ export function SidebarNav() {
               </SidebarGroupContent>
             </SidebarGroup>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-pink-400/70 dark:text-pink-300/50 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">⭐ {t('sidebar.management')}</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-slate-500 dark:text-slate-400 uppercase text-xs tracking-wider mb-2 flex items-center gap-1">{t('sidebar.management')}</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu className="space-y-1">
                   {managementItems.map((item) => (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-pink-100 to-pink-50 dark:from-pink-900/30 dark:to-pink-800/20 shadow-md border-2 border-pink-200 dark:border-pink-700/30' : 'hover:bg-pink-50 dark:hover:bg-pink-900/20'}`}>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className={`rounded-2xl py-3 transition-all ${pathname === item.href ? 'bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 shadow-md border-2 border-slate-200 dark:border-slate-700' : 'hover:bg-slate-50 dark:hover:bg-slate-800'}`}>
                         <Link href={item.href} className="flex items-center gap-3">
-                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-pink-400 to-pink-500 text-white shadow-sm' : 'bg-pink-100 dark:bg-pink-900/30 text-pink-500'}`}>
+                          <div className={`p-2 rounded-xl ${pathname === item.href ? 'bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-sm' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
                             <item.icon className="h-4 w-4" />
                           </div>
                           <span className="font-medium">{item.title}</span>
@@ -262,25 +262,25 @@ export function SidebarNav() {
           </>
         )}
       </SidebarContent>
-      <SidebarFooter className="border-t border-pink-200 dark:border-pink-900/30 p-4 bg-gradient-to-t from-pink-50 to-pink-100/30 dark:from-pink-950/30 dark:to-pink-900/10">
-        <div className="flex items-center gap-3 mb-4 p-3 rounded-2xl bg-gradient-to-r from-pink-100/80 to-purple-100/50 dark:from-pink-900/30 dark:to-purple-900/20 border-2 border-pink-200/50 dark:border-pink-800/30">
-          <Avatar className="h-10 w-10 ring-2 ring-pink-300/50 dark:ring-pink-600/30">
+      <SidebarFooter className="border-t border-slate-200 dark:border-slate-800 p-4 bg-gradient-to-t from-slate-50 to-slate-100/30 dark:from-slate-900 dark:to-slate-800/30">
+        <div className="flex items-center gap-3 mb-4 p-3 rounded-2xl bg-gradient-to-r from-slate-100/80 to-slate-50 dark:from-slate-800 dark:to-slate-700/50 border-2 border-slate-200/50 dark:border-slate-700/50">
+          <Avatar className="h-10 w-10 ring-2 ring-slate-300/50 dark:ring-slate-600/50">
             <AvatarImage src="/placeholder-avatar.jpg" />
-            <AvatarFallback className="bg-gradient-to-br from-pink-400 to-purple-400 text-white font-semibold">{userInitials}</AvatarFallback>
+            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-semibold">{userInitials}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col flex-1 min-w-0">
-            <span className="text-sm font-semibold truncate">{userName} ✨</span>
-            <span className="text-xs text-pink-400/70 dark:text-pink-300/50 truncate">{userRole} • {employeeId}</span>
+            <span className="text-sm font-semibold truncate">{userName}</span>
+            <span className="text-xs text-slate-400 dark:text-slate-500 truncate">{userRole} • {employeeId}</span>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1 bg-pink-50 hover:bg-pink-100 dark:bg-pink-900/20 dark:hover:bg-pink-900/40 border-pink-200 dark:border-pink-800/30 rounded-xl text-pink-600 dark:text-pink-300" asChild>
+          <Button variant="outline" size="sm" className="flex-1 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800/50 dark:hover:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300" asChild>
             <Link href="/dashboard/settings">
               <HelpCircle className="h-4 w-4 mr-1" />
               {t('common.help')}
             </Link>
           </Button>
-          <Button variant="outline" size="sm" className="flex-1 bg-pink-50 hover:bg-red-100 dark:bg-pink-900/20 dark:hover:bg-red-900/30 hover:text-red-500 hover:border-red-300 border-pink-200 dark:border-pink-800/30 rounded-xl text-pink-600 dark:text-pink-300" asChild>
+          <Button variant="outline" size="sm" className="flex-1 bg-slate-50 hover:bg-red-100 dark:bg-slate-800/50 dark:hover:bg-red-900/30 hover:text-red-500 hover:border-red-300 border-slate-200 dark:border-slate-700 rounded-xl text-slate-600 dark:text-slate-300" asChild>
             <Link href="/">
               <LogOut className="h-4 w-4 mr-1" />
               {t('common.logout')}

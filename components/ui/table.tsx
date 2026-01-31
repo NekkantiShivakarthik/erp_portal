@@ -8,7 +8,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto rounded-2xl border-2 border-pink-200/50 dark:border-pink-800/30"
+      className="relative w-full overflow-x-auto rounded-2xl border-2 border-slate-200/50 dark:border-slate-700/50"
     >
       <table
         data-slot="table"
@@ -23,7 +23,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
   return (
     <thead
       data-slot="table-header"
-      className={cn("[&_tr]:border-b [&_tr]:border-pink-200/50 dark:[&_tr]:border-pink-800/30 bg-gradient-to-r from-pink-50 to-purple-50 dark:from-pink-950/30 dark:to-purple-950/30", className)}
+      className={cn("[&_tr]:border-b [&_tr]:border-slate-200/50 dark:[&_tr]:border-slate-700/50 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-900/50", className)}
       {...props}
     />
   )
@@ -44,7 +44,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "bg-pink-50/50 dark:bg-pink-950/20 border-t border-pink-200/50 dark:border-pink-800/30 font-medium [&>tr]:last:border-b-0",
+        "bg-slate-50/50 dark:bg-slate-800/30 border-t border-slate-200/50 dark:border-slate-700/50 font-medium [&>tr]:last:border-b-0",
         className
       )}
       {...props}
@@ -57,7 +57,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "hover:bg-pink-50/50 dark:hover:bg-pink-900/20 data-[state=selected]:bg-pink-100 dark:data-[state=selected]:bg-pink-900/30 border-b border-pink-200/30 dark:border-pink-800/20 transition-colors duration-200",
+        "hover:bg-slate-50/50 dark:hover:bg-slate-800/30 data-[state=selected]:bg-slate-100 dark:data-[state=selected]:bg-slate-800/50 border-b border-slate-200/30 dark:border-slate-700/30 transition-colors duration-200",
         className
       )}
       {...props}
@@ -70,7 +70,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "text-pink-600 dark:text-pink-300 h-12 px-3 text-left align-middle font-semibold whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
+        "text-slate-700 dark:text-slate-300 h-12 px-3 text-left align-middle font-semibold whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className
       )}
       {...props}
