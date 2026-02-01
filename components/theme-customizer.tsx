@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { 
   Palette, 
   PaintBucket, 
@@ -178,6 +178,12 @@ export function ThemeCustomizer() {
   const { theme } = useTheme()
   const [activePreset, setActivePreset] = useState<string | null>(null)
   const [expandedSections, setExpandedSections] = useState<string[]>(["presets"])
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => 
@@ -194,6 +200,17 @@ export function ThemeCustomizer() {
 
   const copyThemeConfig = () => {
     navigator.clipboard.writeText(JSON.stringify(customization, null, 2))
+  }
+
+  // Show a placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="relative">
+        <SlidersHorizontal className="h-5 w-5" />
+        <Sparkles className="absolute -top-0.5 -right-0.5 h-3 w-3 text-primary animate-pulse" />
+        <span className="sr-only">Customize Theme</span>
+      </Button>
+    )
   }
 
   return (

@@ -1,5 +1,6 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { Palette } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,6 +16,22 @@ import { cn } from "@/lib/utils"
 
 export function ThemeColorToggle() {
   const { themeColor, setThemeColor } = useThemeColor()
+  const [mounted, setMounted] = useState(false)
+
+  // Prevent hydration mismatch by only rendering after mount
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Show a placeholder during SSR to prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <Button variant="ghost" size="icon" className="relative">
+        <Palette className="h-5 w-5" />
+        <span className="sr-only">Change theme color</span>
+      </Button>
+    )
+  }
 
   return (
     <DropdownMenu>
